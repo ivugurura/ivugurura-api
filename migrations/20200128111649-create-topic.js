@@ -23,6 +23,15 @@ module.exports = {
           as: 'categoryId'
         }
       },
+      coverImage: {
+        type: Sequelize.INTEGER,
+        onDelete: 'CASCADE',
+        references: {
+          model: 'Media',
+          key: 'id',
+          as: 'coverImage'
+        }
+      },
       description: {
         type: Sequelize.STRING
       },
@@ -47,7 +56,7 @@ module.exports = {
           as: 'userId'
         }
       },
-      is_published: {
+      isPublished: {
         type: Sequelize.BOOLEAN
       },
       createdAt: {

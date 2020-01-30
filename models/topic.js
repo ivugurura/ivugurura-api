@@ -8,9 +8,10 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING,
         unique: true
       },
+      coverImage: DataTypes.STRING,
       description: DataTypes.STRING,
       content: DataTypes.TEXT,
-      is_published: DataTypes.BOOLEAN
+      isPublished: DataTypes.BOOLEAN
     },
     {}
   );
@@ -33,6 +34,11 @@ module.exports = (sequelize, DataTypes) => {
     Topic.hasMany(models.TopicView, {
       foreignKey: 'topicViewId',
       as: 'views',
+      onDelete: 'CASCADE'
+    });
+    Topic.hasOne(models.Media, {
+      foreignKey: 'mediaId',
+      as: 'coverImage',
       onDelete: 'CASCADE'
     });
   };
