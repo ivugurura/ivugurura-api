@@ -7,12 +7,12 @@ module.exports = (sequelize, DataTypes) => {
     },
     {}
   );
-  TopicView.associate = function(models) {
-    TopicView.belongTo(models.Topic, {
+  TopicView.associate = models => {
+    TopicView.belongsTo(models.Topic, {
       foreignKey: 'topicId',
       onDelete: 'CASCADE'
     });
-    TopicView.belongTo(models.User, {
+    TopicView.belongsTo(models.User, {
       foreignKey: 'userId',
       onDelete: 'CASCADE'
     });
