@@ -18,3 +18,12 @@ export const serverResponse = (res, statusCode, message, data) => {
     .status(statusCode)
     .json({ status: statusCode, [messageType]: message, data });
 };
+export const joiValidatorMsg = (res, result) => {
+  const errors = [];
+  const errorsSent = result.error.details;
+
+  for (let index = 0; index < errorsSent.length; index += 1) {
+    errors.push(errorsSent[index].message.split('"').join(''));
+  }
+  return serverResponse(res, 400, errors[0]);
+};

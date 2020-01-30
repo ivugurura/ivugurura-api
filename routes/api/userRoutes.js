@@ -1,8 +1,8 @@
 import { Router } from 'express';
-import { userSignin } from '../../controllers';
-import { catchErrors } from '../../middlewares';
+import { userSignin } from '../../controllers/userController';
+import { catchErrors, isLoginInfoValid } from '../../middlewares';
 
 const userRoutes = Router();
-userRoutes.get('/signin', catchErrors(userSignin));
+userRoutes.post('/login', isLoginInfoValid, catchErrors(userSignin));
 
 export default userRoutes;
