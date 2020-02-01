@@ -5,20 +5,24 @@ module.exports = (sequelize, DataTypes) => {
     {
       title: DataTypes.STRING,
       mediaLink: DataTypes.STRING,
-      type: DataTypes.ENUM('audio', 'video', 'image')
+      type: {
+        type: DataTypes.ENUM,
+        values: ['audio', 'video', 'image']
+      },
+      languageId: {
+        type: DataTypes.INTEGER,
+        required: true
+      },
+      albumId: {
+        type: DataTypes.INTEGER,
+        required: true
+      }
     },
     {}
   );
   Media.associate = function(models) {
-    Media.hasOne(models.Language, {
-      foreignKey: 'language_id',
-      as: 'language'
-    });
-    Media.belongsTo(models.Album, {
-      foreignKey: 'albumId',
-      as: 'album',
-      onDelete: 'CASCADE'
-    });
+    Media.belongsTo(models.Language);
+    Media.belongsTo(models.Album);
   };
   return Media;
 };

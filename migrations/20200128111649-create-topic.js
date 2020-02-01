@@ -9,13 +9,16 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       title: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
+        allowNull: false
       },
       slug: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
+        allowNull: false
       },
       categoryId: {
         type: Sequelize.INTEGER,
+        allowNull: false,
         onDelete: 'CASCADE',
         references: {
           model: 'Categories',
@@ -23,7 +26,7 @@ module.exports = {
           as: 'categoryId'
         }
       },
-      coverImage: {
+      mediaId: {
         type: Sequelize.INTEGER,
         onDelete: 'CASCADE',
         references: {
@@ -40,6 +43,7 @@ module.exports = {
       },
       languageId: {
         type: Sequelize.INTEGER,
+        allowNull: false,
         onDelete: 'CASCADE',
         references: {
           model: 'Languages',
@@ -49,6 +53,7 @@ module.exports = {
       },
       userId: {
         type: Sequelize.INTEGER,
+        allowNull: false,
         onDelete: 'CASCADE',
         references: {
           model: 'Users',
@@ -57,7 +62,8 @@ module.exports = {
         }
       },
       isPublished: {
-        type: Sequelize.BOOLEAN
+        type: Sequelize.BOOLEAN,
+        default: false
       },
       createdAt: {
         allowNull: false,

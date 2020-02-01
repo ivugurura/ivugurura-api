@@ -3,19 +3,18 @@ module.exports = (sequelize, DataTypes) => {
   const TopicView = sequelize.define(
     'TopicView',
     {
-      isRead: DataTypes.BOOLEAN
+      isRead: DataTypes.BOOLEAN,
+      topicId: {
+        type: DataTypes.INTEGER,
+        required: true
+      },
+      userId: DataTypes.INTEGER
     },
     {}
   );
   TopicView.associate = models => {
-    TopicView.belongsTo(models.Topic, {
-      foreignKey: 'topicId',
-      onDelete: 'CASCADE'
-    });
-    TopicView.belongsTo(models.User, {
-      foreignKey: 'userId',
-      onDelete: 'CASCADE'
-    });
+    TopicView.belongsTo(models.Topic);
+    TopicView.belongsTo(models.User);
   };
   return TopicView;
 };

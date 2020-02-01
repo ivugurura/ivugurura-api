@@ -8,7 +8,6 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING,
         unique: true
       },
-      coverImage: DataTypes.STRING,
       description: DataTypes.STRING,
       content: DataTypes.TEXT,
       isPublished: DataTypes.BOOLEAN
@@ -17,30 +16,17 @@ module.exports = (sequelize, DataTypes) => {
   );
   Topic.associate = models => {
     Topic.belongsTo(models.Language, {
-      foreignKey: 'languageId',
       as: 'language',
-      onDelete: 'CASCADE'
+      foreignKey: 'languageId'
     });
-    Topic.belongsTo(models.User, {
-      foreignKey: 'userId',
-      as: 'editor',
-      onDelete: 'CASCADE'
+    Topic.belongsTo(models.Category, {
+      foreignKey: 'categoryId',
+      as: 'category'
     });
-    Topic.hasMany(models.Commentary, {
-      foreignKey: 'commentaryId',
-      as: 'commentaries',
-      onDelete: 'CASCADE'
-    });
-    Topic.hasMany(models.TopicView, {
-      foreignKey: 'topicViewId',
-      as: 'views',
-      onDelete: 'CASCADE'
-    });
-    Topic.hasOne(models.Media, {
-      foreignKey: 'mediaId',
-      as: 'coverImage',
-      onDelete: 'CASCADE'
-    });
+    Topic.belongsTo(models.User, { foreignKey: 'userId', as: 'editor' });
+    Topic.hasMany(models.Commentary, { as: 'commentaries' });
+    Topic.hasMany(models.TopicView, { as: 'views' });
+    Topic.hasOne(models.Media, { as: 'coverImage' });
   };
   return Topic;
 };

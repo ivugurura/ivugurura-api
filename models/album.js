@@ -8,10 +8,7 @@ module.exports = (sequelize, DataTypes) => {
     {}
   );
   Album.associate = function(models) {
-    Album.hasMany(models.Media, {
-      foreignKey: 'mediaId',
-      as: 'medias'
-    });
+    Album.hasMany(models.Media);
   };
   return Album;
 };

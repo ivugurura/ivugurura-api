@@ -3,14 +3,11 @@
 module.exports = {
   up: (queryInterface, Sequelize) => {
     return queryInterface.bulkInsert(
-      'Media',
+      'Categories',
       [
         {
-          title: 'English',
-          mediaLink: 'en',
-          type: 'image',
-          albumId: 1,
-          languageId: 2,
+          name: 'Ukuri mvajuru',
+          languageId: 1,
           createdAt: new Date(),
           updatedAt: new Date()
         }
@@ -20,6 +17,6 @@ module.exports = {
   },
 
   down: (queryInterface, Sequelize) => {
-    return queryInterface.bulkDelete('Media', null, {});
+    return queryInterface.bulkDelete('Categories', null, {});
   }
 };

@@ -1,4 +1,6 @@
 import bcrypt from 'bcrypt';
+import slugify from 'slugify';
+import uniqid from 'uniqid';
 
 export const hashPassword = password => {
   const salt = bcrypt.genSaltSync(process.env.PASS_SALT);
@@ -26,4 +28,10 @@ export const joiValidatorMsg = (res, result) => {
     errors.push(errorsSent[index].message.split('"').join(''));
   }
   return serverResponse(res, 400, errors[0]);
+};
+
+export const generateSlug = title => {
+  const uniqueId = uniqid.process();
+  const slug = `${slugify(title, { lower: true })}-${uniqueId}`;
+  return slug;
 };

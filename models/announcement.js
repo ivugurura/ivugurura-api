@@ -10,11 +10,7 @@ module.exports = (sequelize, DataTypes) => {
     {}
   );
   Announcement.associate = function(models) {
-    Announcement.belongsTo(models.User, {
-      foreignKey: 'userId',
-      as: 'publisher',
-      onDelete: 'CASCADE'
-    });
+    Announcement.belongsTo(models.User);
   };
   return Announcement;
 };
