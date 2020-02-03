@@ -23,7 +23,7 @@ module.exports = (sequelize, DataTypes) => {
       foreignKey: 'categoryId',
       as: 'category'
     });
-    Topic.belongsTo(models.User, { foreignKey: 'userId', as: 'editor' });
+    Topic.belongsTo(models.User, { foreignKey: 'userId', as: 'user' });
     Topic.hasMany(models.Commentary, { as: 'commentaries' });
     Topic.hasMany(models.TopicView, { as: 'views' });
     Topic.hasOne(models.Media, { as: 'coverImage' });

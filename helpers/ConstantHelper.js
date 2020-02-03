@@ -1,4 +1,5 @@
 import Joi from 'joi';
+import { Topic, Language, Category, User, Commentary, Media } from '../models';
 
 export class ConstantHelper {
   constructor() {
@@ -21,6 +22,15 @@ export class ConstantHelper {
     };
     return userInfo;
   }
+  existingTopicKeys() {
+    return {
+      title: Joi.string(),
+      description: Joi.string(),
+      content: Joi.string(),
+      isPublished: Joi.boolean(),
+      mediaId: Joi.number()
+    };
+  }
   getTopicKeys() {
     return {
       title: Joi.string().required(),
@@ -31,5 +41,62 @@ export class ConstantHelper {
       mediaId: Joi.number(),
       languageId: Joi.number().required()
     };
+  }
+  albumIncludes() {
+    return [
+      {
+        model: Media,
+        as: 'media',
+        attributes: ['name']
+      }
+    ];
+  }
+  announcementIncludes() {
+    return [
+      {
+        model: User,
+        as: 'user',
+        attributes: ['names']
+      }
+    ];
+  }
+  categoryIncludes() {
+    return [
+      {
+        model: Category,
+        as: 'categories',
+        attributes: ['name']
+      }
+    ];
+  }
+  oneTopicIncludes() {
+    return [
+      ...this.topicIncludes(),
+      {
+        model: Category,
+        as: 'category',
+        include: [{ model: Topic, as: 'relatedTopics' }]
+      }
+    ];
+  }
+  topicIncludes() {
+    return [
+      ...this.announcementIncludes(),
+      {
+        model: Language,
+        as: 'language',
+        attributes: ['name']
+      },
+      {
+        model: Category,
+        as: 'category',
+        attributes: ['name']
+      },
+      {
+        model: Commentary,
+        as: 'commentaries',
+        attributes: ['content']
+      }
+    ];
   }
 }

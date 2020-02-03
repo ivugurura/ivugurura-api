@@ -19,9 +19,12 @@ export default (sequelize, DataTypes) => {
     {}
   );
   Category.associate = models => {
-    Category.belongsTo(models.Language);
+    Category.belongsTo(models.Language, { as: 'language' });
     Category.belongsTo(models.Category, { as: 'parent' });
-    Category.hasMany(models.Topic, { foreignKey: 'categoryId' });
+    Category.hasMany(models.Topic, {
+      foreignKey: 'categoryId',
+      as: 'relatedTopics'
+    });
     Category.hasMany(models.Category, { as: 'categories' });
   };
   return Category;

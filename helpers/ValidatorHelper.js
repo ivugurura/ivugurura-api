@@ -13,4 +13,7 @@ export class ValidatorHelper extends ConstantHelper {
   validateNewTopic() {
     return Joi.validate(this.data, Joi.object().keys(this.getTopicKeys()));
   }
+  validateExistingTopic() {
+    return Joi.validate(this.data, Joi.object().keys(this.existingTopicKeys()));
+  }
 }
