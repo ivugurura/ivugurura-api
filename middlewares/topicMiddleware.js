@@ -19,7 +19,6 @@ export const doesTopicExist = async (req, res, next) => {
     const idOrSlug = req.params.topicIdOrSlug;
     const condition = isNaN(idOrSlug) ? { slug: idOrSlug } : { id: idOrSlug };
     const topic = await dbHelper.findOne(condition);
-    req.params.topicId = topic.id;
     if (topic) {
       req.params.topicId = topic.id;
       return next();
