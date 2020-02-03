@@ -1,6 +1,7 @@
 import { serverResponse } from '../helpers';
 
 export const handleErrors = (err, req, res, next) => {
+  console.log(err.stack);
   return serverResponse(res, 500, err.message);
 };
 

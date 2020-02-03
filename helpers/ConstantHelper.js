@@ -1,25 +1,102 @@
 import Joi from 'joi';
+import { Topic, Language, Category, User, Commentary, Media } from '../models';
 
 export class ConstantHelper {
   constructor() {
-    this.login = {
-      email: Joi.string().required(),
-      password: Joi.string().required()
-    };
     this.hour = 3600000;
     this.day = this.hour * 24;
     this.week = this.day * 7;
   }
   getLoginKeys() {
-    return this.login;
+    return {
+      email: Joi.string().required(),
+      password: Joi.string().required()
+    };
   }
   getSignupKeys() {
     let userInfo = {
-      ...this.login,
+      ...this.getLoginKeys(),
       names: Joi.string().required(),
       username: Joi.string().required(),
       access_lvl: Joi.number().required()
     };
     return userInfo;
+  }
+  existingTopicKeys() {
+    return {
+      title: Joi.string(),
+      description: Joi.string(),
+      content: Joi.string(),
+      isPublished: Joi.boolean(),
+      mediaId: Joi.number()
+    };
+  }
+  getTopicKeys() {
+    return {
+      title: Joi.string().required(),
+      description: Joi.string().required(),
+      content: Joi.string().required(),
+      isPublished: Joi.boolean(),
+      categoryId: Joi.number().required(),
+      mediaId: Joi.number(),
+      languageId: Joi.number().required()
+    };
+  }
+  albumIncludes() {
+    return [
+      {
+        model: Media,
+        as: 'media',
+        attributes: ['name']
+      }
+    ];
+  }
+  announcementIncludes() {
+    return [
+      {
+        model: User,
+        as: 'user',
+        attributes: ['names']
+      }
+    ];
+  }
+  categoryIncludes() {
+    return [
+      {
+        model: Category,
+        as: 'categories',
+        attributes: ['name']
+      }
+    ];
+  }
+  oneTopicIncludes() {
+    return [
+      ...this.topicIncludes(),
+      {
+        model: Category,
+        as: 'category',
+        include: [{ model: Topic, as: 'relatedTopics' }]
+      }
+    ];
+  }
+  topicIncludes() {
+    return [
+      ...this.announcementIncludes(),
+      {
+        model: Language,
+        as: 'language',
+        attributes: ['name']
+      },
+      {
+        model: Category,
+        as: 'category',
+        attributes: ['name']
+      },
+      {
+        model: Commentary,
+        as: 'commentaries',
+        attributes: ['content']
+      }
+    ];
   }
 }

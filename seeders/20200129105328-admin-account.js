@@ -1,7 +1,6 @@
 'use strict';
 
-import { hashPassword } from '../helpers';
-
+const hashPassword = require('../helpers/util').hashPassword;
 module.exports = {
   up: (queryInterface, Sequelize) => {
     return queryInterface.bulkInsert(

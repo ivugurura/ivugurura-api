@@ -9,10 +9,12 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       name: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
+        allowNull: false
       },
       languageId: {
         type: Sequelize.INTEGER,
+        allowNull: false,
         onDelete: 'CASCADE',
         references: {
           model: 'Languages',
@@ -20,7 +22,7 @@ module.exports = {
           as: 'languageId'
         }
       },
-      parent: {
+      parentId: {
         type: Sequelize.INTEGER,
         onDelete: 'CASCADE',
         references: {

@@ -6,6 +6,12 @@ module.exports = {
       'Languages',
       [
         {
+          name: 'Kinyarwanda',
+          short_name: 'kn',
+          createdAt: new Date(),
+          updatedAt: new Date()
+        },
+        {
           name: 'English',
           short_name: 'en',
           createdAt: new Date(),

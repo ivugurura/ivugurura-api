@@ -2,12 +2,18 @@ import Joi from 'joi';
 import { ConstantHelper } from './ConstantHelper';
 
 export class ValidatorHelper extends ConstantHelper {
-  constructor(reqBody) {
-    this.reqBody = reqBody;
+  constructor(data) {
+    super();
+    this.data = data;
   }
 
   validateUser() {
-    loginSchema = Joi.object().keys(this.getLoginKeys);
-    return Joi.validate(this.reqBody, loginSchema);
+    return Joi.validate(this.data, Joi.object().keys(this.getLoginKeys()));
+  }
+  validateNewTopic() {
+    return Joi.validate(this.data, Joi.object().keys(this.getTopicKeys()));
+  }
+  validateExistingTopic() {
+    return Joi.validate(this.data, Joi.object().keys(this.existingTopicKeys()));
   }
 }
