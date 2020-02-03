@@ -10,22 +10,24 @@ export default (sequelize, DataTypes) => {
       languageId: {
         type: DataTypes.INTEGER,
         required: true
-      },
-      parentId: {
-        type: DataTypes.INTEGER,
-        required: true
       }
     },
     {}
   );
   Category.associate = models => {
     Category.belongsTo(models.Language, { as: 'language' });
-    Category.belongsTo(models.Category, { as: 'parent' });
+    Category.belongsTo(models.Category, {
+      as: 'parent',
+      foreignKey: 'categoryId'
+    });
     Category.hasMany(models.Topic, {
       foreignKey: 'categoryId',
       as: 'relatedTopics'
     });
-    Category.hasMany(models.Category, { as: 'categories' });
+    Category.hasMany(models.Category, {
+      as: 'categories',
+      foreignKey: 'categoryId'
+    });
   };
   return Category;
 };

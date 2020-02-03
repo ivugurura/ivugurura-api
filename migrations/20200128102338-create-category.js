@@ -22,7 +22,7 @@ module.exports = {
           as: 'languageId'
         }
       },
-      parentId: {
+      categoryId: {
         type: Sequelize.INTEGER,
         onDelete: 'CASCADE',
         references: {
