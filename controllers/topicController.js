@@ -11,12 +11,17 @@ export const addNewTopic = async (req, res) => {
   return serverResponse(res, 201, 'Created', newTopic);
 };
 export const getAllTopics = async (req, res) => {
-  const topics = await dbHelper.findAll(null);
+  const { languageId } = req.body;
+  const topics = await dbHelper.findAll({ languageId });
   return serverResponse(res, 200, 'Success', topics);
 };
 export const getOneTopic = async (req, res) => {
   const { topicId: id } = req.params;
-  const topic = await dbHelper.findOne({ id }, constHelper.oneTopicIncludes());
+  const { languageId } = req.body;
+  const topic = await dbHelper.findOne(
+    { id, languageId },
+    constHelper.oneTopicIncludes()
+  );
   return serverResponse(res, 200, 'Success', topic);
 };
 export const editTopic = async (req, res) => {
