@@ -16,4 +16,7 @@ export class ValidatorHelper extends ConstantHelper {
   validateExistingTopic() {
     return Joi.validate(this.data, Joi.object().keys(this.existingTopicKeys()));
   }
+  validateCategory() {
+    return Joi.validate(this.data, Joi.object().keys(this.categoryKeys()));
+  }
 }

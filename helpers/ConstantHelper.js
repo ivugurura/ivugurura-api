@@ -31,6 +31,12 @@ export class ConstantHelper {
       mediaId: Joi.number()
     };
   }
+  categoryKeys() {
+    return {
+      name: Joi.string().required(),
+      languageId: Joi.number().required()
+    };
+  }
   getTopicKeys() {
     return {
       title: Joi.string().required(),
