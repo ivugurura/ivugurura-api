@@ -8,7 +8,7 @@ import { Topic } from '../models';
 
 export const isNewTopicValidated = (req, res, next) => {
   let validator = new ValidatorHelper(req.body);
-  const errorBody = validator.validateNewTopic();
+  const errorBody = validator.validateInput('newTopic');
   if (errorBody.error) return joiValidatorMsg(res, errorBody);
   return next();
 };
@@ -28,7 +28,7 @@ export const doesTopicExist = async (req, res, next) => {
 };
 export const isExistingTopicValid = (req, res, next) => {
   let validator = new ValidatorHelper(req.body);
-  const errorBody = validator.validateExistingTopic();
+  const errorBody = validator.validateInput('existingTopic');
   if (errorBody.error) return joiValidatorMsg(res, errorBody);
   return next();
 };

@@ -37,6 +37,12 @@ export class ConstantHelper {
       languageId: Joi.number().required()
     };
   }
+  albumKeys() {
+    return {
+      name: Joi.string().required(),
+      languageId: Joi.number()
+    };
+  }
   getTopicKeys() {
     return {
       title: Joi.string().required(),

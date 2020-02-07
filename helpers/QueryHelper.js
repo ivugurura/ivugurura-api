@@ -12,7 +12,7 @@ export class QueryHelper {
   }
   async findAll(whereCondition, include, offset = 0, limit = 20) {
     return this.model.findAll({
-      order: [['id', 'DESC']],
+      order: [['createdAt', 'DESC']],
       offset,
       limit,
       where: whereCondition,

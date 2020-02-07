@@ -8,7 +8,7 @@ import { Category } from '../models';
 
 export const isCategoryValid = async (req, res, next) => {
   let validator = new ValidatorHelper(req.body);
-  const errorBody = validator.validateCategory();
+  const errorBody = validator.validateInput('category');
   if (errorBody.error) return joiValidatorMsg(res, errorBody);
   return next();
 };
