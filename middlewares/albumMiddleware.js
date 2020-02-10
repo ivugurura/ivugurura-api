@@ -21,3 +21,11 @@ export const doesAlbumExist = async (req, res, next) => {
   }
   return serverResponse(res, 404, 'Album does not exist');
 };
+
+export const isFileTypeValid = (req, res, next) => {
+  const { fileType } = req.params;
+  if (fileType && (fileType === 'song' || fileType === 'image')) {
+    return next();
+  }
+  return serverResponse(res, 400, 'Unknown routes');
+};

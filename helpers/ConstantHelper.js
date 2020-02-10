@@ -7,6 +7,7 @@ export class ConstantHelper {
     this.day = this.hour * 24;
     this.week = this.day * 7;
   }
+  static serverError = 'Unknown upload';
   getLoginKeys() {
     return {
       email: Joi.string().required(),
