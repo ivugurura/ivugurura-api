@@ -105,3 +105,6 @@ dist
 
 # Remove package-lock.json
 package-lock.json
+
+# Remove app files
+app_files/

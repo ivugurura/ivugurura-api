@@ -1,4 +1,10 @@
-import { serverResponse, QueryHelper } from '../helpers';
+import multer from 'multer';
+import {
+  serverResponse,
+  QueryHelper,
+  uploadMany,
+  uploadSingle
+} from '../helpers';
 import { Album } from '../models';
 
 const dbHelper = new QueryHelper(Album);
@@ -27,4 +33,15 @@ export const deleteAlbum = async (req, res) => {
   const { albumId: id } = req.params;
   await dbHelper.delete({ id });
   return serverResponse(res, 200, 'Album deleted');
+};
+
+export const uploadFile = (req, res) => {
+  const { isMany } = req.query;
+  const upload = isMany ? uploadMany : uploadSingle;
+  upload(req, res, uploadError => {
+    if (uploadError instanceof multer.MulterError || uploadError)
+      return serverResponse(res, 500, uploadError);
+    if (!req.file) return serverResponse(res, 400, 'No file selected');
+    return serverResponse(res, 200, 'File(s) uploaded');
+  });
 };
