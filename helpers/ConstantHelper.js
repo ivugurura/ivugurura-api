@@ -44,6 +44,17 @@ export class ConstantHelper {
       languageId: Joi.number()
     };
   }
+  mediaKeys() {
+    return {
+      title: Joi.string().required(),
+      type: Joi.string()
+        .valid('audio', 'video', 'image')
+        .required(),
+      mediaLink: Joi.string().required(),
+      languageId: Joi.number().required(),
+      albumId: Joi.number().required()
+    };
+  }
   getTopicKeys() {
     return {
       title: Joi.string().required(),
