@@ -21,7 +21,7 @@ module.exports = {
         allowNull: false,
         onDelete: 'CASCADE',
         references: {
-          model: 'Categories',
+          model: 'categories',
           key: 'id',
           as: 'categoryId'
         }
@@ -30,7 +30,7 @@ module.exports = {
         type: Sequelize.INTEGER,
         onDelete: 'CASCADE',
         references: {
-          model: 'Media',
+          model: 'media',
           key: 'id',
           as: 'coverImage'
         }
@@ -46,7 +46,7 @@ module.exports = {
         allowNull: false,
         onDelete: 'CASCADE',
         references: {
-          model: 'Languages',
+          model: 'languages',
           key: 'id',
           as: 'languageId'
         }
@@ -56,7 +56,7 @@ module.exports = {
         allowNull: false,
         onDelete: 'CASCADE',
         references: {
-          model: 'Users',
+          model: 'users',
           key: 'id',
           as: 'userId'
         }

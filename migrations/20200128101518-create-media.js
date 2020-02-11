@@ -26,7 +26,7 @@ module.exports = {
         allowNull: false,
         onDelete: 'CASCADE',
         references: {
-          model: 'Languages',
+          model: 'languages',
           key: 'id',
           as: 'languageId'
         }
@@ -36,7 +36,7 @@ module.exports = {
         allowNull: false,
         onDelete: 'CASCADE',
         references: {
-          model: 'Albums',
+          model: 'albums',
           key: 'id',
           as: 'albumId'
         }
