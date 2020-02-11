@@ -8,21 +8,19 @@ module.exports = (sequelize, DataTypes) => {
       type: {
         type: DataTypes.ENUM,
         values: ['audio', 'video', 'image']
-      },
-      languageId: {
-        type: DataTypes.INTEGER,
-        required: true
-      },
-      albumId: {
-        type: DataTypes.INTEGER,
-        required: true
       }
     },
     {}
   );
   Media.associate = function(models) {
-    Media.belongsTo(models.Language);
-    Media.belongsTo(models.Album);
+    Media.belongsTo(models.Language, {
+      as: 'language',
+      foreignKey: 'languageId'
+    });
+    Media.belongsTo(models.Album, {
+      as: 'album',
+      foreignKey: 'albumId'
+    });
   };
   return Media;
 };

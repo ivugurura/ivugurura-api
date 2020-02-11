@@ -25,6 +25,9 @@ export class ValidatorHelper extends ConstantHelper {
       case 'album':
         validateKeys = Joi.object().keys(this.albumKeys());
         break;
+      case 'media':
+        validateKeys = Joi.object().keys(this.mediaKeys());
+        break;
       default:
         break;
     }

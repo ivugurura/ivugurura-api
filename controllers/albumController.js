@@ -5,9 +5,10 @@ import {
   uploadMany,
   uploadSingle
 } from '../helpers';
-import { Album } from '../models';
+import { Album, Media } from '../models';
 
 const dbHelper = new QueryHelper(Album);
+const dbMediaHelper = new QueryHelper(Media);
 export const createAlbum = async (req, res) => {
   const newAlbum = await dbHelper.create(req.body);
   return serverResponse(res, 201, 'Success', newAlbum);
@@ -44,4 +45,8 @@ export const uploadFile = (req, res) => {
     if (!req.file) return serverResponse(res, 400, 'No file selected');
     return serverResponse(res, 200, 'File(s) uploaded');
   });
+};
+export const addNewMedia = async (req, res) => {
+  const newMedia = await dbMediaHelper.create(req.body);
+  return serverResponse(res, 201, 'Success', newMedia);
 };

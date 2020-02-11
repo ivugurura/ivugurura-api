@@ -21,11 +21,16 @@ export const doesAlbumExist = async (req, res, next) => {
   }
   return serverResponse(res, 404, 'Album does not exist');
 };
-
 export const isFileTypeValid = (req, res, next) => {
   const { fileType } = req.params;
   if (fileType && (fileType === 'song' || fileType === 'image')) {
     return next();
   }
   return serverResponse(res, 400, 'Unknown routes');
+};
+export const isMediaValid = (req, res, next) => {
+  let validator = new ValidatorHelper(req.body);
+  const errorBody = validator.validateInput('media');
+  if (errorBody.error) return joiValidatorMsg(res, errorBody);
+  return next();
 };
