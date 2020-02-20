@@ -4,13 +4,17 @@ import {
   createAlbum,
   getOneAlbum,
   editAlbumInfo,
-  deleteAlbum
+  deleteAlbum,
+  uploadFile,
+  addNewMedia
 } from '../../controllers/albumController';
 import {
   isAdminOrEditor,
   catchErrors,
   isAlbumValid,
-  doesAlbumExist
+  doesAlbumExist,
+  isFileTypeValid,
+  isMediaValid
 } from '../../middlewares';
 
 const albumRoutes = Router();
@@ -35,5 +39,8 @@ albumRoutes.delete(
   catchErrors(doesAlbumExist),
   catchErrors(deleteAlbum)
 );
+
+albumRoutes.post('/upload/:fileType', isFileTypeValid, catchErrors(uploadFile));
+albumRoutes.post('/add', isMediaValid, catchErrors(addNewMedia));
 
 export default albumRoutes;

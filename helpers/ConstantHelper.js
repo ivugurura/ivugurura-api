@@ -7,8 +7,10 @@ export class ConstantHelper {
     this.day = this.hour * 24;
     this.week = this.day * 7;
   }
+  static serverError = 'Unknown upload';
   getLoginKeys() {
     return {
+      languageId: Joi.number().required(),
       email: Joi.string().required(),
       password: Joi.string().required()
     };
@@ -41,6 +43,17 @@ export class ConstantHelper {
     return {
       name: Joi.string().required(),
       languageId: Joi.number()
+    };
+  }
+  mediaKeys() {
+    return {
+      title: Joi.string().required(),
+      type: Joi.string()
+        .valid('audio', 'video', 'image')
+        .required(),
+      mediaLink: Joi.string().required(),
+      languageId: Joi.number().required(),
+      albumId: Joi.number().required()
     };
   }
   getTopicKeys() {
