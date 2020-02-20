@@ -3,7 +3,7 @@
 module.exports = {
   up: (queryInterface, Sequelize) => {
     return queryInterface.bulkInsert(
-      'Media',
+      'media',
       [
         {
           title: 'English',
@@ -20,6 +20,6 @@ module.exports = {
   },
 
   down: (queryInterface, Sequelize) => {
-    return queryInterface.bulkDelete('Media', null, {});
+    return queryInterface.bulkDelete('media', null, {});
   }
 };

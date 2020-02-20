@@ -17,7 +17,7 @@ module.exports = {
         allowNull: false,
         onDelete: 'CASCADE',
         references: {
-          model: 'Languages',
+          model: 'languages',
           key: 'id',
           as: 'languageId'
         }
@@ -26,7 +26,7 @@ module.exports = {
         type: Sequelize.INTEGER,
         onDelete: 'CASCADE',
         references: {
-          model: 'Categories',
+          model: 'categories',
           key: 'id',
           as: 'parent'
         }
