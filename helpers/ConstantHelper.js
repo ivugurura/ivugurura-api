@@ -10,6 +10,7 @@ export class ConstantHelper {
   static serverError = 'Unknown upload';
   getLoginKeys() {
     return {
+      languageId: Joi.number().required(),
       email: Joi.string().required(),
       password: Joi.string().required()
     };
