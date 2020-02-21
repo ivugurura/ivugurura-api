@@ -10,7 +10,9 @@ module.exports = (sequelize, DataTypes) => {
       },
       userId: DataTypes.INTEGER
     },
-    {}
+    {
+      tableName: 'topic_views'
+    }
   );
   TopicView.associate = models => {
     TopicView.belongsTo(models.Topic);
