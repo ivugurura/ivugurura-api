@@ -1,5 +1,13 @@
 import Joi from 'joi';
-import { Topic, Language, Category, User, Commentary, Media } from '../models';
+import {
+  Topic,
+  Language,
+  Category,
+  User,
+  Commentary,
+  Media,
+  TopicView
+} from '../models';
 
 export class ConstantHelper {
   constructor() {
@@ -101,6 +109,11 @@ export class ConstantHelper {
         model: Category,
         as: 'category',
         include: [{ model: Topic, as: 'relatedTopics' }]
+      },
+      {
+        model: TopicView,
+        as: 'views',
+        attributes: ['isRead']
       }
     ];
   }
