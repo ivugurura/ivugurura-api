@@ -8,8 +8,8 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      isRead: {
-        type: Sequelize.BOOLEAN
+      ipAddress: {
+        type: Sequelize.STRING
       },
       topicId: {
         type: Sequelize.INTEGER,
@@ -18,15 +18,6 @@ module.exports = {
           model: 'topics',
           key: 'id',
           as: 'topicId'
-        }
-      },
-      userId: {
-        type: Sequelize.INTEGER,
-        onDelete: 'CASCADE',
-        references: {
-          model: 'users',
-          key: 'id',
-          as: 'userId'
         }
       },
       createdAt: {

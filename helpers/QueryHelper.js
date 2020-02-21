@@ -32,4 +32,7 @@ export class QueryHelper {
       logging: false
     });
   }
+  async findOrCreate(whereCondition, defaults) {
+    return this.model.findOrCreate({ where: whereCondition, defaults });
+  }
 }

@@ -3,12 +3,11 @@ module.exports = (sequelize, DataTypes) => {
   const TopicView = sequelize.define(
     'TopicView',
     {
-      isRead: DataTypes.BOOLEAN,
+      ipAddress: DataTypes.STRING,
       topicId: {
         type: DataTypes.INTEGER,
         required: true
-      },
-      userId: DataTypes.INTEGER
+      }
     },
     {
       tableName: 'topic_views'
@@ -16,7 +15,6 @@ module.exports = (sequelize, DataTypes) => {
   );
   TopicView.associate = models => {
     TopicView.belongsTo(models.Topic);
-    TopicView.belongsTo(models.User);
   };
   return TopicView;
 };

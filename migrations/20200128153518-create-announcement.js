@@ -19,6 +19,10 @@ module.exports = {
       type: {
         type: Sequelize.STRING
       },
+      expiryDate: {
+        type: Sequelize.DATE,
+        allowNull: false
+      },
       languageId: {
         type: Sequelize.INTEGER,
         allowNull: false,
@@ -32,7 +36,6 @@ module.exports = {
       userId: {
         type: Sequelize.INTEGER,
         allowNull: false,
-        onDelete: 'CASCADE',
         references: {
           model: 'users',
           key: 'id',

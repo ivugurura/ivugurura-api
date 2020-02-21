@@ -113,7 +113,7 @@ export class ConstantHelper {
       {
         model: TopicView,
         as: 'views',
-        attributes: ['isRead']
+        attributes: ['ipAddress']
       }
     ];
   }

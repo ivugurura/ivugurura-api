@@ -3,16 +3,17 @@ module.exports = (sequelize, DataTypes) => {
   const Commentary = sequelize.define(
     'Commentary',
     {
-      content: DataTypes.TEXT,
-      topicId: {
-        type: DataTypes.INTEGER,
+      content: {
+        type: DataTypes.TEXT,
         required: true
-      }
+      },
+      names: DataTypes.STRING,
+      email: DataTypes.STRING,
+      website: DataTypes.STRING
     },
     {}
   );
   Commentary.associate = function(models) {
-    Commentary.belongsTo(models.User);
     Commentary.belongsTo(models.Topic);
   };
   return Commentary;

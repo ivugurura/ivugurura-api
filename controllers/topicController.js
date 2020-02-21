@@ -19,23 +19,12 @@ export const getOneTopic = async (req, res) => {
   const viewDbHelper = new QueryHelper(TopicView);
   const { topicId: id } = req.params;
   const { languageId } = req.body;
-  let hasViewed = false;
-  const userId = req.user ? req.user.id : null;
 
   const topic = await dbHelper.findOne(
     { id, languageId },
     constHelper.oneTopicIncludes()
   );
-  if (req.user) {
-    const userView = await viewDbHelper.findOne({
-      topicId: id,
-      userId: req.user.id
-    });
-    if (userView) hasViewed = true;
-  }
-  if (!hasViewed) {
-    await viewDbHelper.create({ isRead: true, topicId: id, userId });
-  }
+  await viewDbHelper.findOrCreate({ topicId: id, ipAddress: req.ip });
   return serverResponse(res, 200, 'Success', topic);
 };
 export const editTopic = async (req, res) => {

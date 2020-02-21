@@ -12,6 +12,15 @@ module.exports = {
         type: Sequelize.TEXT,
         allowNull: false
       },
+      names: {
+        type: Sequelize.STRING
+      },
+      email: {
+        type: Sequelize.STRING
+      },
+      website: {
+        type: Sequelize.STRING
+      },
       topicId: {
         type: Sequelize.INTEGER,
         onDelete: 'CASCADE',
@@ -19,15 +28,6 @@ module.exports = {
           model: 'topics',
           key: 'id',
           as: 'topicId'
-        }
-      },
-      userId: {
-        type: Sequelize.INTEGER,
-        onDelete: 'CASCADE',
-        references: {
-          model: 'users',
-          key: 'id',
-          as: 'userId'
         }
       },
       createdAt: {

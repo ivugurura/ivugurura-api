@@ -19,7 +19,7 @@ module.exports = {
       categoryId: {
         type: Sequelize.INTEGER,
         allowNull: false,
-        onDelete: 'CASCADE',
+        onDelete: 'RESTRICT',
         references: {
           model: 'categories',
           key: 'id',
@@ -28,7 +28,6 @@ module.exports = {
       },
       mediaId: {
         type: Sequelize.INTEGER,
-        onDelete: 'CASCADE',
         references: {
           model: 'media',
           key: 'id',
@@ -54,7 +53,6 @@ module.exports = {
       userId: {
         type: Sequelize.INTEGER,
         allowNull: false,
-        onDelete: 'CASCADE',
         references: {
           model: 'users',
           key: 'id',
