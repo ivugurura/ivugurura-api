@@ -64,6 +64,15 @@ export class ConstantHelper {
       albumId: Joi.number().required()
     };
   }
+  announcemtKeys() {
+    return {
+      title: Joi.string().required(),
+      type: Joi.string(),
+      content: Joi.string().required(),
+      expiryDate: Joi.date().required(),
+      languageId: Joi.number().required()
+    };
+  }
   getTopicKeys() {
     return {
       title: Joi.string().required(),

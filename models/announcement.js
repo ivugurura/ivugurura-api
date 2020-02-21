@@ -11,7 +11,14 @@ module.exports = (sequelize, DataTypes) => {
     {}
   );
   Announcement.associate = function(models) {
-    Announcement.belongsTo(models.User);
+    Announcement.belongsTo(models.User, {
+      as: 'publisher',
+      foreignKey: 'userId'
+    });
+    Announcement.belongsTo(models.Language, {
+      as: 'language',
+      foreignKey: 'languageId'
+    });
   };
   return Announcement;
 };
