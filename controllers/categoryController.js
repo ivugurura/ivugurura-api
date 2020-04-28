@@ -12,7 +12,7 @@ export const createNewCategory = async (req, res) => {
 export const getCategories = async (req, res) => {
   const { languageId } = req.body;
   const categories = await dbHelper.findAll(
-    { languageId },
+    { languageId, categoryId: null },
     constHelper.categoryIncludes()
   );
   return serverResponse(res, 201, 'Success', categories);

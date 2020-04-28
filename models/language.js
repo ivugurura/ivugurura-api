@@ -5,15 +5,17 @@ module.exports = (sequelize, DataTypes) => {
     {
       name: {
         type: DataTypes.STRING,
-        unique: true
+        unique: true,
       },
       short_name: {
         type: DataTypes.STRING,
-        unique: true
-      }
+        unique: true,
+      },
     },
-    {}
+    {
+      tableName: 'languages',
+    }
   );
-  Language.associate = models => {};
+  Language.associate = (models) => {};
   return Language;
 };

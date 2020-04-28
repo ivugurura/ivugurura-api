@@ -7,19 +7,19 @@ module.exports = (sequelize, DataTypes) => {
       mediaLink: DataTypes.STRING,
       type: {
         type: DataTypes.ENUM,
-        values: ['audio', 'video', 'image']
-      }
+        values: ['audio', 'video', 'image'],
+      },
     },
-    {}
+    { tableName: 'media' }
   );
-  Media.associate = function(models) {
+  Media.associate = function (models) {
     Media.belongsTo(models.Language, {
       as: 'language',
-      foreignKey: 'languageId'
+      foreignKey: 'languageId',
     });
     Media.belongsTo(models.Album, {
       as: 'album',
-      foreignKey: 'albumId'
+      foreignKey: 'albumId',
     });
   };
   return Media;

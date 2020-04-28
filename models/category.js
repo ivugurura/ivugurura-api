@@ -5,28 +5,28 @@ export default (sequelize, DataTypes) => {
     {
       name: {
         type: DataTypes.STRING,
-        unique: true
+        unique: true,
       },
       languageId: {
         type: DataTypes.INTEGER,
-        required: true
-      }
+        required: true,
+      },
     },
-    {}
+    { tableName: 'categories' }
   );
-  Category.associate = models => {
+  Category.associate = (models) => {
     Category.belongsTo(models.Language, { as: 'language' });
     Category.belongsTo(models.Category, {
       as: 'parent',
-      foreignKey: 'categoryId'
+      foreignKey: 'categoryId',
     });
     Category.hasMany(models.Topic, {
       foreignKey: 'categoryId',
-      as: 'relatedTopics'
+      as: 'relatedTopics',
     });
     Category.hasMany(models.Category, {
       as: 'categories',
-      foreignKey: 'categoryId'
+      foreignKey: 'categoryId',
     });
   };
   return Category;

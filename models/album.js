@@ -3,11 +3,11 @@ module.exports = (sequelize, DataTypes) => {
   const Album = sequelize.define(
     'Album',
     {
-      name: DataTypes.STRING
+      name: DataTypes.STRING,
     },
-    {}
+    { tableName: 'albums' }
   );
-  Album.associate = function(models) {
+  Album.associate = function (models) {
     Album.hasMany(models.Media);
   };
   return Album;

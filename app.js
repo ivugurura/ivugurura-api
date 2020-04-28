@@ -6,11 +6,13 @@ import passport from 'passport';
 import expressSession from 'express-session';
 import connectRedis from 'connect-redis';
 import redis from 'redis';
+import lang from 'i18n';
 import { capture } from 'express-device';
 import { localPassport } from './config/passport';
 import { sequelize } from './models';
 import routes from './routes';
 import { handleErrors } from './middlewares';
+import { translate } from './locales';
 
 dotenv.config();
 localPassport(passport);
@@ -23,8 +25,9 @@ const redisSessionStore = new RedisStore({
   port: process.env.REDIS_PORT,
   prefix: process.env.REDIS_PREFIX,
   name: process.env.REDIS_NAME,
-  client: redisClient
+  client: redisClient,
 });
+
 const port = process.env.PORT || 3000;
 const hour = 3600000;
 const app = express();
@@ -51,7 +54,7 @@ app.use(
     secret: process.env.SESSION_SECRET,
     name: process.env.SESSION_NAME,
     cookie: { path: '/', httpOnly: true, secure: false, maxAge: 24 * hour },
-    store: redisSessionStore
+    store: redisSessionStore,
   })
 );
 /**
@@ -59,8 +62,12 @@ app.use(
  */
 app.use(passport.initialize());
 app.use(passport.session());
+
 app.get('/', (req, res) => {
-  res.status(200).json({ message: 'The test apis are working' });
+  const headerLang = req.headers['accept-language'] || 'kn';
+  res.status(200).json({
+    message: translate[headerLang].welcomeMesg,
+  });
 });
 /**
  * App routes

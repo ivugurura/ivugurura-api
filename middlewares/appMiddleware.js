@@ -1,5 +1,6 @@
 import { serverResponse, QueryHelper } from '../helpers';
 import { Language } from '../models';
+import { translate } from '../locales';
 
 const dbHelper = new QueryHelper(Language);
 export const handleErrors = (err, req, res, next) => {
@@ -24,14 +25,16 @@ export const monitorDevActions = (req, res, next) => {
 };
 
 export const route404 = (req, res) => {
-  return serverResponse(res, 404, 'Sorry you have lost');
+  const headerLang = req.headers['accept-language'] || 'kn';
+  const message = translate[headerLang].error404;
+  return serverResponse(res, 404, message);
 };
-export const catchErrors = fn => (req, res, next) => {
+export const catchErrors = (fn) => (req, res, next) => {
   Promise.resolve(fn(req, res, next)).catch(next);
 };
 export const setLanguage = async (req, res, next) => {
-  const langShortName = req.headers['accept-language'] || 'kn';
-  const language = await dbHelper.findOne({ short_name: langShortName });
+  const headerLang = req.headers['accept-language'] || 'kn';
+  const language = await dbHelper.findOne({ short_name: headerLang });
   req.body.languageId = language ? language.id : 1;
   return next();
 };

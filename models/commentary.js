@@ -5,15 +5,15 @@ module.exports = (sequelize, DataTypes) => {
     {
       content: {
         type: DataTypes.TEXT,
-        required: true
+        required: true,
       },
       names: DataTypes.STRING,
       email: DataTypes.STRING,
-      website: DataTypes.STRING
+      website: DataTypes.STRING,
     },
-    {}
+    { tableName: 'commentaries' }
   );
-  Commentary.associate = function(models) {
+  Commentary.associate = function (models) {
     Commentary.belongsTo(models.Topic);
   };
   return Commentary;

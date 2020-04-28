@@ -6,18 +6,18 @@ module.exports = (sequelize, DataTypes) => {
       title: DataTypes.STRING,
       content: DataTypes.TEXT,
       type: DataTypes.STRING,
-      expiryDate: DataTypes.DATE
+      expiryDate: DataTypes.DATE,
     },
-    {}
+    { tableName: 'announcements' }
   );
-  Announcement.associate = function(models) {
+  Announcement.associate = function (models) {
     Announcement.belongsTo(models.User, {
       as: 'publisher',
-      foreignKey: 'userId'
+      foreignKey: 'userId',
     });
     Announcement.belongsTo(models.Language, {
       as: 'language',
-      foreignKey: 'languageId'
+      foreignKey: 'languageId',
     });
   };
   return Announcement;
