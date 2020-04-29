@@ -6,7 +6,6 @@ import passport from 'passport';
 import expressSession from 'express-session';
 import connectRedis from 'connect-redis';
 import redis from 'redis';
-import lang from 'i18n';
 import { capture } from 'express-device';
 import { localPassport } from './config/passport';
 import { sequelize } from './models';
@@ -64,7 +63,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 app.get('/', (req, res) => {
-  const headerLang = req.headers['accept-language'] || 'kn';
+  const headerLang = req.acceptsLanguages('en', 'fr', 'kn') || 'kn';
   res.status(200).json({
     message: translate[headerLang].welcomeMesg,
   });

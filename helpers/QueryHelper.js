@@ -7,17 +7,23 @@ export class QueryHelper {
       where: whereCondition,
       logging: false,
       include,
-      attributes
+      attributes,
     });
   }
-  async findAll(whereCondition, include, offset = 0, limit = 20) {
+  async findAll(
+    whereCondition,
+    include,
+    orderBy = [['createdAt', 'DESC']],
+    offset = 0,
+    limit = 20
+  ) {
     return this.model.findAll({
-      order: [['createdAt', 'DESC']],
+      order: orderBy,
       offset,
       limit,
       where: whereCondition,
       logging: false,
-      include
+      include,
     });
   }
   async create(data) {
@@ -29,7 +35,7 @@ export class QueryHelper {
   async delete(whereCondition) {
     return this.model.destroy({
       where: whereCondition,
-      logging: false
+      logging: false,
     });
   }
   async findOrCreate(whereCondition, defaults) {

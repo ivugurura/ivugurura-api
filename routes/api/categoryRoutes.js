@@ -3,13 +3,13 @@ import {
   catchErrors,
   isAdminOrEditor,
   isCategoryValid,
-  doesCategoryExist
+  doesCategoryExist,
 } from '../../middlewares';
 import {
   getCategories,
   createNewCategory,
   editCategory,
-  deleteCategory
+  deleteCategory,
 } from '../../controllers/categoryController';
 
 const categoryRoutes = Router();
@@ -17,6 +17,7 @@ categoryRoutes.get('/', catchErrors(getCategories));
 categoryRoutes.post(
   '/',
   isAdminOrEditor,
+  catchErrors(doesCategoryExist),
   isCategoryValid,
   catchErrors(createNewCategory)
 );

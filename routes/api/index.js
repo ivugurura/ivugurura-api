@@ -8,9 +8,9 @@ import announceRoutes from './announceRoutes';
 const apiRoutes = Router();
 
 apiRoutes.use('/user', userRoutes);
-apiRoutes.use('/topic', topicRoutes);
-apiRoutes.use('/category', categoryRoutes);
-apiRoutes.use('/album', albumRoutes);
+apiRoutes.use('/topics', topicRoutes);
+apiRoutes.use('/categories', categoryRoutes);
+apiRoutes.use('/albums', albumRoutes);
 apiRoutes.use('/announcements', announceRoutes);
 
 export default apiRoutes;
