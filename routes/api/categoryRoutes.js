@@ -10,10 +10,13 @@ import {
   createNewCategory,
   editCategory,
   deleteCategory,
+  getNavCategories,
 } from '../../controllers/categoryController';
 
 const categoryRoutes = Router();
+
 categoryRoutes.get('/', catchErrors(getCategories));
+categoryRoutes.get('/navs', catchErrors(getNavCategories));
 categoryRoutes.post(
   '/',
   isAdminOrEditor,

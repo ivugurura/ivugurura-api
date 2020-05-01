@@ -7,6 +7,10 @@ export default (sequelize, DataTypes) => {
         type: DataTypes.STRING,
         unique: true,
       },
+      slug: {
+        type: DataTypes.STRING,
+        unique: true,
+      },
       languageId: {
         type: DataTypes.INTEGER,
         required: true,

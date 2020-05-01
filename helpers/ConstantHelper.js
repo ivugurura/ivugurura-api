@@ -106,7 +106,7 @@ export class ConstantHelper {
       {
         model: Category,
         as: 'categories',
-        attributes: ['id', 'name'],
+        attributes: ['id', 'name', 'slug'],
       },
     ];
   }

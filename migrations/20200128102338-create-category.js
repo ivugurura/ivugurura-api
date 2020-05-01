@@ -6,11 +6,15 @@ module.exports = {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
       },
       name: {
         type: Sequelize.STRING,
-        allowNull: false
+        allowNull: false,
+      },
+      slug: {
+        type: Sequelize.STRING,
+        allowNull: false,
       },
       languageId: {
         type: Sequelize.INTEGER,
@@ -19,8 +23,8 @@ module.exports = {
         references: {
           model: 'languages',
           key: 'id',
-          as: 'languageId'
-        }
+          as: 'languageId',
+        },
       },
       categoryId: {
         type: Sequelize.INTEGER,
@@ -28,20 +32,20 @@ module.exports = {
         references: {
           model: 'categories',
           key: 'id',
-          as: 'parent'
-        }
+          as: 'parent',
+        },
       },
       createdAt: {
         allowNull: false,
-        type: Sequelize.DATE
+        type: Sequelize.DATE,
       },
       updatedAt: {
         allowNull: false,
-        type: Sequelize.DATE
-      }
+        type: Sequelize.DATE,
+      },
     });
   },
   down: (queryInterface, Sequelize) => {
     return queryInterface.dropTable('categories');
-  }
+  },
 };
