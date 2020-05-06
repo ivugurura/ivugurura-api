@@ -6,39 +6,40 @@ module.exports = {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
       },
       title: {
         type: Sequelize.STRING,
-        allowNull: false
+        allowNull: false,
       },
       slug: {
         type: Sequelize.STRING,
-        allowNull: false
+        allowNull: false,
       },
       categoryId: {
         type: Sequelize.INTEGER,
         allowNull: false,
-        onDelete: 'RESTRICT',
+        onDelete: 'CASCADE',
         references: {
           model: 'categories',
           key: 'id',
-          as: 'categoryId'
-        }
+          as: 'categoryId',
+        },
       },
       mediaId: {
         type: Sequelize.INTEGER,
+        allowNull: false,
         references: {
           model: 'media',
           key: 'id',
-          as: 'coverImage'
-        }
+          as: 'coverImage',
+        },
       },
       description: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
       },
       content: {
-        type: Sequelize.TEXT
+        type: Sequelize.TEXT,
       },
       languageId: {
         type: Sequelize.INTEGER,
@@ -47,8 +48,8 @@ module.exports = {
         references: {
           model: 'languages',
           key: 'id',
-          as: 'languageId'
-        }
+          as: 'languageId',
+        },
       },
       userId: {
         type: Sequelize.INTEGER,
@@ -56,24 +57,24 @@ module.exports = {
         references: {
           model: 'users',
           key: 'id',
-          as: 'userId'
-        }
+          as: 'userId',
+        },
       },
       isPublished: {
         type: Sequelize.BOOLEAN,
-        default: false
+        default: false,
       },
       createdAt: {
         allowNull: false,
-        type: Sequelize.DATE
+        type: Sequelize.DATE,
       },
       updatedAt: {
         allowNull: false,
-        type: Sequelize.DATE
-      }
+        type: Sequelize.DATE,
+      },
     });
   },
   down: (queryInterface, Sequelize) => {
     return queryInterface.dropTable('topics');
-  }
+  },
 };

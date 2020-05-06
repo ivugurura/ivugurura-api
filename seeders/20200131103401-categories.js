@@ -7,10 +7,11 @@ module.exports = {
       [
         {
           name: 'Ukuri mvajuru',
+          slug: 'ukuri-mvajuru-sdsehj7',
           languageId: 1,
           createdAt: new Date(),
-          updatedAt: new Date()
-        }
+          updatedAt: new Date(),
+        },
       ],
       {}
     );
@@ -18,5 +19,5 @@ module.exports = {
 
   down: (queryInterface, Sequelize) => {
     return queryInterface.bulkDelete('categories', null, {});
-  }
+  },
 };

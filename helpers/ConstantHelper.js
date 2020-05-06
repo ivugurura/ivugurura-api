@@ -116,12 +116,31 @@ export class ConstantHelper {
       {
         model: Category,
         as: 'category',
-        include: [{ model: Topic, as: 'relatedTopics' }],
+        include: [
+          {
+            model: Topic,
+            as: 'relatedTopics',
+            attributes: ['title', 'slug', 'description'],
+            include: [
+              { model: Media, as: 'coverImage', attributes: ['mediaLink'] },
+            ],
+          },
+        ],
+      },
+      {
+        model: Commentary,
+        as: 'commentaries',
+        attributes: ['content'],
       },
       {
         model: TopicView,
         as: 'views',
         attributes: ['ipAddress'],
+      },
+      {
+        model: Media,
+        as: 'coverImage',
+        attributes: ['mediaLink'],
       },
     ];
   }
@@ -129,19 +148,14 @@ export class ConstantHelper {
     return [
       ...this.announcementIncludes(),
       {
-        model: Language,
-        as: 'language',
-        attributes: ['name'],
-      },
-      {
         model: Category,
         as: 'category',
         attributes: ['name'],
       },
       {
-        model: Commentary,
-        as: 'commentaries',
-        attributes: ['content'],
+        model: Media,
+        as: 'coverImage',
+        attributes: ['mediaLink'],
       },
     ];
   }

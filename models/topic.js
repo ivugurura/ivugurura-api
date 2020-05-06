@@ -26,7 +26,7 @@ module.exports = (sequelize, DataTypes) => {
     Topic.belongsTo(models.User, { foreignKey: 'userId', as: 'user' });
     Topic.hasMany(models.Commentary, { as: 'commentaries' });
     Topic.hasMany(models.TopicView, { as: 'views' });
-    Topic.hasOne(models.Media, { as: 'coverImage' });
+    Topic.belongsTo(models.Media, { foreignKey: 'mediaId', as: 'coverImage' });
   };
   return Topic;
 };

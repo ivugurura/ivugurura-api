@@ -12,7 +12,17 @@ export const addNewTopic = async (req, res) => {
 };
 export const getAllTopics = async (req, res) => {
   const { languageId } = req.body;
-  const topics = await dbHelper.findAll({ languageId });
+  const { page, pageSize } = req.query;
+  const offset = (page - 1) * pageSize || 0;
+  const limit = pageSize || 20;
+  console.log(`Offset:${offset},Limit:${limit}`);
+  const topics = await dbHelper.findAll(
+    { languageId },
+    constHelper.topicIncludes(),
+    null,
+    Number(offset),
+    Number(limit)
+  );
   return serverResponse(res, 200, 'Success', topics);
 };
 export const getOneTopic = async (req, res) => {

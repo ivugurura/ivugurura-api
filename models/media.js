@@ -21,6 +21,7 @@ module.exports = (sequelize, DataTypes) => {
       as: 'album',
       foreignKey: 'albumId',
     });
+    Media.hasOne(models.Topic, { foreignKey: 'mediaId' });
   };
   return Media;
 };
