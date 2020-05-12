@@ -12,14 +12,18 @@ export const addNewTopic = async (req, res) => {
 };
 export const getAllTopics = async (req, res) => {
   const { languageId } = req.body;
-  const { page, pageSize } = req.query;
+  const { page, pageSize, category } = req.query;
   const offset = (page - 1) * pageSize || 0;
   const limit = pageSize || 20;
-  console.log(`Offset:${offset},Limit:${limit}`);
+  const orderBy = [['createdAt', 'DESC']];
+  if (category === 'carsoul') {
+    orderBy = [['title', 'ASC']];
+  }
+
   const topics = await dbHelper.findAll(
     { languageId },
     constHelper.topicIncludes(),
-    null,
+    orderBy,
     Number(offset),
     Number(limit)
   );
