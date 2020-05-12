@@ -15,13 +15,16 @@ export const getAllTopics = async (req, res) => {
   const { page, pageSize, category } = req.query;
   const offset = (page - 1) * pageSize || 0;
   const limit = pageSize || 20;
-  const orderBy = [['createdAt', 'DESC']];
+  let orderBy = [['createdAt', 'DESC']];
+  let whereConditions = { languageId };
   if (category === 'carsoul') {
     orderBy = [['title', 'ASC']];
   }
-
+  if (!isNaN(category)) {
+    whereConditions = { languageId, categoryId: category };
+  }
   const topics = await dbHelper.findAll(
-    { languageId },
+    whereConditions,
     constHelper.topicIncludes(),
     orderBy,
     Number(offset),
