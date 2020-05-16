@@ -44,6 +44,8 @@ sequelize
     console.log('Something wrong with db');
     process.exit(1);
   });
+app.use('/songs', express.static('public/songs'));
+app.use('/images', express.static('public/images'));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(
