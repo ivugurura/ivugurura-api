@@ -1,9 +1,10 @@
-import { Category } from '../models';
+import { Category, Sequelize } from '../models';
 import { ConstantHelper } from '../helpers/ConstantHelper';
 import { serverResponse, QueryHelper, generateSlug } from '../helpers';
 
 const dbHelper = new QueryHelper(Category);
 const constHelper = new ConstantHelper();
+const { Op } = Sequelize;
 export const createNewCategory = async (req, res) => {
   req.body.slug = generateSlug(req.body.name);
   let newCategory = await dbHelper.create(req.body);
@@ -24,7 +25,11 @@ export const getNavCategories = async (req, res) => {
 export const getCategories = async (req, res) => {
   const { languageId } = req.body;
   const orderByName = [['name', 'ASC']];
-  const categories = await dbHelper.findAll({ languageId }, null, orderByName);
+  const categories = await dbHelper.findAll(
+    { languageId, categoryId: { [Op.not]: null } },
+    null,
+    orderByName
+  );
   return serverResponse(res, 201, 'Success', categories);
 };
 
