@@ -26,14 +26,8 @@ module.exports = {
           as: 'categoryId',
         },
       },
-      mediaId: {
-        type: Sequelize.INTEGER,
-        allowNull: false,
-        references: {
-          model: 'media',
-          key: 'id',
-          as: 'coverImage',
-        },
+      coverImage: {
+        type: Sequelize.STRING,
       },
       description: {
         type: Sequelize.STRING,

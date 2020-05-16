@@ -8,6 +8,7 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING,
         unique: true,
       },
+      coverImage: DataTypes.STRING,
       description: DataTypes.STRING,
       content: DataTypes.TEXT,
       isPublished: DataTypes.BOOLEAN,
@@ -26,7 +27,7 @@ module.exports = (sequelize, DataTypes) => {
     Topic.belongsTo(models.User, { foreignKey: 'userId', as: 'user' });
     Topic.hasMany(models.Commentary, { as: 'commentaries' });
     Topic.hasMany(models.TopicView, { as: 'views' });
-    Topic.belongsTo(models.Media, { foreignKey: 'mediaId', as: 'coverImage' });
+    Topic.hasMany(models.Media, { as: 'images' });
   };
   return Topic;
 };

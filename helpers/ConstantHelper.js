@@ -36,9 +36,9 @@ export class ConstantHelper {
     return {
       title: Joi.string(),
       description: Joi.string(),
+      coverImage: Joi.string(),
       content: Joi.string(),
       isPublished: Joi.boolean(),
-      mediaId: Joi.number(),
     };
   }
   categoryKeys() {
@@ -79,7 +79,7 @@ export class ConstantHelper {
       content: Joi.string().required(),
       isPublished: Joi.boolean(),
       categoryId: Joi.number().required(),
-      mediaId: Joi.number(),
+      coverImage: Joi.string(),
       languageId: Joi.number().required(),
     };
   }
@@ -121,9 +121,6 @@ export class ConstantHelper {
             model: Topic,
             as: 'relatedTopics',
             attributes: ['title', 'slug', 'description'],
-            include: [
-              { model: Media, as: 'coverImage', attributes: ['mediaLink'] },
-            ],
           },
         ],
       },
@@ -151,11 +148,6 @@ export class ConstantHelper {
         model: Category,
         as: 'category',
         attributes: ['name'],
-      },
-      {
-        model: Media,
-        as: 'coverImage',
-        attributes: ['mediaLink'],
       },
     ];
   }
