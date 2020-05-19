@@ -6,7 +6,8 @@ import {
   editAlbumInfo,
   deleteAlbum,
   uploadFile,
-  addNewMedia
+  addNewMedia,
+  deleteFile,
 } from '../../controllers/albumController';
 import {
   isAdminOrEditor,
@@ -14,7 +15,7 @@ import {
   isAlbumValid,
   doesAlbumExist,
   isFileTypeValid,
-  isMediaValid
+  isMediaValid,
 } from '../../middlewares';
 
 const albumRoutes = Router();
@@ -41,6 +42,11 @@ albumRoutes.delete(
 );
 
 albumRoutes.post('/upload/:fileType', isFileTypeValid, catchErrors(uploadFile));
+albumRoutes.delete(
+  '/:fileType/:fileName',
+  isFileTypeValid,
+  catchErrors(deleteFile)
+);
 albumRoutes.post('/add', isMediaValid, catchErrors(addNewMedia));
 
 export default albumRoutes;

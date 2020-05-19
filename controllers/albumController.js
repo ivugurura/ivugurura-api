@@ -1,9 +1,10 @@
 import multer from 'multer';
+import { unlink } from 'fs';
 import {
   serverResponse,
   QueryHelper,
   uploadMany,
-  uploadSingle
+  uploadSingle,
 } from '../helpers';
 import { Album, Media } from '../models';
 
@@ -39,11 +40,21 @@ export const deleteAlbum = async (req, res) => {
 export const uploadFile = (req, res) => {
   const { isMany } = req.query;
   const upload = isMany ? uploadMany : uploadSingle;
-  upload(req, res, uploadError => {
+  upload(req, res, (uploadError) => {
     if (uploadError instanceof multer.MulterError || uploadError)
       return serverResponse(res, 500, uploadError);
     if (!req.file) return serverResponse(res, 400, 'No file selected');
-    return serverResponse(res, 200, 'File(s) uploaded');
+    const fileName = req.file.filename;
+    return serverResponse(res, 200, 'File(s) uploaded', fileName);
+  });
+};
+export const deleteFile = (req, res) => {
+  const { fileName, fileType } = req.params;
+  const { IMAGES_ZONE, SONGS_ZONE } = process.env;
+  const filePath = fileType === 'image' ? IMAGES_ZONE : SONGS_ZONE;
+  unlink(`${filePath}/${fileName}`, (error) => {
+    if (error) return serverResponse(res, 500, 'File not delete');
+    return serverResponse(res, 200, 'File deleted');
   });
 };
 export const addNewMedia = async (req, res) => {

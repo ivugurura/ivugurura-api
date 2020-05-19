@@ -134,11 +134,6 @@ export class ConstantHelper {
         as: 'views',
         attributes: ['ipAddress'],
       },
-      {
-        model: Media,
-        as: 'coverImage',
-        attributes: ['mediaLink'],
-      },
     ];
   }
   topicIncludes() {
