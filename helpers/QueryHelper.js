@@ -45,4 +45,7 @@ export class QueryHelper {
       logging: false,
     });
   }
+  async count(whereCondition = {}) {
+    return this.model.count({ where: whereCondition, logging: false });
+  }
 }
