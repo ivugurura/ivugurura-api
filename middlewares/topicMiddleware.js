@@ -2,7 +2,7 @@ import {
   ValidatorHelper,
   joiValidatorMsg,
   QueryHelper,
-  serverResponse
+  serverResponse,
 } from '../helpers';
 import { Topic } from '../models';
 
@@ -31,4 +31,12 @@ export const isExistingTopicValid = (req, res, next) => {
   const errorBody = validator.validateInput('existingTopic');
   if (errorBody.error) return joiValidatorMsg(res, errorBody);
   return next();
+};
+export const isTopicStatusValid = (req, res, next) => {
+  const { publishStatus } = req.params;
+  const valids = ['published', 'unPublished'];
+  if (publishStatus && valids.includes(publishStatus)) {
+    return next();
+  }
+  return serverResponse(res, 400, 'Unknown routes');
 };

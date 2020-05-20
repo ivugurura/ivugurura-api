@@ -1,5 +1,5 @@
 import passport from 'passport';
-import { serverResponse, QueryHelper } from '../helpers';
+import { serverResponse, QueryHelper, paginator } from '../helpers';
 import { Topic, Media } from '../models';
 import { ConstantHelper } from '../helpers/ConstantHelper';
 
@@ -18,7 +18,6 @@ export const userSignin = async (req, res, next) => {
     });
   })(req, req, next);
 };
-
 export const getDashboardCounts = async (req, res) => {
   const { languageId } = req.body;
   let counts = {};
@@ -28,4 +27,19 @@ export const getDashboardCounts = async (req, res) => {
   const unPublished = await dbTopic.count({ languageId, isPublished: null });
   counts = { songs, videos, published, unPublished };
   return serverResponse(res, 200, 'Success', counts);
+};
+export const getTopicsByPublish = async (req, res) => {
+  const { languageId } = req.body;
+  const { publishStatus } = req.params;
+  const { offset, limit } = paginator(req.query);
+  const isPublished = publishStatus === 'published' ? true : null;
+  const whereConditions = { languageId, isPublished };
+  const topics = await dbTopic.findAll(
+    whereConditions,
+    constants.topicIncludes(),
+    [['title', 'ASC']],
+    offset,
+    limit
+  );
+  return serverResponse(res, 200, 'Success', topics);
 };

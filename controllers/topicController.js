@@ -1,4 +1,9 @@
-import { QueryHelper, serverResponse, generateSlug } from '../helpers';
+import {
+  QueryHelper,
+  serverResponse,
+  generateSlug,
+  paginator,
+} from '../helpers';
 import { Topic, TopicView } from '../models';
 import { ConstantHelper } from '../helpers/ConstantHelper';
 
@@ -12,9 +17,8 @@ export const addNewTopic = async (req, res) => {
 };
 export const getAllTopics = async (req, res) => {
   const { languageId } = req.body;
-  const { page, pageSize, category } = req.query;
-  const offset = (page - 1) * pageSize || 0;
-  const limit = pageSize || 20;
+  const { category } = req.query;
+  const { offset, limit } = paginator(req.params);
   let orderBy = [['createdAt', 'DESC']];
   let whereConditions = { languageId };
   if (category === 'carsoul') {
@@ -27,8 +31,8 @@ export const getAllTopics = async (req, res) => {
     whereConditions,
     constHelper.topicIncludes(),
     orderBy,
-    Number(offset),
-    Number(limit)
+    offset,
+    limit
   );
   return serverResponse(res, 200, 'Success', topics);
 };
