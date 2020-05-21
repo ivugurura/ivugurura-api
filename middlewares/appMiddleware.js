@@ -21,12 +21,13 @@ export const monitorDevActions = (req, res, next) => {
       ? `User: ${req.user.username}`
       : 'UNKNOWN user';
     console.log(
-      `${user} is using ${req.device.type}, 
-        Route: ${req.path}, method: ${req.method}, 
-        body: ${JSON.stringify(req.body)}, 
-        session: ${JSON.stringify(req.session)},
-        IP: ${req.ip} `
+      `${user} is using ${req.device.type},\n 
+        Route: ${req.path}, method: ${req.method},\n
+        body: ${JSON.stringify(req.body)},\n
+        session: ${JSON.stringify(req.session)},\n
+        IP: ${req.ip}\n`
     );
+    // User Agent: ${JSON.stringify(req.useragent)}
   }
   return next();
 };

@@ -4,6 +4,7 @@ import dotenv from 'dotenv';
 import cors from 'cors';
 import passport from 'passport';
 import expressSession from 'express-session';
+import userAgent from 'express-useragent';
 import connectRedis from 'connect-redis';
 import redis from 'redis';
 import { capture } from 'express-device';
@@ -32,6 +33,7 @@ const hour = 3600000;
 const app = express();
 app.use(cors({ origin: true, credentials: true }));
 app.use(capture());
+app.use(userAgent.express());
 app.set('trust proxy', true);
 
 /**

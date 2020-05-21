@@ -1,7 +1,11 @@
 import bcrypt from 'bcrypt';
 import slugify from 'slugify';
 import uniqid from 'uniqid';
+import jwt, { verify } from 'jwt-token';
+import { User } from '../models';
+import { QueryHelper } from './QueryHelper';
 
+const dbUser = new QueryHelper(User);
 export const hashPassword = (password) => {
   const salt = bcrypt.genSaltSync(process.env.PASS_SALT);
   const hashPass = bcrypt.hashSync(password, salt);
@@ -11,7 +15,7 @@ export const unHashPassword = (password, hashedPass) => {
   return bcrypt.compareSync(password, hashedPass);
 };
 export const generatJWT = (userInfo) => {
-  const token = jwt.sign(userInfo, process.env.SECRET, { expiresIn: '1d' });
+  const token = jwt.sign(userInfo, process.env.SECRET, { expiresIn: '1w' });
   return token;
 };
 export const serverResponse = (res, statusCode, message, data) => {
@@ -39,4 +43,27 @@ export const paginator = ({ page, pageSize }) => {
   const offset = Number((page - 1) * pageSize) || 0;
   const limit = Number(pageSize) || 20;
   return { offset, limit };
+};
+export const authenticatedUser = async (req) => {
+  const { user, useragent, headers } = req;
+  if (
+    useragent.isFirefox ||
+    useragent.isOpera ||
+    useragent.isChromeOS ||
+    useragent.isEdge
+  ) {
+    const token = headers.authorization;
+    try {
+      const { id } = verify(token, process.env.SECRET);
+      const user = await dbUser.findOne({ id });
+      if (user.id) {
+        return user;
+      }
+    } catch (error) {
+      return null;
+    }
+  } else if ((useragent.browser = 'PostmanRuntime' && req.isAuthenticated())) {
+    return user;
+  }
+  return null;
 };

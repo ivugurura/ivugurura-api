@@ -1,5 +1,5 @@
 import passport from 'passport';
-import { serverResponse, QueryHelper, paginator } from '../helpers';
+import { serverResponse, QueryHelper, paginator, generatJWT } from '../helpers';
 import { Topic, Media } from '../models';
 import { ConstantHelper } from '../helpers/ConstantHelper';
 
@@ -12,6 +12,7 @@ export const userSignin = async (req, res, next) => {
     req.logIn(user, (err) => {
       if (err) return next(err);
 
+      user.token = generatJWT({ id: user.id });
       req.session.cookie.maxAge = constants.week;
       req.session.save();
       return serverResponse(res, 200, `Welcome ${user.names}`, user);

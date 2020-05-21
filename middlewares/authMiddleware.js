@@ -1,8 +1,9 @@
-import { serverResponse } from '../helpers';
+import { serverResponse, authenticatedUser } from '../helpers';
 import { translate } from '../locales';
 
 export const isAuthenticated = async (req, res, next) => {
-  if (req.isAuthenticated()) return next();
+  const user = await authenticatedUser(req);
+  if (user) return next();
 
   const headerLang = req.acceptsLanguages('en', 'fr', 'kn') || 'kn';
   const message = translate[headerLang].notAuth;
@@ -10,8 +11,9 @@ export const isAuthenticated = async (req, res, next) => {
 };
 
 export const isEditor = async (req, res, next) => {
-  if (req.isAuthenticated()) {
-    if (req.user.role === 'editor') return next();
+  const user = await authenticatedUser(req);
+  if (user && user.role === 'editor') {
+    return next();
   }
   const headerLang = req.acceptsLanguages('en', 'fr', 'kn') || 'kn';
   const message = translate[headerLang].notEditor;
@@ -20,9 +22,11 @@ export const isEditor = async (req, res, next) => {
 };
 
 export const isAdmin = async (req, res, next) => {
-  if (req.isAuthenticated()) {
-    if (req.user.role === 'admin') return next();
+  const user = await authenticatedUser(req);
+  if (user && user.role === 'admin') {
+    return next();
   }
+
   const headerLang = req.acceptsLanguages('en', 'fr', 'kn') || 'kn';
   const message = translate[headerLang].notAdmin;
 
@@ -30,8 +34,9 @@ export const isAdmin = async (req, res, next) => {
 };
 
 export const isAdminOrEditor = async (req, res, next) => {
-  if (req.isAuthenticated()) {
-    if (req.user.role === 'editor' || req.user.role === 'admin') return next();
+  const user = await authenticatedUser(req);
+  if (user) {
+    if (user.role === 'editor' || user.role === 'admin') return next();
   }
   const headerLang = req.acceptsLanguages('en', 'fr', 'kn') || 'kn';
   const message = translate[headerLang].notAdmin;
