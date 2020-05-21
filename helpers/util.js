@@ -1,7 +1,7 @@
 import bcrypt from 'bcrypt';
 import slugify from 'slugify';
 import uniqid from 'uniqid';
-import jwt, { verify } from 'jwt-token';
+import jwt, { verify } from 'jsonwebtoken';
 import { User } from '../models';
 import { QueryHelper } from './QueryHelper';
 
