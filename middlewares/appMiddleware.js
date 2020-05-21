@@ -1,3 +1,4 @@
+import { existsSync, mkdirSync } from 'fs';
 import { serverResponse, QueryHelper } from '../helpers';
 import { Language } from '../models';
 import { translate } from '../locales';
@@ -16,6 +17,13 @@ export const handleErrors = (err, req, res, next) => {
 };
 
 export const monitorDevActions = (req, res, next) => {
+  const songsDir = process.env.SONGS_ZONE;
+  const imagesDir = process.env.IMAGES_ZONE;
+  if (!existsSync(songsDir) || !existsSync(imagesDir)) {
+    mkdirSync('./public');
+    mkdirSync(songsDir);
+    mkdirSync(imagesDir);
+  }
   if (isDev) {
     const user = req.isAuthenticated()
       ? `User: ${req.user.username}`
