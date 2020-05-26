@@ -38,6 +38,8 @@ export class ConstantHelper {
       description: Joi.string(),
       coverImage: Joi.string(),
       content: Joi.string(),
+      categoryId: Joi.number(),
+      languageId: Joi.number().required(),
       isPublished: Joi.boolean(),
     };
   }
@@ -79,7 +81,7 @@ export class ConstantHelper {
       content: Joi.string().required(),
       isPublished: Joi.boolean(),
       categoryId: Joi.number().required(),
-      coverImage: Joi.string(),
+      coverImage: Joi.string().required(),
       languageId: Joi.number().required(),
     };
   }

@@ -21,6 +21,7 @@ export const doesTopicExist = async (req, res, next) => {
     const topic = await dbHelper.findOne(condition);
     if (topic) {
       req.params.topicId = topic.id;
+      req.body.coverImage = topic.coverImage;
       return next();
     }
   }

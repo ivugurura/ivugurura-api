@@ -1,3 +1,4 @@
+import { unlink } from 'fs';
 import {
   QueryHelper,
   serverResponse,
@@ -59,6 +60,11 @@ export const editTopic = async (req, res) => {
 
 export const deleteTopic = async (req, res) => {
   const { topicId: id } = req.params;
+  const { coverImage } = req.body;
+  const { IMAGES_ZONE } = process.env;
   await dbHelper.delete({ id });
-  return serverResponse(res, 200, 'The topic deleted');
+  unlink(`${IMAGES_ZONE}/${coverImage}`, (error) => {
+    if (error) console.log('File not delete');
+    return serverResponse(res, 200, 'The topic deleted');
+  });
 };
