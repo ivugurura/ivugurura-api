@@ -129,7 +129,7 @@ export class ConstantHelper {
       {
         model: Commentary,
         as: 'commentaries',
-        attributes: ['content'],
+        attributes: ['content', 'names', 'createdAt'],
       },
       {
         model: TopicView,
