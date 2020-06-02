@@ -148,4 +148,14 @@ export class ConstantHelper {
       },
     ];
   }
+  commentKeys() {
+    return {
+      names: Joi.string().required(),
+      email: Joi.string().email().required(),
+      content: Joi.string().required(),
+      website: Joi.string(),
+      // coverImage: Joi.string(),
+      languageId: Joi.number().required(),
+    };
+  }
 }

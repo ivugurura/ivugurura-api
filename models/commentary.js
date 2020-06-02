@@ -14,7 +14,10 @@ module.exports = (sequelize, DataTypes) => {
     { tableName: 'commentaries' }
   );
   Commentary.associate = function (models) {
-    Commentary.belongsTo(models.Topic);
+    Commentary.belongsTo(models.Topic, {
+      as: 'topic',
+      foreignKey: 'topicId',
+    });
   };
   return Commentary;
 };

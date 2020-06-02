@@ -41,3 +41,9 @@ export const isTopicStatusValid = (req, res, next) => {
   }
   return serverResponse(res, 400, 'Unknown routes');
 };
+export const isCommentValid = (req, res, next) => {
+  let validator = new ValidatorHelper(req.body);
+  const errorBody = validator.validateInput('comment');
+  if (errorBody.error) return joiValidatorMsg(res, errorBody);
+  return next();
+};

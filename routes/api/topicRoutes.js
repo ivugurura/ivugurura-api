@@ -3,14 +3,16 @@ import { catchErrors, isAdminOrEditor } from '../../middlewares';
 import {
   isNewTopicValidated,
   doesTopicExist,
-  isExistingTopicValid
+  isExistingTopicValid,
+  isCommentValid,
 } from '../../middlewares/topicMiddleware';
 import {
   addNewTopic,
   getAllTopics,
   editTopic,
   getOneTopic,
-  deleteTopic
+  deleteTopic,
+  addTopicComment,
 } from '../../controllers/topicController';
 
 const topicRoutes = Router();
@@ -35,8 +37,15 @@ topicRoutes.get(
 );
 topicRoutes.delete(
   '/:topicIdOrSlug',
+  isAdminOrEditor,
   catchErrors(doesTopicExist),
   catchErrors(deleteTopic)
+);
+topicRoutes.post(
+  '/:topicIdOrSlug/comments',
+  isCommentValid,
+  catchErrors(doesTopicExist),
+  catchErrors(addTopicComment)
 );
 
 export default topicRoutes;

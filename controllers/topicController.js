@@ -5,10 +5,11 @@ import {
   generateSlug,
   paginator,
 } from '../helpers';
-import { Topic, TopicView } from '../models';
+import { Topic, TopicView, Commentary } from '../models';
 import { ConstantHelper } from '../helpers/ConstantHelper';
 
 const dbHelper = new QueryHelper(Topic);
+const dbCommentHelper = new QueryHelper(Commentary);
 const constHelper = new ConstantHelper();
 export const addNewTopic = async (req, res) => {
   req.body.userId = req.user.id;
@@ -57,7 +58,6 @@ export const editTopic = async (req, res) => {
   await dbHelper.update(req.body, { id });
   return serverResponse(res, 200, 'The topic updated');
 };
-
 export const deleteTopic = async (req, res) => {
   const { topicId: id } = req.params;
   const { coverImage } = req.body;
@@ -67,4 +67,12 @@ export const deleteTopic = async (req, res) => {
     if (error) console.log('File not delete');
     return serverResponse(res, 200, 'The topic deleted');
   });
+};
+export const addTopicComment = async (req, res) => {
+  const { topicId } = req.params;
+  req.body.topicId = topicId;
+  console.log(req.body);
+
+  const newComment = await dbCommentHelper.create(req.body);
+  return serverResponse(res, 201, 'Success', newComment);
 };
