@@ -20,7 +20,7 @@ export const addNewTopic = async (req, res) => {
 export const getAllTopics = async (req, res) => {
   const { languageId } = req.body;
   const { category } = req.query;
-  const { offset, limit } = paginator(req.params);
+  const { offset, limit } = paginator(req.query);
   let orderBy = [['createdAt', 'DESC']];
   let whereConditions = { languageId };
   if (category === 'carsoul') {
