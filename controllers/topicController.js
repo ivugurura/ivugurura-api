@@ -33,6 +33,7 @@ export const getAllTopics = async (req, res) => {
     whereConditions,
     constHelper.topicIncludes(),
     orderBy,
+    null,
     offset,
     limit
   );

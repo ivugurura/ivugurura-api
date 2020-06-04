@@ -14,6 +14,7 @@ export class QueryHelper {
     whereCondition,
     include,
     orderBy = [['createdAt', 'DESC']],
+    attributes,
     offset = 0,
     limit = 20
   ) {
@@ -24,6 +25,7 @@ export class QueryHelper {
       where: whereCondition,
       logging: false,
       include,
+      attributes,
     });
   }
   async create(data) {
