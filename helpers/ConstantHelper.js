@@ -112,6 +112,15 @@ export class ConstantHelper {
       },
     ];
   }
+  oneCategoryIncludes() {
+    return [
+      {
+        model: Category,
+        as: 'parent',
+        attributes: ['id', 'name'],
+      },
+    ];
+  }
   oneTopicIncludes() {
     return [
       ...this.topicIncludes(),

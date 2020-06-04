@@ -32,7 +32,16 @@ export const getCategories = async (req, res) => {
   );
   return serverResponse(res, 201, 'Success', categories);
 };
-
+export const getACategory = async (req, res) => {
+  const { languageId, categoryId: id } = req.body;
+  const attributes = ['id', 'name', 'slug', 'createdAt'];
+  const category = await dbHelper.findOne(
+    { languageId, id },
+    constHelper.oneCategoryIncludes(),
+    attributes
+  );
+  return serverResponse(res, 200, 'Success', category);
+};
 export const editCategory = async (req, res) => {
   const { categoryId: id } = req.params;
   if (req.body.name) {

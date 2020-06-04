@@ -11,18 +11,25 @@ import {
   editCategory,
   deleteCategory,
   getNavCategories,
+  getACategory,
 } from '../../controllers/categoryController';
 
 const categoryRoutes = Router();
 
 categoryRoutes.get('/', catchErrors(getCategories));
 categoryRoutes.get('/navs', catchErrors(getNavCategories));
+
 categoryRoutes.post(
   '/',
   isAdminOrEditor,
   catchErrors(doesCategoryExist),
   isCategoryValid,
   catchErrors(createNewCategory)
+);
+categoryRoutes.get(
+  '/:categoryId',
+  catchErrors(doesCategoryExist),
+  catchErrors(getACategory)
 );
 categoryRoutes.patch(
   '/:categoryId',
