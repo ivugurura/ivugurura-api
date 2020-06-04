@@ -131,7 +131,7 @@ export class ConstantHelper {
           {
             model: Topic,
             as: 'relatedTopics',
-            attributes: ['title', 'slug', 'description'],
+            attributes: ['title', 'slug', 'description', 'coverImage'],
           },
         ],
       },
