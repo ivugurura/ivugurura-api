@@ -39,6 +39,7 @@ export const getTopicsByPublish = async (req, res) => {
     whereConditions,
     constants.topicIncludes(),
     [['title', 'ASC']],
+    null,
     offset,
     limit
   );
