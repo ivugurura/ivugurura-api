@@ -8,6 +8,7 @@ import {
   uploadFile,
   addNewMedia,
   deleteFile,
+  getMedia,
 } from '../../controllers/albumController';
 import {
   isAdminOrEditor,
@@ -48,5 +49,6 @@ albumRoutes.delete(
   catchErrors(deleteFile)
 );
 albumRoutes.post('/add', isMediaValid, catchErrors(addNewMedia));
+albumRoutes.get('/medias/all', catchErrors(getMedia));
 
 export default albumRoutes;
