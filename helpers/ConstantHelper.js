@@ -7,6 +7,7 @@ import {
   Commentary,
   Media,
   TopicView,
+  Album,
 } from '../models';
 
 export class ConstantHelper {
@@ -90,6 +91,20 @@ export class ConstantHelper {
       {
         model: Media,
         as: 'media',
+        attributes: ['name'],
+      },
+    ];
+  }
+  mediaIncludes() {
+    return [
+      {
+        model: Album,
+        as: 'album',
+        attributes: ['name'],
+      },
+      {
+        model: Language,
+        as: 'language',
         attributes: ['name'],
       },
     ];

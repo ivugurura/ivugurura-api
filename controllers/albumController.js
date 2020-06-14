@@ -7,9 +7,11 @@ import {
   uploadSingle,
 } from '../helpers';
 import { Album, Media } from '../models';
+import { ConstantHelper } from '../helpers/ConstantHelper';
 
 const dbHelper = new QueryHelper(Album);
 const dbMediaHelper = new QueryHelper(Media);
+const constHelper = new ConstantHelper();
 export const createAlbum = async (req, res) => {
   const newAlbum = await dbHelper.create(req.body);
   return serverResponse(res, 201, 'Success', newAlbum);
@@ -63,6 +65,11 @@ export const addNewMedia = async (req, res) => {
 };
 export const getMedia = async (req, res) => {
   const attributes = ['title', 'mediaLink', 'type'];
-  const medias = await dbMediaHelper.findAll(null, null, null, attributes);
+  const medias = await dbMediaHelper.findAll(
+    null,
+    constHelper.mediaIncludes(),
+    null,
+    attributes
+  );
   return serverResponse(res, 200, 'Success', medias);
 };
