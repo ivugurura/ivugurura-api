@@ -25,6 +25,6 @@ export const doesCategoryExist = async (req, res, next) => {
       return next();
     }
   }
-  if (req.method === 'POST' && !categoryId) return next();
+  if (req.method === 'POST' && !categoryIdOrSlug) return next();
   return serverResponse(res, 404, 'Category does not exist');
 };
