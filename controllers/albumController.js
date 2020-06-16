@@ -64,9 +64,11 @@ export const addNewMedia = async (req, res) => {
   return serverResponse(res, 201, 'Success', newMedia);
 };
 export const getMedia = async (req, res) => {
+  const { mediaType } = req.params;
+  const conditions = mediaType !== 'all' ? { type: mediaType } : null;
   const attributes = ['title', 'mediaLink', 'type'];
   const medias = await dbMediaHelper.findAll(
-    null,
+    conditions,
     constHelper.mediaIncludes(),
     null,
     attributes

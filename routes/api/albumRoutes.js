@@ -49,6 +49,6 @@ albumRoutes.delete(
   catchErrors(deleteFile)
 );
 albumRoutes.post('/add', isMediaValid, catchErrors(addNewMedia));
-albumRoutes.get('/medias/all', catchErrors(getMedia));
+albumRoutes.get('/medias/:mediaType', catchErrors(getMedia));
 
 export default albumRoutes;
