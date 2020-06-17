@@ -5,7 +5,7 @@ module.exports = (sequelize, DataTypes) => {
     {
       title: DataTypes.STRING,
       content: DataTypes.TEXT,
-      type: DataTypes.STRING,
+      isPublished: DataTypes.BOOLEAN,
       expiryDate: DataTypes.DATE,
     },
     { tableName: 'announcements' }

@@ -69,7 +69,7 @@ export class ConstantHelper {
   announcemtKeys() {
     return {
       title: Joi.string().required(),
-      type: Joi.string(),
+      isPublished: Joi.boolean(),
       content: Joi.string().required(),
       expiryDate: Joi.date().required(),
       languageId: Joi.number().required(),

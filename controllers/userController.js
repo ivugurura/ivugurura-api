@@ -22,8 +22,8 @@ export const userSignin = async (req, res, next) => {
 export const getDashboardCounts = async (req, res) => {
   const { languageId } = req.body;
   let counts = {};
-  const songs = await dbMedia.count({ languageId, type: 'audio' });
-  const videos = await dbMedia.count({ languageId, type: 'video' });
+  const songs = await dbMedia.count({ type: 'audio' });
+  const videos = await dbMedia.count({ type: 'video' });
   const published = await dbTopic.count({ languageId, isPublished: true });
   const unPublished = await dbTopic.count({ languageId, isPublished: null });
   counts = { songs, videos, published, unPublished };
