@@ -6,11 +6,12 @@ import {
   uploadMany,
   uploadSingle,
 } from '../helpers';
-import { Album, Media } from '../models';
+import { Album, Media, Topic } from '../models';
 import { ConstantHelper } from '../helpers/ConstantHelper';
 
 const dbHelper = new QueryHelper(Album);
 const dbMediaHelper = new QueryHelper(Media);
+const dbTopicHelper = new QueryHelper(Topic);
 const constHelper = new ConstantHelper();
 export const createAlbum = async (req, res) => {
   const newAlbum = await dbHelper.create(req.body);
@@ -39,15 +40,37 @@ export const deleteAlbum = async (req, res) => {
   return serverResponse(res, 200, 'Album deleted');
 };
 
-export const uploadFile = (req, res) => {
-  const { isMany } = req.query;
+export const uploadFile = async (req, res) => {
+  const { isMany, prevFile, update } = req.query;
+  const { fileType } = req.params;
+  const { IMAGES_ZONE, SONGS_ZONE } = process.env;
+
   const upload = isMany ? uploadMany : uploadSingle;
-  upload(req, res, (uploadError) => {
-    if (uploadError instanceof multer.MulterError || uploadError)
-      return serverResponse(res, 500, uploadError);
-    if (!req.file) return serverResponse(res, 400, 'No file selected');
-    const fileName = req.file.filename;
-    return serverResponse(res, 200, 'File(s) uploaded', fileName);
+
+  const filePath = fileType === 'image' ? IMAGES_ZONE : SONGS_ZONE;
+  /**
+   * Delete the previous file first then
+   * Upload a new one
+   */
+  unlink(`${filePath}/${prevFile}`, (error) => {
+    if (error) console.log('Error occurred, not deleted');
+
+    upload(req, res, async (uploadError) => {
+      if (uploadError instanceof multer.MulterError || uploadError)
+        return serverResponse(res, 500, uploadError);
+      if (!req.file) return serverResponse(res, 400, 'No file selected');
+      const fileName = req.file.filename;
+      /**
+       * Update a topic cover image if necessary
+       */
+      if (fileType === 'image' && update !== 'null') {
+        await dbTopicHelper.update(
+          { coverImage: fileName },
+          { coverImage: prevFile }
+        );
+      }
+      return serverResponse(res, 200, 'File(s) uploaded', fileName);
+    });
   });
 };
 export const deleteFile = (req, res) => {

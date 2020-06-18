@@ -72,7 +72,6 @@ export const deleteTopic = async (req, res) => {
 export const addTopicComment = async (req, res) => {
   const { topicId } = req.params;
   req.body.topicId = topicId;
-  console.log(req.body);
 
   const newComment = await dbCommentHelper.create(req.body);
   return serverResponse(res, 201, 'Success', newComment);
