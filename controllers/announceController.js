@@ -1,10 +1,15 @@
 import { serverResponse, QueryHelper } from '../helpers';
 import db, { Announcement } from '../models';
+import { ConstantHelper } from '../helpers/ConstantHelper';
 
 const dbHelper = new QueryHelper(Announcement);
+const constHelper = new ConstantHelper();
 export const getAnnouncements = async (req, res) => {
   const { languageId } = req.body;
-  const announcements = await dbHelper.findAll({ languageId });
+  const announcements = await dbHelper.findAll(
+    { languageId },
+    constHelper.announcementIncludes()
+  );
   return serverResponse(res, 200, 'Success', announcements);
 };
 export const getPublishedAnnouncemnt = async (req, res) => {

@@ -116,6 +116,11 @@ export class ConstantHelper {
         as: 'user',
         attributes: ['names'],
       },
+      {
+        model: Language,
+        as: 'language',
+        attributes: ['name'],
+      },
     ];
   }
   categoryIncludes() {
