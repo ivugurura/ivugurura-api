@@ -13,6 +13,7 @@ import {
   getOneTopic,
   deleteTopic,
   addTopicComment,
+  getTopicComments,
 } from '../../controllers/topicController';
 
 const topicRoutes = Router();
@@ -46,6 +47,11 @@ topicRoutes.post(
   isCommentValid,
   catchErrors(doesTopicExist),
   catchErrors(addTopicComment)
+);
+topicRoutes.get(
+  '/:topicIdOrSlug/comments',
+  catchErrors(doesTopicExist),
+  catchErrors(getTopicComments)
 );
 
 export default topicRoutes;

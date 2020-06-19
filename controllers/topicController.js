@@ -76,3 +76,14 @@ export const addTopicComment = async (req, res) => {
   const newComment = await dbCommentHelper.create(req.body);
   return serverResponse(res, 201, 'Success', newComment);
 };
+export const getTopicComments = async (req, res) => {
+  const { topicId } = req.params;
+  const attributes = ['names', 'content', 'createdAt'];
+  const comments = await dbCommentHelper.findAll(
+    { topicId },
+    null,
+    null,
+    attributes
+  );
+  return serverResponse(res, 200, 'Success', comments);
+};
