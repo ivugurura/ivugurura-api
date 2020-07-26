@@ -87,3 +87,17 @@ export const getTopicComments = async (req, res) => {
   );
   return serverResponse(res, 200, 'Success', comments);
 };
+export const getAllCommentaries = async (req, res) => {
+  const attributes = ['names', 'content', 'isPublished', 'createdAt'];
+  const orderBy = [
+    ['isPublished', 'ASC'],
+    ['content', 'ASC'],
+  ];
+  const comments = await dbCommentHelper.findAll(
+    { isPublished: 0 },
+    constHelper.commentIncludes(),
+    orderBy,
+    attributes
+  );
+  return serverResponse(res, 200, 'Success', comments);
+};

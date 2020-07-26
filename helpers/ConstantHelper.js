@@ -187,4 +187,13 @@ export class ConstantHelper {
       languageId: Joi.number().required(),
     };
   }
+  commentIncludes() {
+    return [
+      {
+        model: Topic,
+        as: 'topic',
+        attributes: ['title', 'description'],
+      },
+    ];
+  }
 }

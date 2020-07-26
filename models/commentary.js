@@ -7,6 +7,7 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.TEXT,
         required: true,
       },
+      isPublished: DataTypes.BOOLEAN,
       names: DataTypes.STRING,
       email: DataTypes.STRING,
       website: DataTypes.STRING,

@@ -14,6 +14,7 @@ import {
   deleteTopic,
   addTopicComment,
   getTopicComments,
+  getAllCommentaries,
 } from '../../controllers/topicController';
 
 const topicRoutes = Router();
@@ -52,6 +53,11 @@ topicRoutes.get(
   '/:topicIdOrSlug/comments',
   catchErrors(doesTopicExist),
   catchErrors(getTopicComments)
+);
+topicRoutes.get(
+  '/comments/all',
+  isAdminOrEditor,
+  catchErrors(getAllCommentaries)
 );
 
 export default topicRoutes;
