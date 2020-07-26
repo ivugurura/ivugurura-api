@@ -80,7 +80,7 @@ export const getTopicComments = async (req, res) => {
   const { topicId } = req.params;
   const attributes = ['names', 'content', 'createdAt'];
   const comments = await dbCommentHelper.findAll(
-    { topicId },
+    { topicId, isPublished: true },
     null,
     null,
     attributes
@@ -88,7 +88,7 @@ export const getTopicComments = async (req, res) => {
   return serverResponse(res, 200, 'Success', comments);
 };
 export const getAllCommentaries = async (req, res) => {
-  const attributes = ['names', 'content', 'isPublished', 'createdAt'];
+  const attributes = ['id', 'names', 'content', 'isPublished', 'createdAt'];
   const orderBy = [
     ['isPublished', 'ASC'],
     ['content', 'ASC'],
@@ -100,4 +100,9 @@ export const getAllCommentaries = async (req, res) => {
     attributes
   );
   return serverResponse(res, 200, 'Success', comments);
+};
+export const publishComment = async (req, res) => {
+  const { commentId: id } = req.params;
+  await dbCommentHelper.update({ isPublished: true }, { id });
+  return serverResponse(res, 200, 'Published successfully');
 };

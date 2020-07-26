@@ -4,7 +4,7 @@ import {
   QueryHelper,
   serverResponse,
 } from '../helpers';
-import { Topic } from '../models';
+import { Topic, Commentary } from '../models';
 
 export const isNewTopicValidated = (req, res, next) => {
   let validator = new ValidatorHelper(req.body);
@@ -46,4 +46,16 @@ export const isCommentValid = (req, res, next) => {
   const errorBody = validator.validateInput('comment');
   if (errorBody.error) return joiValidatorMsg(res, errorBody);
   return next();
+};
+export const doesCommentExist = async (req, res, next) => {
+  const dbCommentHelper = new QueryHelper(Commentary);
+  const { commentId } = req.params;
+  if (commentId) {
+    console.log('========>Publish comment'), commentId;
+    const comment = await dbCommentHelper.findOne({ id: commentId }, null, [
+      'id',
+    ]);
+    if (comment) return next();
+  }
+  return serverResponse(res, 404, 'Commentary does not exist');
 };

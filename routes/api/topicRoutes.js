@@ -5,6 +5,7 @@ import {
   doesTopicExist,
   isExistingTopicValid,
   isCommentValid,
+  doesCommentExist,
 } from '../../middlewares/topicMiddleware';
 import {
   addNewTopic,
@@ -15,6 +16,7 @@ import {
   addTopicComment,
   getTopicComments,
   getAllCommentaries,
+  publishComment,
 } from '../../controllers/topicController';
 
 const topicRoutes = Router();
@@ -58,6 +60,12 @@ topicRoutes.get(
   '/comments/all',
   isAdminOrEditor,
   catchErrors(getAllCommentaries)
+);
+topicRoutes.put(
+  '/publish/comments/:commentId',
+  isAdminOrEditor,
+  catchErrors(doesCommentExist),
+  catchErrors(publishComment)
 );
 
 export default topicRoutes;
