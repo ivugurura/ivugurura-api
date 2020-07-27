@@ -2,6 +2,7 @@ import bcrypt from 'bcrypt';
 import slugify from 'slugify';
 import uniqid from 'uniqid';
 import jwt, { verify } from 'jsonwebtoken';
+import sgMail from '@sendgrid/mail';
 import { User } from '../models';
 import { QueryHelper } from './QueryHelper';
 
@@ -66,4 +67,17 @@ export const authenticatedUser = async (req) => {
     return user;
   }
   return null;
+};
+
+export const sendEmail = async (messageBody) => {
+  // const msg = {
+  //   to: 'test@example.com',
+  //   from: 'test@example.com',
+  //   subject: 'Sending with Twilio SendGrid is Fun',
+  //   text: 'and easy to do anywhere, even with Node.js',
+  //   html: '<strong>and easy to do anywhere, even with Node.js</strong>',
+  // };
+  // sgMail.send(msg);
+  sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+  return await sgMail.send(messageBody);
 };

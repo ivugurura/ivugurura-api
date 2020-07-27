@@ -51,7 +51,6 @@ export const doesCommentExist = async (req, res, next) => {
   const dbCommentHelper = new QueryHelper(Commentary);
   const { commentId } = req.params;
   if (commentId) {
-    console.log('========>Publish comment'), commentId;
     const comment = await dbCommentHelper.findOne({ id: commentId }, null, [
       'id',
     ]);

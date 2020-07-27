@@ -179,12 +179,11 @@ export class ConstantHelper {
   }
   commentKeys() {
     return {
+      content: Joi.string().required(),
       names: Joi.string().required(),
       email: Joi.string().email().required(),
-      content: Joi.string().required(),
-      website: Joi.string(),
-      // coverImage: Joi.string(),
       languageId: Joi.number().required(),
+      website: Joi.string().allow(''),
     };
   }
   commentIncludes() {

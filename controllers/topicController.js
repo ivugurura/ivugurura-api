@@ -88,7 +88,15 @@ export const getTopicComments = async (req, res) => {
   return serverResponse(res, 200, 'Success', comments);
 };
 export const getAllCommentaries = async (req, res) => {
-  const attributes = ['id', 'names', 'content', 'isPublished', 'createdAt'];
+  const attributes = [
+    'id',
+    'names',
+    'email',
+    'website',
+    'content',
+    'isPublished',
+    'createdAt',
+  ];
   const orderBy = [
     ['isPublished', 'ASC'],
     ['content', 'ASC'],

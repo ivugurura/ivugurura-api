@@ -1,5 +1,5 @@
 import { Category, Topic, Sequelize } from '../models';
-import { QueryHelper, serverResponse } from '../helpers';
+import { QueryHelper, serverResponse, sendEmail } from '../helpers';
 
 const categoryDb = new QueryHelper(Category);
 const topicDb = new QueryHelper(Topic);
@@ -42,4 +42,21 @@ export const searchInfo = async (req, res) => {
   );
   const searched = { topics, categories };
   return serverResponse(res, 200, 'Success', searched);
+};
+export const sendContactUs = async (req, res) => {
+  const { names, email, message } = req.body;
+  const { CONTACT_EMAIL, APP_EMAIL, APP_NAME } = process.env;
+  const html = `<strong>${message}</strong>`;
+  const subject = `${names} contacted us from ${APP_NAME}`;
+  const messageContent = {
+    to: CONTACT_EMAIL,
+    from: APP_EMAIL,
+    subject,
+    html,
+    text: message,
+  };
+  const sentMsg = await sendEmail(messageContent);
+  console.log('Sent message reuslt', sentMsg);
+
+  return serverResponse(res, 200, 'Message sent');
 };
