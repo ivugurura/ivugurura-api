@@ -3,6 +3,8 @@ import slugify from 'slugify';
 import uniqid from 'uniqid';
 import jwt, { verify } from 'jsonwebtoken';
 import sgMail from '@sendgrid/mail';
+// import nodemailer from 'nodemailer';
+// import sgTransport from 'nodemailer-sendgrid-transport';
 import { User } from '../models';
 import { QueryHelper } from './QueryHelper';
 
@@ -80,4 +82,12 @@ export const sendEmail = async (messageBody) => {
   // sgMail.send(msg);
   sgMail.setApiKey(process.env.SENDGRID_API_KEY);
   return await sgMail.send(messageBody);
+  // const transport = nodemailer.createTransport(
+  //   sgTransport({
+  //     auth: {
+  //       api_key: process.env.SENDGRID_API_KEY,
+  //     },
+  //   })
+  // );
+  // return await transport.sendMail(messageBody);
 };

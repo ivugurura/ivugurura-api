@@ -45,12 +45,12 @@ export const searchInfo = async (req, res) => {
 };
 export const sendContactUs = async (req, res) => {
   const { names, email, message } = req.body;
-  const { CONTACT_EMAIL, APP_EMAIL, APP_NAME } = process.env;
+
   const html = `<strong>${message}</strong>`;
-  const subject = `${names} contacted us from ${APP_NAME}`;
+  const subject = `${names} contacted us from ${process.env.APP_NAME}`;
   const messageContent = {
-    to: CONTACT_EMAIL,
-    from: APP_EMAIL,
+    to: process.env.CONTACT_EMAIL,
+    from: process.env.APP_EMAIL,
     subject,
     html,
     text: message,
