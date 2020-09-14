@@ -10,6 +10,10 @@ module.exports = {
     host: process.env.DB_HOST,
     port: process.env.DB_PORT,
     dialect: process.env.DB_DIALECT,
+    dialectOptions: {
+      charset: 'utf8mb4',
+      collate: 'utf8mb4_unicode_ci'
+    },
     seederStorage: 'sequelize'
   },
   test: {
@@ -19,6 +23,9 @@ module.exports = {
     host: process.env.DB_HOST,
     port: process.env.DB_PORT,
     dialect: process.env.DB_DIALECT,
+    dialectOptions: {
+      charset: 'utf8mb4'
+    },
     seederStorage: 'sequelize'
   },
   production: {
