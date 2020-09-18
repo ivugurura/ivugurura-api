@@ -31,17 +31,19 @@ export const getDashboardCounts = async (req, res) => {
 };
 export const getTopicsByPublish = async (req, res) => {
   const { languageId } = req.body;
-  const { publishStatus } = req.params;
   const { offset, limit } = paginator(req.query);
-  const isPublished = publishStatus === 'published' ? true : null;
-  const whereConditions = { languageId, isPublished };
+  const whereConditions = { languageId };
   const topics = await dbTopic.findAll(
     whereConditions,
     constants.topicIncludes(),
-    [['title', 'ASC']],
+    [
+      ['isPublished', 'ASC'],
+      ['title', 'ASC']
+    ],
     null,
     offset,
     limit
   );
+  console.log(topics);
   return serverResponse(res, 200, 'Success', topics);
 };

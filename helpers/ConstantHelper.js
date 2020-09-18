@@ -7,7 +7,7 @@ import {
   Commentary,
   Media,
   TopicView,
-  Album,
+  Album
 } from '../models';
 
 export class ConstantHelper {
@@ -21,7 +21,7 @@ export class ConstantHelper {
     return {
       languageId: Joi.number().required(),
       email: Joi.string().required(),
-      password: Joi.string().required(),
+      password: Joi.string().required()
     };
   }
   getSignupKeys() {
@@ -29,7 +29,7 @@ export class ConstantHelper {
       ...this.getLoginKeys(),
       names: Joi.string().required(),
       username: Joi.string().required(),
-      access_lvl: Joi.number().required(),
+      access_lvl: Joi.number().required()
     };
     return userInfo;
   }
@@ -41,20 +41,20 @@ export class ConstantHelper {
       content: Joi.string(),
       categoryId: Joi.number(),
       languageId: Joi.number().required(),
-      isPublished: Joi.boolean(),
+      isPublished: Joi.boolean()
     };
   }
   categoryKeys() {
     return {
       name: Joi.string().required(),
       categoryId: Joi.number(),
-      languageId: Joi.number(),
+      languageId: Joi.number()
     };
   }
   albumKeys() {
     return {
       name: Joi.string().required(),
-      languageId: Joi.number(),
+      languageId: Joi.number()
     };
   }
   mediaKeys() {
@@ -63,7 +63,7 @@ export class ConstantHelper {
       type: Joi.string().valid('audio', 'video', 'image').required(),
       mediaLink: Joi.string().required(),
       languageId: Joi.number().required(),
-      albumId: Joi.number().required(),
+      albumId: Joi.number().required()
     };
   }
   announcemtKeys() {
@@ -72,7 +72,7 @@ export class ConstantHelper {
       isPublished: Joi.boolean(),
       content: Joi.string().required(),
       expiryDate: Joi.date().required(),
-      languageId: Joi.number().required(),
+      languageId: Joi.number().required()
     };
   }
   getTopicKeys() {
@@ -83,7 +83,7 @@ export class ConstantHelper {
       isPublished: Joi.boolean(),
       categoryId: Joi.number().required(),
       coverImage: Joi.string().required(),
-      languageId: Joi.number().required(),
+      languageId: Joi.number().required()
     };
   }
   albumIncludes() {
@@ -91,8 +91,8 @@ export class ConstantHelper {
       {
         model: Media,
         as: 'media',
-        attributes: ['name'],
-      },
+        attributes: ['name']
+      }
     ];
   }
   mediaIncludes() {
@@ -100,13 +100,13 @@ export class ConstantHelper {
       {
         model: Album,
         as: 'album',
-        attributes: ['name'],
+        attributes: ['name']
       },
       {
         model: Language,
         as: 'language',
-        attributes: ['name'],
-      },
+        attributes: ['name']
+      }
     ];
   }
   announcementIncludes() {
@@ -114,13 +114,13 @@ export class ConstantHelper {
       {
         model: User,
         as: 'user',
-        attributes: ['names'],
+        attributes: ['names']
       },
       {
         model: Language,
         as: 'language',
-        attributes: ['name'],
-      },
+        attributes: ['name']
+      }
     ];
   }
   categoryIncludes() {
@@ -128,8 +128,8 @@ export class ConstantHelper {
       {
         model: Category,
         as: 'categories',
-        attributes: ['id', 'name', 'slug'],
-      },
+        attributes: ['id', 'name', 'slug']
+      }
     ];
   }
   oneCategoryIncludes() {
@@ -137,8 +137,8 @@ export class ConstantHelper {
       {
         model: Category,
         as: 'parent',
-        attributes: ['id', 'name'],
-      },
+        attributes: ['id', 'name']
+      }
     ];
   }
   oneTopicIncludes() {
@@ -151,20 +151,20 @@ export class ConstantHelper {
           {
             model: Topic,
             as: 'relatedTopics',
-            attributes: ['title', 'slug', 'description', 'coverImage'],
-          },
-        ],
+            attributes: ['title', 'slug', 'description', 'coverImage']
+          }
+        ]
       },
       {
         model: Commentary,
         as: 'commentaries',
-        attributes: ['content', 'names', 'createdAt'],
+        attributes: ['content', 'names', 'createdAt']
       },
       {
         model: TopicView,
         as: 'views',
-        attributes: ['ipAddress'],
-      },
+        attributes: ['ipAddress']
+      }
     ];
   }
   topicIncludes() {
@@ -173,8 +173,13 @@ export class ConstantHelper {
       {
         model: Category,
         as: 'category',
-        attributes: ['name'],
+        attributes: ['name']
       },
+      {
+        model: TopicView,
+        as: 'views',
+        attributes: ['ipAddress']
+      }
     ];
   }
   commentKeys() {
@@ -183,7 +188,7 @@ export class ConstantHelper {
       names: Joi.string().required(),
       email: Joi.string().email().required(),
       languageId: Joi.number().required(),
-      website: Joi.string().allow(''),
+      website: Joi.string().allow('')
     };
   }
   commentIncludes() {
@@ -191,8 +196,8 @@ export class ConstantHelper {
       {
         model: Topic,
         as: 'topic',
-        attributes: ['title', 'description'],
-      },
+        attributes: ['title', 'description']
+      }
     ];
   }
 }
