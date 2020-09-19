@@ -25,7 +25,7 @@ export const getDashboardCounts = async (req, res) => {
   const songs = await dbMedia.count({ type: 'audio' });
   const videos = await dbMedia.count({ type: 'video' });
   const published = await dbTopic.count({ languageId, isPublished: true });
-  const unPublished = await dbTopic.count({ languageId, isPublished: null });
+  const unPublished = await dbTopic.count({ languageId, isPublished: false });
   counts = { songs, videos, published, unPublished };
   return serverResponse(res, 200, 'Success', counts);
 };
@@ -44,6 +44,5 @@ export const getTopicsByPublish = async (req, res) => {
     offset,
     limit
   );
-  console.log(topics);
   return serverResponse(res, 200, 'Success', topics);
 };

@@ -3,7 +3,7 @@ import {
   QueryHelper,
   serverResponse,
   generateSlug,
-  paginator,
+  paginator
 } from '../helpers';
 import { Topic, TopicView, Commentary } from '../models';
 import { ConstantHelper } from '../helpers/ConstantHelper';
@@ -22,15 +22,15 @@ export const getAllTopics = async (req, res) => {
   const { category } = req.query;
   const { offset, limit } = paginator(req.query);
   let orderBy = [['createdAt', 'DESC']];
-  let whereConditions = { languageId };
+  let conditions = { languageId, isPublished: true };
   if (category === 'carsoul') {
     orderBy = [['title', 'ASC']];
   }
   if (!isNaN(category)) {
-    whereConditions = { languageId, categoryId: category };
+    conditions = { ...conditions, categoryId: category };
   }
   const topics = await dbHelper.findAll(
-    whereConditions,
+    conditions,
     constHelper.topicIncludes(),
     orderBy,
     null,
@@ -44,11 +44,11 @@ export const getOneTopic = async (req, res) => {
   const { topicId: id } = req.params;
   const { languageId } = req.body;
 
+  await viewDbHelper.findOrCreate({ topicId: id, ipAddress: req.ip });
   const topic = await dbHelper.findOne(
-    { id, languageId },
+    { id, languageId, isPublished: true },
     constHelper.oneTopicIncludes()
   );
-  await viewDbHelper.findOrCreate({ topicId: id, ipAddress: req.ip });
   return serverResponse(res, 200, 'Success', topic);
 };
 export const editTopic = async (req, res) => {
@@ -95,14 +95,14 @@ export const getAllCommentaries = async (req, res) => {
     'website',
     'content',
     'isPublished',
-    'createdAt',
+    'createdAt'
   ];
   const orderBy = [
     ['isPublished', 'ASC'],
-    ['content', 'ASC'],
+    ['content', 'ASC']
   ];
   const comments = await dbCommentHelper.findAll(
-    { isPublished: 0 },
+    { isPublished: true },
     constHelper.commentIncludes(),
     orderBy,
     attributes

@@ -21,6 +21,10 @@ module.exports = {
       website: {
         type: Sequelize.STRING
       },
+      isPublished: {
+        type: Sequelize.BOOLEAN,
+        defaultValue: false
+      },
       topicId: {
         type: Sequelize.INTEGER,
         onDelete: 'CASCADE',
