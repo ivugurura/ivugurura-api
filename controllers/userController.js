@@ -19,6 +19,11 @@ export const userSignin = async (req, res, next) => {
     });
   })(req, req, next);
 };
+export const logoutUser = (req, res) => {
+  req.session.destroy();
+  req.logout();
+  return serverResponse(res, 200, 'Successfully logged out');
+};
 export const getDashboardCounts = async (req, res) => {
   const { languageId } = req.body;
   let counts = {};

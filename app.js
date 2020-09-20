@@ -25,7 +25,7 @@ const redisSessionStore = new RedisStore({
   port: process.env.REDIS_PORT,
   prefix: process.env.REDIS_PREFIX,
   name: process.env.REDIS_NAME,
-  client: redisClient,
+  client: redisClient
 });
 
 const port = process.env.PORT || 3000;
@@ -57,7 +57,7 @@ app.use(
     secret: process.env.SESSION_SECRET,
     name: process.env.SESSION_NAME,
     cookie: { path: '/', httpOnly: true, secure: false, maxAge: 24 * hour },
-    store: redisSessionStore,
+    store: redisSessionStore
   })
 );
 /**
@@ -69,7 +69,7 @@ app.use(passport.session());
 app.get('/', (req, res) => {
   const headerLang = req.acceptsLanguages('en', 'fr', 'kn') || 'kn';
   res.status(200).json({
-    message: translate[headerLang].welcomeMesg,
+    message: translate[headerLang].welcomeMesg
   });
 });
 /**
