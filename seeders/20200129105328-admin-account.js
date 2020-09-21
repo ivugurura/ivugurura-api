@@ -6,14 +6,14 @@ export const up = (queryInterface, Sequelize) => {
     'users',
     [
       {
-        names: 'Reformation Voice',
-        username: 'Reformation',
-        email: 'reformation@email.com',
-        password: hashPassword('MyPassword'),
+        names: 'Ivugurura Admin',
+        username: 'Ivugurura',
+        email: 'ubugorozinfo@gmail.com',
+        password: hashPassword('MaraikaWundi@3'),
         role: 'admin',
         createdAt: new Date(),
-        updatedAt: new Date(),
-      },
+        updatedAt: new Date()
+      }
     ],
     {}
   );

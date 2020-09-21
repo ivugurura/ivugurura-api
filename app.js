@@ -13,6 +13,7 @@ import { sequelize } from './models';
 import routes from './routes';
 import { handleErrors } from './middlewares';
 import { translate } from './locales';
+import { security } from './config/security';
 
 dotenv.config();
 localPassport(passport);
@@ -31,6 +32,7 @@ const redisSessionStore = new RedisStore({
 const port = process.env.PORT || 3000;
 const hour = 3600000;
 const app = express();
+security(app);
 app.use(cors({ origin: true, credentials: true }));
 app.use(capture());
 app.use(userAgent.express());

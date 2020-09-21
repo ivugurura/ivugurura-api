@@ -3,14 +3,14 @@ export const up = (queryInterface, Sequelize) => {
     'media',
     [
       {
-        title: 'English',
-        mediaLink: 'en',
+        title: 'Test image',
+        mediaLink: 'test-image.jpg',
         type: 'image',
         albumId: 1,
         languageId: 2,
         createdAt: new Date(),
-        updatedAt: new Date(),
-      },
+        updatedAt: new Date()
+      }
     ],
     {}
   );
