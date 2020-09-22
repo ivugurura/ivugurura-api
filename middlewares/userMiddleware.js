@@ -1,10 +1,15 @@
-import { serverResponse, ValidatorHelper, joiValidatorMsg } from '../helpers';
+import {
+  serverResponse,
+  ValidatorHelper,
+  joiValidatorMsg,
+  getLang
+} from '../helpers';
 import { translate } from '../locales';
 
 export const isLoginInfoValid = (req, res, next) => {
   if (req.isAuthenticated()) {
-    const headerLang = req.acceptsLanguages('en', 'fr', 'kn') || 'kn';
-    const message = translate[headerLang].alreadyAuth;
+    const lang = getLang(req);
+    const message = translate[lang].alreadyAuth;
     return serverResponse(res, 422, message);
   }
   let validator = new ValidatorHelper(req.body);

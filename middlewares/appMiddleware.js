@@ -1,13 +1,13 @@
 import { existsSync, mkdirSync } from 'fs';
-import { serverResponse, QueryHelper } from '../helpers';
+import { serverResponse, QueryHelper, getLang } from '../helpers';
 import { Language } from '../models';
 import { translate } from '../locales';
 
 const dbHelper = new QueryHelper(Language);
 const isDev = process.env.NODE_ENV === 'development';
 export const handleErrors = (err, req, res, next) => {
-  const headerLang = req.acceptsLanguages('en', 'fr', 'kn') || 'kn';
-  let message = translate[headerLang].error500;
+  const lang = getLang(req);
+  let message = translate[lang].error500;
   if (isDev) {
     message = err.message;
     console.log(err.stack);
@@ -17,6 +17,7 @@ export const handleErrors = (err, req, res, next) => {
 };
 
 export const monitorDevActions = (req, res, next) => {
+  const lang = getLang(req);
   const songsDir = process.env.SONGS_ZONE;
   const imagesDir = process.env.IMAGES_ZONE;
   if (!existsSync('./public')) mkdirSync('./public');
@@ -28,7 +29,7 @@ export const monitorDevActions = (req, res, next) => {
       : 'UNKNOWN user';
     console.log(
       `${user} is using ${req.device.type},\n 
-        Route: ${req.path}, method: ${req.method},\n
+        Route: ${req.path}, method: ${req.method}, Language: ${lang}\n
         body: ${JSON.stringify(req.body)},\n
         session: ${JSON.stringify(req.session)},\n
         IP: ${req.ip}\n`
@@ -39,8 +40,8 @@ export const monitorDevActions = (req, res, next) => {
 };
 
 export const route404 = (req, res) => {
-  const headerLang = req.acceptsLanguages('en', 'fr', 'kn') || 'kn';
-  const message = translate[headerLang].error404;
+  const lang = getLang(req);
+  const message = translate[lang].error404;
 
   return serverResponse(res, 404, message);
 };
@@ -48,8 +49,8 @@ export const catchErrors = (fn) => (req, res, next) => {
   Promise.resolve(fn(req, res, next)).catch(next);
 };
 export const setLanguage = async (req, res, next) => {
-  const headerLang = req.acceptsLanguages('en', 'fr', 'kn') || 'kn';
-  const language = await dbHelper.findOne({ short_name: headerLang });
+  const lang = getLang(req);
+  const language = await dbHelper.findOne({ short_name: lang });
   req.body.languageId = language ? language.id : 1;
   return next();
 };

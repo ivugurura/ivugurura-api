@@ -82,12 +82,6 @@ export const sendEmail = async (messageBody) => {
   // sgMail.send(msg);
   sgMail.setApiKey(process.env.SENDGRID_API_KEY);
   return await sgMail.send(messageBody);
-  // const transport = nodemailer.createTransport(
-  //   sgTransport({
-  //     auth: {
-  //       api_key: process.env.SENDGRID_API_KEY,
-  //     },
-  //   })
-  // );
-  // return await transport.sendMail(messageBody);
 };
+export const getLang = (req) =>
+  req.acceptsLanguages('en', 'kn', 'fr', 'sw') || 'en';

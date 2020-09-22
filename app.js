@@ -14,6 +14,7 @@ import routes from './routes';
 import { handleErrors } from './middlewares';
 import { translate } from './locales';
 import { security } from './config/security';
+import { getLang } from './helpers';
 
 dotenv.config();
 localPassport(passport);
@@ -69,9 +70,9 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 app.get('/', (req, res) => {
-  const headerLang = req.acceptsLanguages('en', 'fr', 'kn') || 'kn';
+  const lang = getLang(req);
   res.status(200).json({
-    message: translate[headerLang].welcomeMesg
+    message: translate[lang].welcomeMesg
   });
 });
 /**
