@@ -34,6 +34,9 @@ export class ValidatorHelper extends ConstantHelper {
       case 'comment':
         validateKeys = Joi.object().keys(this.commentKeys());
         break;
+      case 'message':
+        validateKeys = Joi.object().keys(this.messageKeys());
+        break;
       default:
         break;
     }

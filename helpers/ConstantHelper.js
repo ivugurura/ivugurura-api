@@ -86,6 +86,14 @@ export class ConstantHelper {
       languageId: Joi.number().required()
     };
   }
+  messageKeys() {
+    return {
+      names: Joi.string().required(),
+      email: Joi.string().required(),
+      message: Joi.string().required(),
+      languageId: Joi.number().required()
+    };
+  }
   albumIncludes() {
     return [
       {

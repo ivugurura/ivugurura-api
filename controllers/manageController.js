@@ -47,7 +47,7 @@ export const searchInfo = async (req, res) => {
 export const sendContactUs = async (req, res) => {
   const { names, email, message } = req.body;
 
-  const html = `<strong>${message}</strong>`;
+  const html = `<h2>Name:${names}</h2><br/><h2>Email:${email}</h2><br/><br/><strong>${message}</strong>`;
   const subject = `${names} contacted us from ${process.env.APP_NAME}`;
   const messageContent = {
     to: process.env.CONTACT_EMAIL,
