@@ -4,6 +4,7 @@ import {
   isAdminOrEditor,
   isCategoryValid,
   doesCategoryExist,
+  isSuperAdmin
 } from '../../middlewares';
 import {
   getCategories,
@@ -11,7 +12,7 @@ import {
   editCategory,
   deleteCategory,
   getNavCategories,
-  getACategory,
+  getACategory
 } from '../../controllers/categoryController';
 
 const categoryRoutes = Router();
@@ -21,7 +22,7 @@ categoryRoutes.get('/navs', catchErrors(getNavCategories));
 
 categoryRoutes.post(
   '/',
-  isAdminOrEditor,
+  isSuperAdmin,
   catchErrors(doesCategoryExist),
   isCategoryValid,
   catchErrors(createNewCategory)

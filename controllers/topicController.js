@@ -49,7 +49,7 @@ export const getOneTopic = async (req, res) => {
     { id, languageId, isPublished: true },
     constHelper.oneTopicIncludes()
   );
-  return serverResponse(res, 200, 'Success', topic);
+  return serverResponse(res, 200, 'Success df', topic);
 };
 export const editTopic = async (req, res) => {
   const { topicId: id } = req.params;

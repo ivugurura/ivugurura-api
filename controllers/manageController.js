@@ -12,21 +12,22 @@ const { Op } = Sequelize;
 export const searchInfo = async (req, res) => {
   const { languageId } = req.body;
   const condition = {
-    [Op.substring]: req.query.searchKey,
+    [Op.substring]: req.query.searchKey
   };
   const topicConditions = {
     [Op.or]: [
       {
         title: condition,
-        description: condition,
-      },
+        description: condition
+      }
     ],
     languageId,
+    isPublished: true
   };
   const categoryConditions = {
     name: condition,
     categoryId: { [Op.not]: null },
-    languageId,
+    languageId
   };
   const topics = await topicDb.findAll(
     topicConditions,
@@ -53,7 +54,7 @@ export const sendContactUs = async (req, res) => {
     from: process.env.APP_EMAIL,
     subject,
     html,
-    text: message,
+    text: message
   };
   const sentMsg = await sendEmail(messageContent);
   console.log('Sent message reuslt', sentMsg);
