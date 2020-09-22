@@ -159,6 +159,7 @@ export class ConstantHelper {
           {
             model: Topic,
             as: 'relatedTopics',
+            where: { isPublished: true },
             attributes: ['title', 'slug', 'description', 'coverImage']
           }
         ]

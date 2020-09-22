@@ -102,7 +102,7 @@ export const getAllCommentaries = async (req, res) => {
     ['content', 'ASC']
   ];
   const comments = await dbCommentHelper.findAll(
-    { isPublished: true },
+    { isPublished: false },
     constHelper.commentIncludes(),
     orderBy,
     attributes

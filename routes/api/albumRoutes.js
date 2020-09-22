@@ -8,7 +8,7 @@ import {
   uploadFile,
   addNewMedia,
   deleteFile,
-  getMedia,
+  getMedia
 } from '../../controllers/albumController';
 import {
   isAdminOrEditor,
@@ -16,11 +16,11 @@ import {
   isAlbumValid,
   doesAlbumExist,
   isFileTypeValid,
-  isMediaValid,
+  isMediaValid
 } from '../../middlewares';
 
 const albumRoutes = Router();
-albumRoutes.post('/', isAdminOrEditor, isAlbumValid, catchErrors(createAlbum));
+// albumRoutes.post('/', isAdminOrEditor, isAlbumValid, catchErrors(createAlbum));
 albumRoutes.get('/', getAlbums);
 albumRoutes.get(
   '/:albumId',
@@ -48,7 +48,7 @@ albumRoutes.delete(
   isFileTypeValid,
   catchErrors(deleteFile)
 );
-albumRoutes.post('/add', isMediaValid, catchErrors(addNewMedia));
+// albumRoutes.post('/add', isMediaValid, catchErrors(addNewMedia));
 albumRoutes.get('/medias/:mediaType', catchErrors(getMedia));
 
 export default albumRoutes;
