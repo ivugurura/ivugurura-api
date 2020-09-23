@@ -13,11 +13,9 @@ export const createNewCategory = async (req, res) => {
 
 export const getNavCategories = async (req, res) => {
   const { languageId } = req.body;
-  const orderByName = [['name', 'ASC']];
   const categories = await dbHelper.findAll(
     { languageId, categoryId: null },
-    constHelper.categoryIncludes(),
-    orderByName
+    constHelper.categoryIncludes()
   );
   return serverResponse(res, 201, 'Success', categories);
 };
