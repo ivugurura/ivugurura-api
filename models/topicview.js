@@ -6,15 +6,15 @@ module.exports = (sequelize, DataTypes) => {
       ipAddress: DataTypes.STRING,
       topicId: {
         type: DataTypes.INTEGER,
-        required: true,
-      },
+        required: true
+      }
     },
     {
-      tableName: 'topic_views',
+      tableName: 'topic_views'
     }
   );
   TopicView.associate = (models) => {
-    TopicView.belongsTo(models.Topic);
+    TopicView.belongsTo(models.Topic, { foreignKey: 'topicId' });
   };
   return TopicView;
 };

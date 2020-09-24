@@ -29,9 +29,12 @@ module.exports = (sequelize, DataTypes) => {
       as: 'category'
     });
     Topic.belongsTo(models.User, { foreignKey: 'userId', as: 'user' });
-    Topic.hasMany(models.Commentary, { as: 'commentaries' });
-    Topic.hasMany(models.TopicView, { as: 'views' });
-    Topic.hasMany(models.Media, { as: 'images' });
+    Topic.hasMany(models.Commentary, {
+      as: 'commentaries',
+      foreignKey: 'topicId'
+    });
+    Topic.hasMany(models.TopicView, { as: 'views', foreignKey: 'topicId' });
+    Topic.hasMany(models.Media, { as: 'images', foreignKey: 'topicId' });
   };
   return Topic;
 };
