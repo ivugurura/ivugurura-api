@@ -1,6 +1,13 @@
-import { serverResponse, authenticatedUser, getLang } from '../helpers';
+import {
+  serverResponse,
+  authenticatedUser,
+  getLang,
+  QueryHelper
+} from '../helpers';
 import { translate } from '../locales';
+import { Topic } from '../models';
 
+const topicDb = new QueryHelper(Topic);
 export const isAuthenticated = async (req, res, next) => {
   const user = await authenticatedUser(req);
   if (user) return next();
@@ -43,7 +50,16 @@ export const isAdminOrEditor = async (req, res, next) => {
 
   return serverResponse(res, 401, message);
 };
-
+export const isTheOwner = async (req, res, next) => {
+  const user = await authenticatedUser(req);
+  const { topicId: id } = req.params;
+  const topic = await topicDb.findOne({ id, userId: user.id });
+  if (topic) return next();
+  if (user.role === 'admin' || user.role === 'super_admin') {
+    return next();
+  }
+  return serverResponse(res, 403, 'You are not allowed');
+};
 export const isSuperAdmin = async (req, res, next) => {
   const user = await authenticatedUser(req);
   if (user && user.email === process.env.ADMIN_EMAIL) return next();

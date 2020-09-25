@@ -1,11 +1,11 @@
 import { Router } from 'express';
-import { catchErrors, isAdminOrEditor } from '../../middlewares';
+import { catchErrors, isAdminOrEditor, isTheOwner } from '../../middlewares';
 import {
   isNewTopicValidated,
   doesTopicExist,
   isExistingTopicValid,
   isCommentValid,
-  doesCommentExist,
+  doesCommentExist
 } from '../../middlewares/topicMiddleware';
 import {
   addNewTopic,
@@ -16,7 +16,7 @@ import {
   addTopicComment,
   getTopicComments,
   getAllCommentaries,
-  publishComment,
+  publishComment
 } from '../../controllers/topicController';
 
 const topicRoutes = Router();
@@ -31,6 +31,7 @@ topicRoutes.patch(
   '/:topicIdOrSlug',
   isAdminOrEditor,
   catchErrors(doesTopicExist),
+  catchErrors(isTheOwner),
   isExistingTopicValid,
   catchErrors(editTopic)
 );
@@ -43,6 +44,7 @@ topicRoutes.delete(
   '/:topicIdOrSlug',
   isAdminOrEditor,
   catchErrors(doesTopicExist),
+  catchErrors(isTheOwner),
   catchErrors(deleteTopic)
 );
 topicRoutes.post(
