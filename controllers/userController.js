@@ -1,11 +1,18 @@
 import passport from 'passport';
-import { serverResponse, QueryHelper, paginator, generatJWT } from '../helpers';
-import { Topic, Media } from '../models';
+import {
+  serverResponse,
+  QueryHelper,
+  paginator,
+  generatJWT,
+  hashPassword
+} from '../helpers';
+import { Topic, Media, User } from '../models';
 import { ConstantHelper } from '../helpers/ConstantHelper';
 
 const constants = new ConstantHelper();
 const dbMedia = new QueryHelper(Media);
 const dbTopic = new QueryHelper(Topic);
+const userDb = new QueryHelper(User);
 export const userSignin = async (req, res, next) => {
   passport.authenticate('local.login', (error, user) => {
     if (error) return serverResponse(res, 401, error.message);
@@ -50,4 +57,11 @@ export const getTopicsByPublish = async (req, res) => {
     limit
   );
   return serverResponse(res, 200, 'Success', topics);
+};
+export const createUser = async (req, res) => {
+  req.body.password = hashPassword(req.body.password);
+  req.body.role = 'editor';
+  const newUser = await userDb.create(req.body);
+
+  return serverResponse(res, 201, 'Success', newUser);
 };

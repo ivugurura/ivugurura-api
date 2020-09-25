@@ -9,6 +9,7 @@ import {
   TopicView,
   Album
 } from '../models';
+import { systemRoles } from './util';
 
 export class ConstantHelper {
   constructor() {
@@ -22,6 +23,17 @@ export class ConstantHelper {
       languageId: Joi.number().required(),
       email: Joi.string().required(),
       password: Joi.string().required()
+    };
+  }
+  getUserKeys() {
+    return {
+      names: Joi.string().required(),
+      username: Joi.string().required(),
+      email: Joi.string().required(),
+      password: Joi.string().required(),
+      profile_image: Joi.string(),
+      role: Joi.string().valid(systemRoles).required(),
+      languageId: Joi.number()
     };
   }
   getSignupKeys() {

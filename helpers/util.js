@@ -100,3 +100,4 @@ export const ucFirst = (word) => {
     (_, m1, m2) => m1.toUpperCase() + m2.toLowerCase()
   );
 };
+export const systemRoles = ['super_admin', 'admin', 'editor'];
