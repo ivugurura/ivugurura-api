@@ -30,7 +30,7 @@ export const isEditor = async (req, res, next) => {
 
 export const isAdmin = async (req, res, next) => {
   const user = await authenticatedUser(req);
-  if (user && user.role === 'admin') {
+  if (user && (user.role === 'admin' || user.role === 'super_admin')) {
     return next();
   }
 

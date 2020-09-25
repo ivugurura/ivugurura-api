@@ -11,7 +11,8 @@ import {
   isLoginInfoValid,
   isAdmin,
   isSuperAdmin,
-  isUserInfoValid
+  isUserInfoValid,
+  isAdminOrEditor
 } from '../../middlewares';
 
 const userRoutes = Router();
@@ -22,8 +23,8 @@ userRoutes.post(
   catchErrors(createUser)
 );
 userRoutes.post('/login', isLoginInfoValid, catchErrors(userSignin));
-userRoutes.get('/dashboard', isAdmin, catchErrors(getDashboardCounts));
-userRoutes.get('/topics', isAdmin, catchErrors(getTopicsByPublish));
+userRoutes.get('/dashboard', isAdminOrEditor, catchErrors(getDashboardCounts));
+userRoutes.get('/topics', isAdminOrEditor, catchErrors(getTopicsByPublish));
 userRoutes.use('/logout', logoutUser);
 
 export default userRoutes;

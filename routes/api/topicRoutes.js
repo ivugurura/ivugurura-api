@@ -1,5 +1,10 @@
 import { Router } from 'express';
-import { catchErrors, isAdminOrEditor, isTheOwner } from '../../middlewares';
+import {
+  catchErrors,
+  isAdmin,
+  isAdminOrEditor,
+  isTheOwner
+} from '../../middlewares';
 import {
   isNewTopicValidated,
   doesTopicExist,
@@ -65,7 +70,7 @@ topicRoutes.get(
 );
 topicRoutes.put(
   '/publish/comments/:commentId',
-  isAdminOrEditor,
+  isAdmin,
   catchErrors(doesCommentExist),
   catchErrors(publishComment)
 );
