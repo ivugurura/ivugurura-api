@@ -6,6 +6,7 @@ import passport from 'passport';
 import expressSession from 'express-session';
 import userAgent from 'express-useragent';
 import connectRedis from 'connect-redis';
+import compression from 'compression';
 import redis from 'redis';
 import { capture } from 'express-device';
 import { localPassport } from './config/passport';
@@ -49,6 +50,7 @@ sequelize
     console.log('Something wrong with db');
     process.exit(1);
   });
+app.use(compression());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(
