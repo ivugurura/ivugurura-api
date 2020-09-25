@@ -83,5 +83,17 @@ export const sendEmail = async (messageBody) => {
   sgMail.setApiKey(process.env.SENDGRID_API_KEY);
   return await sgMail.send(messageBody);
 };
-export const getLang = (req) =>
-  req.acceptsLanguages('en', 'kn', 'fr', 'sw') || 'en';
+export const getLang = (req) => {
+  return req.acceptsLanguages('en', 'kn', 'fr', 'sw') || 'en';
+};
+/**
+ *
+ * @param {Sting} word
+ * @returns Word with first char capitalized
+ */
+export const ucFirst = (word) => {
+  return word.replace(
+    /(^\w|\s\w)(\S*)/g,
+    (_, m1, m2) => m1.toUpperCase() + m2.toLowerCase()
+  );
+};

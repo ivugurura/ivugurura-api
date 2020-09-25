@@ -3,7 +3,8 @@ import {
   QueryHelper,
   serverResponse,
   generateSlug,
-  paginator
+  paginator,
+  ucFirst
 } from '../helpers';
 import { Topic, TopicView, Commentary } from '../models';
 import { ConstantHelper } from '../helpers/ConstantHelper';
@@ -14,6 +15,7 @@ const constHelper = new ConstantHelper();
 export const addNewTopic = async (req, res) => {
   req.body.userId = req.user.id;
   req.body.slug = generateSlug(req.body.title);
+  req.body.title = ucFirst(req.body.title);
   const newTopic = await dbHelper.create(req.body);
   return serverResponse(res, 201, 'Created', newTopic);
 };
@@ -55,6 +57,7 @@ export const editTopic = async (req, res) => {
   const { topicId: id } = req.params;
   if (req.body.title) {
     req.body.slug = generateSlug(req.body.title);
+    req.body.title = ucFirst(req.body.title);
   }
   await dbHelper.update(req.body, { id });
   return serverResponse(res, 200, 'The topic updated');
