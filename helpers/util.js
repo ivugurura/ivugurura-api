@@ -7,6 +7,7 @@ import sgMail from '@sendgrid/mail';
 // import sgTransport from 'nodemailer-sendgrid-transport';
 import { User } from '../models';
 import { QueryHelper } from './QueryHelper';
+import { contactEmail } from './mailFormatter';
 
 const dbUser = new QueryHelper(User);
 export const hashPassword = (password) => {
@@ -71,16 +72,18 @@ export const authenticatedUser = async (req) => {
   return null;
 };
 
-export const sendEmail = async (messageBody) => {
-  // const msg = {
-  //   to: 'test@example.com',
-  //   from: 'test@example.com',
-  //   subject: 'Sending with Twilio SendGrid is Fun',
-  //   text: 'and easy to do anywhere, even with Node.js',
-  //   html: '<strong>and easy to do anywhere, even with Node.js</strong>',
-  // };
-  // sgMail.send(msg);
+export const sendEmail = async ({ names, email, message }) => {
+  const subject = `${names} contacted us from ${process.env.APP_NAME}`;
+  const emailContent = contactEmail(names, email, message);
+
   sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+  const messageBody = {
+    to: `${process.env.CONTACT_EMAIL}`,
+    from: process.env.APP_EMAIL,
+    subject,
+    html: emailContent,
+    text: `${emailContent}`
+  };
   return await sgMail.send(messageBody);
 };
 export const getLang = (req) => {
