@@ -8,7 +8,7 @@ export class ChatRoom {
   }
   addUser(id, name) {
     const newUser = { id, name, room: this.roomName };
-    if (this.userExist(id)) return this.userExist;
+    if (this.userExist(id)) return this.userExist(id);
     this.users.push(newUser);
     return newUser;
   }
