@@ -59,11 +59,15 @@ export const sendContactUs = async (req, res) => {
 export const getAllMessages = async (req, res) => {
   const user = await authenticatedUser(req);
   const { listenerId } = req.query;
-  let conditions = {
-    [Op.or]: { senderId: listenerId, receiverId: listenerId }
-  };
-  if (user) {
+  let conditions = null;
+  if (listenerId) {
+    conditions = {
+      [Op.or]: { senderId: listenerId, receiverId: listenerId }
+    };
+  } else if (user && !listenerId) {
     conditions = null;
+  } else {
+    conditions = { senderId: null, receiverId: null };
   }
   const messages = await messageDb.findAll(conditions);
   return serverResponse(res, 200, 'Success', messages);

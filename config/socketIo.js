@@ -13,15 +13,15 @@ export const appSocket = (app) => {
   io.on('connect', (socket) => {
     socket.on('join', ({ userId, name }, socketJoinCb) => {
       console.log('JOIN', userId, name);
-      const newUser = chatRoom.addUser(userId, name);
+      const newUser = chatRoom.addUser(socket.id, userId, name);
 
       socket.join(chatRoom.roomName);
       socket.emit('join-message', {
-        user: 'Reformation Voice',
+        senderName: 'Reformation Voice',
         content: `${newUser.name}, Welcome to Reformation voice`
       });
       socket.broadcast.to(chatRoom.roomName).emit('join-message', {
-        user: 'Reformation Voice',
+        senderName: 'Reformation Voice',
         content: `${newUser.name} has joined`
       });
       io.to(chatRoom.roomName).emit('users-list', {
@@ -30,15 +30,20 @@ export const appSocket = (app) => {
       console.log('JOINED user', chatRoom.getRoomUsers());
       socketJoinCb();
     });
-    socket.on('send-message', ({ userId, message }, sendMessageCb) => {
-      const { id, name } = chatRoom.userExist(userId);
-      const newMessage = { senderId: id, senderName: name, content: message };
+    socket.on('send-message', ({ message }, sendMessageCb) => {
+      const { userId, name } = chatRoom.userExist(socket.id);
+      const newMessage = {
+        senderId: userId,
+        senderName: name,
+        content: message
+      };
       console.log('send message', newMessage);
       messageDb
         .create(newMessage)
         .then(() => {
           io.to(chatRoom.roomName).emit('new-message', {
-            user: name,
+            senderId: userId,
+            senderName: name,
             content: message
           });
           sendMessageCb();
@@ -47,6 +52,14 @@ export const appSocket = (app) => {
           socket.emit('send-message-error', { message: 'Message not sent' });
           sendMessageCb();
         });
+    });
+    socket.on('disconnect', () => {
+      const user = chatRoom.removeUser(socket.id);
+      if (user) {
+        io.to(chatRoom.roomName).emit('users-list', {
+          users: chatRoom.getRoomUsers()
+        });
+      }
     });
   });
   /**
