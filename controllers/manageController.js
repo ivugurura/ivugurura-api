@@ -60,16 +60,18 @@ export const getAllMessages = async (req, res) => {
   const user = await authenticatedUser(req);
   const { listenerId } = req.query;
   let conditions = null;
-  if (listenerId) {
+  if (listenerId && listenerId !== 'all') {
     conditions = {
       [Op.or]: { senderId: listenerId, receiverId: listenerId }
     };
-  } else if (user && !listenerId) {
+  } else if (user && listenerId === 'all') {
+    console.log('excuted', listenerId, typeof listenerId);
     conditions = null;
   } else {
     conditions = { senderId: null, receiverId: null };
   }
   const messages = await messageDb.findAll(conditions);
+
   return serverResponse(res, 200, 'Success', messages);
 };
 export const getListenerMessages = async (req, res) => {

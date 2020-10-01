@@ -17,10 +17,12 @@ export const appSocket = (app) => {
 
       socket.join(chatRoom.roomName);
       socket.emit('join-message', {
+        senderId: userId,
         senderName: 'Reformation Voice',
         content: `${newUser.name}, Welcome to Reformation voice`
       });
       socket.broadcast.to(chatRoom.roomName).emit('join-message', {
+        senderId: userId,
         senderName: 'Reformation Voice',
         content: `${newUser.name} has joined`
       });
