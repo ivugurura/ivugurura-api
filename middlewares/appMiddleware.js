@@ -32,7 +32,7 @@ export const monitorDevActions = (req, res, next) => {
         Route: ${req.path}, method: ${req.method}, Language: ${lang}\n
         body: ${JSON.stringify(req.body)},\n
         session: ${JSON.stringify(req.session)},\n
-        IP: ${req.ip}\n`
+        IP: ${req.ip}, host: ${req.headers.host}`
     );
     // User Agent: ${JSON.stringify(req.useragent)}
   }

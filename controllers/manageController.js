@@ -1,8 +1,14 @@
-import { Category, Topic, Sequelize } from '../models';
-import { QueryHelper, serverResponse, sendEmail } from '../helpers';
+import { Category, Topic, Message, Sequelize } from '../models';
+import {
+  QueryHelper,
+  serverResponse,
+  sendEmail,
+  authenticatedUser
+} from '../helpers';
 
 const categoryDb = new QueryHelper(Category);
 const topicDb = new QueryHelper(Topic);
+const messageDb = new QueryHelper(Message);
 const { Op } = Sequelize;
 
 /**
@@ -49,4 +55,29 @@ export const sendContactUs = async (req, res) => {
   console.log('Sent message reuslt', sentMsg);
 
   return serverResponse(res, 200, 'Message sent');
+};
+export const getAllMessages = async (req, res) => {
+  const user = await authenticatedUser(req);
+  const { listenerId } = req.query;
+  let conditions = null;
+  if (listenerId && listenerId !== 'all') {
+    conditions = {
+      [Op.or]: { senderId: listenerId, receiverId: listenerId, fromAdmin: true }
+    };
+  } else if (user && listenerId === 'all') {
+    conditions = null;
+  } else {
+    conditions = { fromAdmin: true };
+  }
+  const messages = await messageDb.findAll(conditions);
+
+  return serverResponse(res, 200, 'Success', messages);
+};
+export const getListenerMessages = async (req, res) => {
+  const { listenerId } = req.params;
+  const messages = await messageDb.findAll({
+    senderId: listenerId,
+    receiverId: listenerId
+  });
+  return serverResponse(res, 200, 'Success', messages);
 };

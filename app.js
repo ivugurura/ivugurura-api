@@ -16,6 +16,7 @@ import { handleErrors } from './middlewares';
 import { translate } from './locales';
 import { security } from './config/security';
 import { getLang } from './helpers';
+import { appSocket } from './config/socketIo';
 
 dotenv.config();
 localPassport(passport);
@@ -31,7 +32,6 @@ const redisSessionStore = new RedisStore({
   client: redisClient
 });
 
-const port = process.env.PORT || 3000;
 const hour = 3600000;
 const app = express();
 security(app);
@@ -80,12 +80,12 @@ app.get('/', (req, res) => {
  */
 app.use('/', routes);
 /**
+ * Configure socket
+ */
+appSocket(app);
+/**
  * Catch unexpected errors
  */
 app.use(handleErrors);
-/**
- * Start express server
- */
-app.listen(port, () => console.log(`listening on port ${port}`));
 
 export default app;
