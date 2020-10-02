@@ -62,13 +62,12 @@ export const getAllMessages = async (req, res) => {
   let conditions = null;
   if (listenerId && listenerId !== 'all') {
     conditions = {
-      [Op.or]: { senderId: listenerId, receiverId: listenerId }
+      [Op.or]: { senderId: listenerId, receiverId: listenerId, fromAdmin: true }
     };
   } else if (user && listenerId === 'all') {
-    console.log('excuted', listenerId, typeof listenerId);
     conditions = null;
   } else {
-    conditions = { senderId: null, receiverId: null };
+    conditions = { fromAdmin: true };
   }
   const messages = await messageDb.findAll(conditions);
 

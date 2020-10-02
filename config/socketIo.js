@@ -12,7 +12,6 @@ export const appSocket = (app) => {
 
   io.on('connect', (socket) => {
     socket.on('join', ({ userId, name }, socketJoinCb) => {
-      console.log('JOIN', userId, name);
       const newUser = chatRoom.addUser(socket.id, userId, name);
 
       socket.join(chatRoom.roomName);
@@ -29,33 +28,47 @@ export const appSocket = (app) => {
       io.to(chatRoom.roomName).emit('users-list', {
         users: chatRoom.getRoomUsers()
       });
-      console.log('JOINED user', chatRoom.getRoomUsers());
       socketJoinCb();
     });
-    socket.on('send-message', ({ message, receiverId }, sendMessageCb) => {
-      const { userId, name } = chatRoom.userExist(socket.id);
-      const newMessage = {
-        senderId: userId,
-        senderName: name,
-        content: message,
-        receiverId
-      };
-      console.log('send message', newMessage);
-      messageDb
-        .create(newMessage)
-        .then(() => {
-          io.to(chatRoom.roomName).emit('new-message', {
+    socket.on(
+      'send-message',
+      ({ message, receiverId, fromAdmin }, sendMessageCb) => {
+        const user = chatRoom.userExist(socket.id);
+        if (user) {
+          const { userId, name } = user;
+          const newMessage = {
             senderId: userId,
             senderName: name,
-            content: message
+            content: message,
+            receiverId,
+            fromAdmin
+          };
+          messageDb
+            .create(newMessage)
+            .then(() => {
+              io.to(chatRoom.roomName).emit('new-message', {
+                senderId: userId,
+                senderName: name,
+                content: message,
+                receiverId,
+                fromAdmin
+              });
+              sendMessageCb();
+            })
+            .catch(() => {
+              socket.emit('send-message-error', {
+                message: 'Message not sent'
+              });
+              sendMessageCb();
+            });
+        } else {
+          socket.emit('send-message-error', {
+            message: 'Message not sent. Reflesh the page and try again'
           });
           sendMessageCb();
-        })
-        .catch(() => {
-          socket.emit('send-message-error', { message: 'Message not sent' });
-          sendMessageCb();
-        });
-    });
+        }
+      }
+    );
     socket.on('disconnect', () => {
       const user = chatRoom.removeUser(socket.id);
       if (user) {
