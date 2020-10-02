@@ -32,12 +32,13 @@ export const appSocket = (app) => {
       console.log('JOINED user', chatRoom.getRoomUsers());
       socketJoinCb();
     });
-    socket.on('send-message', ({ message }, sendMessageCb) => {
+    socket.on('send-message', ({ message, receiverId }, sendMessageCb) => {
       const { userId, name } = chatRoom.userExist(socket.id);
       const newMessage = {
         senderId: userId,
         senderName: name,
-        content: message
+        content: message,
+        receiverId
       };
       console.log('send message', newMessage);
       messageDb
