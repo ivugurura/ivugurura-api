@@ -78,7 +78,7 @@ app.get('/', (req, res) => {
 /**
  * App routes
  */
-app.use('/socket.io', routes);
+app.use('/', routes);
 /**
  * Configure socket
  */
