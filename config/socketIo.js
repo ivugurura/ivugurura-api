@@ -1,13 +1,23 @@
-import http from 'http';
 import socketIo from 'socket.io';
+// import http from 'http';
 import { ChatRoom, QueryHelper } from '../helpers';
 import { Message } from '../models';
 
 const port = process.env.PORT || 3000;
 const chatRoom = new ChatRoom();
 const messageDb = new QueryHelper(Message);
+/**
+ *
+ * @param {Express} app
+ */
 export const appSocket = (app) => {
-  const server = http.createServer(app);
+  // const server = http.createServer(app);
+  /**
+   * Start express server
+   */
+  const server = app.listen(port, () =>
+    console.log(`listening on port ${port}`)
+  );
   const io = socketIo(server);
 
   io.on('connect', (socket) => {
@@ -78,8 +88,4 @@ export const appSocket = (app) => {
       }
     });
   });
-  /**
-   * Start express server
-   */
-  server.listen(port, () => console.log(`listening on port ${port}`));
 };
