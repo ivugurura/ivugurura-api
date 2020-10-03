@@ -8,7 +8,7 @@ const chatRoom = new ChatRoom();
 const messageDb = new QueryHelper(Message);
 export const appSocket = (app) => {
   const server = http.createServer(app);
-  const io = socketIo(server, { transports: ['websocket', 'polling'] });
+  const io = socketIo(server);
 
   io.on('connect', (socket) => {
     socket.on('join', ({ userId, name }, socketJoinCb) => {
