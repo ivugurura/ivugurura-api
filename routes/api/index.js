@@ -1,4 +1,4 @@
-import express, { Router } from 'express';
+import { Router } from 'express';
 import userRoutes from './userRoutes';
 import topicRoutes from './topicRoutes';
 import categoryRoutes from './categoryRoutes';
@@ -14,7 +14,5 @@ apiRoutes.use('/categories', categoryRoutes);
 apiRoutes.use('/albums', albumRoutes);
 apiRoutes.use('/announcements', announceRoutes);
 apiRoutes.use('/manage', manageRoutes);
-apiRoutes.use('/songs', express.static('public/songs'));
-apiRoutes.use('/images', express.static('public/images'));
 
 export default apiRoutes;

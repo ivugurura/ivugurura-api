@@ -1,4 +1,6 @@
 import { Router } from 'express';
+import { getLang } from '../helpers';
+import { translate } from '../locales';
 import {
   monitorDevActions,
   route404,
@@ -10,7 +12,13 @@ import apiRoutes from './api';
 const routes = Router();
 
 routes.use(monitorDevActions);
-routes.use('/api', catchErrors(setLanguage), apiRoutes);
-routes.all('*', route404);
+routes.get('/', (req, res) => {
+  const lang = getLang(req);
+  res.status(200).json({
+    message: translate[lang].welcomeMesg
+  });
+});
+routes.use('/v1', catchErrors(setLanguage), apiRoutes);
+routes.all('/*', route404);
 
 export default routes;

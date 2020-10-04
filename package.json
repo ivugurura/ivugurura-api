@@ -1,7 +1,11 @@
 {
-  "name": "reformation",
+  "name": "ivugurura",
   "version": "1.0.0",
   "description": "Reformation and revival",
+  "private": true,
+  "engines": {
+    "node": "12.18.0"
+  },
   "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",

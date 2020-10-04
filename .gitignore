@@ -109,3 +109,6 @@ package-lock.json
 # Remove app files
 app_files/
 public/
+
+# Remove production build directory client
+build/

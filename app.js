@@ -1,6 +1,7 @@
 import express from 'express';
 import bodyParser from 'body-parser';
 import dotenv from 'dotenv';
+import path from 'path';
 import cors from 'cors';
 import passport from 'passport';
 import expressSession from 'express-session';
@@ -34,7 +35,9 @@ const redisSessionStore = new RedisStore({
 
 const hour = 3600000;
 const app = express();
+
 const isProduction = process.env.NODE_ENV === 'production';
+
 security(app);
 app.use(cors({ origin: isProduction, credentials: true }));
 app.use(capture());
@@ -54,6 +57,9 @@ sequelize
 app.use(compression());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
+app.use(express.static(__dirname + '/build'));
+app.use('/songs', express.static('public/songs'));
+app.use('/images', express.static('public/images'));
 app.use(
   expressSession({
     resave: true,
@@ -69,24 +75,23 @@ app.use(
  */
 app.use(passport.initialize());
 app.use(passport.session());
-
-app.get('/', (req, res) => {
-  const lang = getLang(req);
-  res.status(200).json({
-    message: translate[lang].welcomeMesg
-  });
-});
 /**
  * App routes
  */
-app.use('/', routes);
+app.use('/api', routes);
+/**
+ * Catch unexpected errors from the API
+ */
+app.use(handleErrors);
+/**
+ * The frontend/cLient
+ */
+app.get('/*', (req, res) => {
+  res.sendFile(path.resolve(__dirname + '/build', 'index.html'));
+});
 /**
  * Configure socket
  */
 appSocket(app);
-/**
- * Catch unexpected errors
- */
-app.use(handleErrors);
 
 export default app;
