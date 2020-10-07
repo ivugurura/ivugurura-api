@@ -2,7 +2,8 @@ import {
   serverResponse,
   authenticatedUser,
   getLang,
-  QueryHelper
+  QueryHelper,
+  systemRoles
 } from '../helpers';
 import { translate } from '../locales';
 import { Topic } from '../models';
@@ -19,7 +20,7 @@ export const isAuthenticated = async (req, res, next) => {
 
 export const isEditor = async (req, res, next) => {
   const user = await authenticatedUser(req);
-  if (user && user.role === 'editor') {
+  if (user && user.role === systemRoles.editor) {
     return next();
   }
   const lang = getLang(req);
@@ -30,7 +31,7 @@ export const isEditor = async (req, res, next) => {
 
 export const isAdmin = async (req, res, next) => {
   const user = await authenticatedUser(req);
-  if (user && (user.role === 'admin' || user.role === 'super_admin')) {
+  if (user && user.role <= systemRoles.admin) {
     return next();
   }
 
@@ -42,9 +43,7 @@ export const isAdmin = async (req, res, next) => {
 
 export const isAdminOrEditor = async (req, res, next) => {
   const user = await authenticatedUser(req);
-  if (user) {
-    if (user.role === 'editor' || user.role === 'admin') return next();
-  }
+  if (user && user.role <= systemRoles.editor) return next();
   const lang = getLang(req);
   const message = translate[lang].notAdmin;
 
@@ -55,7 +54,7 @@ export const isTheOwner = async (req, res, next) => {
   const { topicId: id } = req.params;
   const topic = await topicDb.findOne({ id, userId: user.id });
   if (topic) return next();
-  if (user.role === 'admin' || user.role === 'super_admin') {
+  if (user.role <= systemRoles.admin) {
     return next();
   }
   return serverResponse(res, 403, 'You are not allowed');

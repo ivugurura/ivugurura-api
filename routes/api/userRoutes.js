@@ -9,7 +9,6 @@ import {
 import {
   catchErrors,
   isLoginInfoValid,
-  isAdmin,
   isSuperAdmin,
   isUserInfoValid,
   isAdminOrEditor

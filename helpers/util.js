@@ -44,9 +44,9 @@ export const generateSlug = (title) => {
   return slug;
 };
 export const paginator = ({ page, pageSize }) => {
-  const offset = Number((page - 1) * pageSize) || 0;
-  const limit = Number(pageSize) || 20;
-  return { offset, limit };
+  const limit = pageSize ? +pageSize : 20;
+  const offset = page ? page * limit : 0;
+  return { limit, offset };
 };
 export const authenticatedUser = async (req) => {
   const { user, useragent, headers } = req;
@@ -100,4 +100,50 @@ export const ucFirst = (word) => {
     (_, m1, m2) => m1.toUpperCase() + m2.toLowerCase()
   );
 };
-export const systemRoles = ['super_admin', 'admin', 'editor'];
+
+/**
+ * Roles
+ */
+export const systemRoles = { superAdmin: 1, admin: 2, editor: 3 };
+/**
+ *
+ * @param {File} file File info
+ * @param {String} filePath Where file will be saved
+ * @param {Function} fileCallBack Callback function
+ */
+export const isFileAllowed = (file, filePath, fileCallBack) => {
+  const coverImages = process.env.BLOGS_ZONE;
+  const images = process.env.IMAGES_ZONE;
+  const audios = process.env.AUDIOS_ZONE;
+  const profiles = process.env.PROFILES_ZONE;
+  const thumbnails = process.env.THUMBNAILS_ZONE;
+  // Allowed exts
+  const allowedImages = /jpeg|jpg|png/;
+  const allowedAudios = /mp3|mpeg/;
+  // Check ext
+  let extname = false;
+  // Check mime
+  let mimetype = false;
+  let errorMessage = '';
+  if (
+    filePath === coverImages ||
+    filePath === images ||
+    filePath === profiles ||
+    filePath === thumbnails
+  ) {
+    extname = allowedImages.test(path.extname(file.originalname).toLowerCase());
+    mimetype = allowedImages.test(file.mimetype);
+    errorMessage = 'Error: only (jpeg, jpg or png) images allowed';
+  }
+  if (filePath === audios) {
+    extname = allowedAudios.test(path.extname(file.originalname).toLowerCase());
+    mimetype = allowedAudios.test(file.mimetype);
+    errorMessage = 'Error: only (mp3, mpeg) audio allowed';
+  }
+
+  if (mimetype && extname) {
+    return fileCallBack(null, true);
+  } else {
+    fileCallBack(errorMessage);
+  }
+};

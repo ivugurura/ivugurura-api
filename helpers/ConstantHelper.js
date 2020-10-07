@@ -32,7 +32,7 @@ export class ConstantHelper {
       email: Joi.string().required(),
       password: Joi.string().required(),
       profile_image: Joi.string(),
-      role: Joi.string().valid(systemRoles).required(),
+      role: Joi.number().valid(2, 3).required(),
       languageId: Joi.number()
     };
   }
