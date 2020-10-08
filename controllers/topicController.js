@@ -48,7 +48,7 @@ export const getOneTopic = async (req, res) => {
 
   await viewDbHelper.findOrCreate({ topicId: id, ipAddress: req.ip });
   const topic = await dbHelper.findOne(
-    { id, languageId, isPublished: true },
+    { id, languageId },
     constHelper.oneTopicIncludes()
   );
   return serverResponse(res, 200, 'Success df', topic);

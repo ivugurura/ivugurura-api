@@ -38,12 +38,11 @@ const app = express();
 
 const isProduction = process.env.NODE_ENV === 'production';
 
-security(app);
 app.use(cors({ origin: true, credentials: true }));
 app.use(capture());
 app.use(userAgent.express());
 app.set('trust proxy', true);
-
+security(app);
 /**
  * Check database connection before running the app
  */

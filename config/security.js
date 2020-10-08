@@ -4,7 +4,7 @@ const SPOOFED_SERVER = 'Phusion Passenger (mod_rails/mod_rack) 3.0.11';
 
 export const security = (app) => {
   app
-    .use(helmet())
+    .use(helmet({ contentSecurityPolicy: false }))
     .use(helmet.noSniff())
     .use(helmet.frameguard({ action: 'deny' }))
     .use(helmet.xssFilter())
