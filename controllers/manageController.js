@@ -52,7 +52,6 @@ export const searchInfo = async (req, res) => {
 };
 export const sendContactUs = async (req, res) => {
   const sentMsg = await sendEmail(req.body);
-  console.log('Sent message reuslt', sentMsg);
 
   return serverResponse(res, 200, 'Message sent');
 };

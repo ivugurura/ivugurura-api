@@ -44,7 +44,6 @@ export const getDashboardCounts = async (req, res) => {
 export const getTopicsByPublish = async (req, res) => {
   const { languageId } = req.body;
   const { offset, limit } = paginator(req.query);
-  console.log('Limit, offset:', limit, offset);
   const whereConditions = { languageId };
   const topics = await dbTopic.findAll(
     whereConditions,
