@@ -45,7 +45,7 @@ export const generateSlug = (title) => {
 };
 export const paginator = ({ page, pageSize }) => {
   const limit = pageSize ? +pageSize : 20;
-  const offset = page && page === 0 ? (page - 1) * limit : 0;
+  const offset = page && +page !== 0 ? (+page - 1) * limit : 0;
   return { limit, offset };
 };
 export const authenticatedUser = async (req) => {
