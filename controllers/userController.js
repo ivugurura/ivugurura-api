@@ -50,7 +50,7 @@ export const getTopicsByPublish = async (req, res) => {
     constants.topicIncludes(),
     [
       ['isPublished', 'ASC'],
-      ['createdAt', 'ASC']
+      ['createdAt', 'DESC']
     ],
     null,
     offset,
