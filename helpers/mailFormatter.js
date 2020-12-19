@@ -14,7 +14,7 @@ export const mailFormatter = (userNames, email, message) => {
                     <tr>
                       <td align="left" style="font-family: Arial, sans-serif; font-size: 24px; color: #050505;">
                         <p>Name: ${userNames}</p>
-                        <p></p>Email: ${email}</p>
+                        <p>Email: ${email}</p>
                       </td>
                     </tr>
                     <tr>

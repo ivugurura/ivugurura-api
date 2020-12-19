@@ -4,7 +4,9 @@ import {
 	serverResponse,
 	generateSlug,
 	paginator,
-	ucFirst
+	ucFirst,
+	mailFormatter,
+	sendEmail
 } from '../helpers';
 import { Topic, TopicView, Commentary } from '../models';
 import { ConstantHelper } from '../helpers/ConstantHelper';
@@ -77,8 +79,21 @@ export const deleteTopic = async (req, res) => {
 export const addTopicComment = async (req, res) => {
 	const { topicId } = req.params;
 	req.body.topicId = topicId;
+	const { names, email, content } = req.body;
+
+	const theTopic = await dbHelper.findOne({ id: topicId });
+
+	let message = `${names} commented on <strong>${theTopic.title}</strong>.`;
+	message += `<br><br><i><strong>${content}</strong></i>.`;
+	message += `<br><br>Go to the dashboard in <strong>Commentaries</strong> section,`;
+	message += `&nbsp;to take some actions on it.`;
+	const subject = `New comment to ${theTopic.title}`;
+	const emailContent = mailFormatter(names, email, message);
 
 	const newComment = await dbCommentHelper.create(req.body);
+	// Send message to Admin
+	await sendEmail(subject, emailContent, process.env.CONTACT_EMAIL);
+
 	return serverResponse(res, 201, 'Success', newComment);
 };
 export const getTopicComments = async (req, res) => {
@@ -107,7 +122,7 @@ export const getAllCommentaries = async (req, res) => {
 		['content', 'ASC']
 	];
 	const comments = await dbCommentHelper.findAll(
-		null,
+		{ isPublished: false },
 		constHelper.commentIncludes(),
 		orderBy,
 		attributes
@@ -117,6 +132,13 @@ export const getAllCommentaries = async (req, res) => {
 };
 export const publishComment = async (req, res) => {
 	const { commentId: id } = req.params;
-	await dbCommentHelper.update({ isPublished: true }, { id });
+	const attributes = ['isPublished'];
+	const { isPublished } = await dbCommentHelper.findOne(
+		{ id },
+		null,
+		attributes
+	);
+
+	await dbCommentHelper.update({ isPublished: !isPublished }, { id });
 	return serverResponse(res, 200, 'Published successfully');
 };
