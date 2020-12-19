@@ -7,7 +7,7 @@ import sgMail from '@sendgrid/mail';
 // import sgTransport from 'nodemailer-sendgrid-transport';
 import { User } from '../models';
 import { QueryHelper } from './QueryHelper';
-import { contactEmail } from './mailFormatter';
+import { mailFormatter } from './mailFormatter';
 
 const dbUser = new QueryHelper(User);
 export const hashPassword = (password) => {
@@ -77,15 +77,18 @@ export const authenticatedUser = async (req) => {
 	}
 	return null;
 };
-
-export const sendEmail = async ({ names, email, message }) => {
-	const subject = `${names} contacted us from ${process.env.APP_NAME}`;
-	const emailContent = contactEmail(names, email, message);
-
+/**
+ *
+ * @param {String} subject The subject
+ * @param {String} emailContent The formated message to be sent
+ * @param {String} sendTo an email to send the message to
+ */
+export const sendEmail = async (subject, emailContent, sendTo) => {
 	sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+
 	const messageBody = {
-		to: `${process.env.CONTACT_EMAIL}`,
-		from: process.env.APP_EMAIL,
+		to: `${sendTo}`,
+		from: `${process.env.APP_EMAIL}`,
 		subject,
 		html: emailContent,
 		text: `${emailContent}`

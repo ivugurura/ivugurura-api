@@ -107,11 +107,12 @@ export const getAllCommentaries = async (req, res) => {
 		['content', 'ASC']
 	];
 	const comments = await dbCommentHelper.findAll(
-		{ isPublished: false },
+		null,
 		constHelper.commentIncludes(),
 		orderBy,
 		attributes
 	);
+
 	return serverResponse(res, 200, 'Success', comments);
 };
 export const publishComment = async (req, res) => {

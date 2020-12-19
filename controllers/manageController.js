@@ -3,7 +3,8 @@ import {
 	QueryHelper,
 	serverResponse,
 	sendEmail,
-	authenticatedUser
+	authenticatedUser,
+	mailFormatter
 } from '../helpers';
 
 const categoryDb = new QueryHelper(Category);
@@ -47,7 +48,12 @@ export const searchInfo = async (req, res) => {
 	return serverResponse(res, 200, 'Success', searched);
 };
 export const sendContactUs = async (req, res) => {
-	const sentMsg = await sendEmail(req.body);
+	const { names, email, message } = req.body;
+
+	const subject = `${names} contacted us from ${process.env.APP_NAME}`;
+	const emailContent = mailFormatter(names, email, message);
+
+	await sendEmail(subject, emailContent, process.env.CONTACT_EMAIL);
 
 	return serverResponse(res, 200, 'Message sent');
 };
