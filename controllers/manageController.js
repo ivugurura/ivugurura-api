@@ -4,7 +4,8 @@ import {
 	serverResponse,
 	sendEmail,
 	authenticatedUser,
-	mailFormatter
+	mailFormatter,
+	paginator
 } from '../helpers';
 
 const categoryDb = new QueryHelper(Category);
@@ -81,4 +82,20 @@ export const getListenerMessages = async (req, res) => {
 		receiverId: listenerId
 	});
 	return serverResponse(res, 200, 'Success', messages);
+};
+export const getChatUsers = async (req, res) => {
+	const attributes = ['senderId', 'senderName'];
+	const group = ['senderId', 'senderName'];
+	const { offset, limit } = paginator(req.query);
+	const users = await messageDb.findAll(
+		null,
+		null,
+		null,
+		attributes,
+		offset,
+		limit,
+		group
+	);
+
+	return serverResponse(res, 200, 'Success', users);
 };
