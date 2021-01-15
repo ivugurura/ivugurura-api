@@ -75,7 +75,7 @@ export class ConstantHelper {
 			type: Joi.string().valid('audio', 'video', 'image').required(),
 			mediaLink: Joi.string().required(),
 			author: Joi.string().required(),
-			actionDate: Joi.string().required(),
+			actionDate: Joi.date().required(),
 			languageId: Joi.number().required(),
 			albumId: Joi.number().required()
 		};
