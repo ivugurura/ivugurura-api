@@ -89,18 +89,16 @@ export const addNewMedia = async (req, res) => {
 export const getMedia = async (req, res) => {
 	const { mediaType } = req.params;
 	const conditions = mediaType !== 'all' ? { type: mediaType } : null;
-	const attributes = ['id', 'title', 'mediaLink', 'type'];
+	const orderBy = [['actionDate', 'ASC']];
 	const medias = await dbMediaHelper.findAll(
 		conditions,
 		constHelper.mediaIncludes(),
-		null,
-		attributes
+		orderBy
 	);
 	return serverResponse(res, 200, 'Success', medias);
 };
 export const downloadSong = async (req, res) => {
 	const { mediaId } = req.params;
-	console.log(mediaId);
 	const media = await dbMediaHelper.findOne({ id: mediaId });
 	if (!media) {
 		return serverResponse(res, 400, `Song does not exist`);
@@ -117,4 +115,20 @@ export const downloadSong = async (req, res) => {
 		}
 		return res.download(`${songsDir}/${media.mediaLink}`);
 	});
+};
+export const deleteMedia = async (req, res) => {
+	const { mediaId } = req.params;
+	const media = await dbMediaHelper.findOne({ id: mediaId });
+	const songLink = process.env.SONGS_ZONE + '/' + media.mediaLink;
+	await dbMediaHelper.delete({ id: mediaId });
+
+	unlink(songLink, (error) => {
+		if (error) return serverResponse(res, 200, 'File not delete');
+		return serverResponse(res, 200, 'File deleted');
+	});
+};
+export const updateMedia = async (req, res) => {
+	const { mediaId } = req.params;
+	await dbMediaHelper.update(req.body, { id: mediaId });
+	return serverResponse(res, 200, 'Song has been updated');
 };
