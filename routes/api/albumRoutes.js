@@ -9,7 +9,9 @@ import {
 	addNewMedia,
 	deleteFile,
 	getMedia,
-	downloadSong
+	downloadSong,
+	updateMedia,
+	deleteMedia
 } from '../../controllers/albumController';
 import {
 	isAdminOrEditor,
@@ -17,7 +19,8 @@ import {
 	isAlbumValid,
 	doesAlbumExist,
 	isFileTypeValid,
-	isMediaValid
+	isMediaValid,
+	doesMediaExist
 } from '../../middlewares';
 
 const albumRoutes = Router();
@@ -49,7 +52,25 @@ albumRoutes.delete(
 	isFileTypeValid,
 	catchErrors(deleteFile)
 );
-albumRoutes.post('/add', isMediaValid, catchErrors(addNewMedia));
+albumRoutes.post(
+	'/add',
+	isAdminOrEditor,
+	isMediaValid,
+	catchErrors(addNewMedia)
+);
+albumRoutes.patch(
+	'/media/:mediaId',
+	isAdminOrEditor,
+	isMediaValid,
+	catchErrors(doesMediaExist),
+	catchErrors(updateMedia)
+);
+albumRoutes.delete(
+	'/media/:mediaId/del',
+	isAdminOrEditor,
+	catchErrors(doesMediaExist),
+	catchErrors(deleteMedia)
+);
 albumRoutes.get('/medias/:mediaType', catchErrors(getMedia));
 albumRoutes.get('/download/:mediaId', catchErrors(downloadSong));
 
