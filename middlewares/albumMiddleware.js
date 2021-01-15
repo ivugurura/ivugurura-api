@@ -41,5 +41,8 @@ export const isMediaValid = (req, res, next) => {
 	let validator = new ValidatorHelper(req.body);
 	const errorBody = validator.validateInput('media');
 	if (errorBody.error) return joiValidatorMsg(res, errorBody);
+	if (req.method === 'PATCH') {
+		delete req.body.languageId;
+	}
 	return next();
 };
