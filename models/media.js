@@ -5,6 +5,8 @@ module.exports = (sequelize, DataTypes) => {
 		{
 			title: DataTypes.STRING,
 			mediaLink: DataTypes.STRING,
+			author: DataTypes.STRING,
+			actionDate: DataTypes.STRING,
 			type: {
 				type: DataTypes.ENUM,
 				values: ['audio', 'video', 'image']
