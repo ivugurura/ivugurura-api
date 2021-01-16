@@ -36,7 +36,13 @@ sequelize
 		process.exit(1);
 	});
 app.use(compression());
-app.use(bodyParser.urlencoded({ limit: '100mb', extended: false }));
+app.use(
+	bodyParser.urlencoded({
+		limit: '100mb',
+		parameterLimit: 100000,
+		extended: false
+	})
+);
 app.use(bodyParser.json({ limit: '100mb' }));
 app.use(express.static(__dirname + '/build'));
 app.use('/songs', express.static('public/songs'));
