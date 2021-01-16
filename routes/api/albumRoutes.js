@@ -13,6 +13,7 @@ import {
 	updateMedia,
 	deleteMedia
 } from '../../controllers/albumController';
+import { uploadSingleFile } from '../../helpers';
 import {
 	isAdminOrEditor,
 	catchErrors,
@@ -46,7 +47,11 @@ albumRoutes.delete(
 	catchErrors(deleteAlbum)
 );
 
-albumRoutes.post('/upload/:fileType', isFileTypeValid, catchErrors(uploadFile));
+albumRoutes.post(
+	'/upload/:fileType',
+	isFileTypeValid,
+	catchErrors(uploadSingleFile)
+);
 albumRoutes.delete(
 	'/:fileType/:fileName',
 	isFileTypeValid,
