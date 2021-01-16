@@ -1,6 +1,7 @@
 import bcrypt from 'bcrypt';
 import slugify from 'slugify';
 import uniqid from 'uniqid';
+import path from 'path';
 import jwt, { verify } from 'jsonwebtoken';
 import sgMail from '@sendgrid/mail';
 // import nodemailer from 'nodemailer';
@@ -121,11 +122,8 @@ export const systemRoles = { superAdmin: 1, admin: 2, editor: 3 };
  * @param {Function} fileCallBack Callback function
  */
 export const isFileAllowed = (file, filePath, fileCallBack) => {
-	const coverImages = process.env.BLOGS_ZONE;
 	const images = process.env.IMAGES_ZONE;
-	const audios = process.env.AUDIOS_ZONE;
-	const profiles = process.env.PROFILES_ZONE;
-	const thumbnails = process.env.THUMBNAILS_ZONE;
+	const audios = process.env.SONGS_ZONE;
 	// Allowed exts
 	const allowedImages = /jpeg|jpg|png/;
 	const allowedAudios = /mp3|mpeg/;
@@ -134,12 +132,7 @@ export const isFileAllowed = (file, filePath, fileCallBack) => {
 	// Check mime
 	let mimetype = false;
 	let errorMessage = '';
-	if (
-		filePath === coverImages ||
-		filePath === images ||
-		filePath === profiles ||
-		filePath === thumbnails
-	) {
+	if (filePath === images) {
 		extname = allowedImages.test(path.extname(file.originalname).toLowerCase());
 		mimetype = allowedImages.test(file.mimetype);
 		errorMessage = 'Error: only (jpeg, jpg or png) images allowed';
@@ -156,3 +149,5 @@ export const isFileAllowed = (file, filePath, fileCallBack) => {
 		fileCallBack(errorMessage);
 	}
 };
+const MB = 1024 * 1024;
+export const ACCEPTED_FILE_SIZE = 100 * MB; //100 mbs
