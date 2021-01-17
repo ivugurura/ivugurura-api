@@ -25,10 +25,10 @@ export const getAllTopics = async (req, res) => {
 	const { languageId } = req.body;
 	const { category } = req.query;
 	const { offset, limit } = paginator(req.query);
-	let orderBy = [['createdAt', 'DESC']];
+	let orderBy = [['title', 'ASC']];
 	let conditions = { languageId, isPublished: true };
 	if (category === 'carsoul') {
-		orderBy = [['title', 'ASC']];
+		orderBy = [['createdAt', 'DESC']];
 	}
 	if (!isNaN(category)) {
 		conditions = { ...conditions, categoryId: category };
