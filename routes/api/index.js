@@ -8,7 +8,7 @@ import manageRoutes from './manageRoutes';
 
 const apiRoutes = Router();
 
-apiRoutes.use('/user', userRoutes);
+apiRoutes.use('/users', userRoutes);
 apiRoutes.use('/topics', topicRoutes);
 apiRoutes.use('/categories', categoryRoutes);
 apiRoutes.use('/albums', albumRoutes);

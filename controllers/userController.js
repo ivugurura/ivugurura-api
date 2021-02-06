@@ -1,67 +1,87 @@
 import passport from 'passport';
 import {
-  serverResponse,
-  QueryHelper,
-  paginator,
-  generatJWT,
-  hashPassword
+	serverResponse,
+	QueryHelper,
+	paginator,
+	generatJWT,
+	hashPassword
 } from '../helpers';
-import { Topic, Media, User } from '../models';
+import { Topic, Media, User, Sequelize } from '../models';
 import { ConstantHelper } from '../helpers/ConstantHelper';
 
 const constants = new ConstantHelper();
 const dbMedia = new QueryHelper(Media);
 const dbTopic = new QueryHelper(Topic);
 const userDb = new QueryHelper(User);
+const { Op } = Sequelize;
 export const userSignin = async (req, res, next) => {
-  passport.authenticate('local.login', (error, user) => {
-    if (error) return serverResponse(res, 401, error.message);
-    req.logIn(user, (err) => {
-      if (err) return next(err);
+	passport.authenticate('local.login', (error, user) => {
+		if (error) return serverResponse(res, 401, error.message);
+		req.logIn(user, (err) => {
+			if (err) return next(err);
 
-      user.token = generatJWT({ id: user.id });
-      req.session.cookie.maxAge = constants.week;
-      req.session.save();
-      return serverResponse(res, 200, `Welcome ${user.names}`, user);
-    });
-  })(req, req, next);
+			user.token = generatJWT({ id: user.id });
+			req.session.cookie.maxAge = constants.week;
+			req.session.save();
+			return serverResponse(res, 200, `Welcome ${user.names}`, user);
+		});
+	})(req, req, next);
 };
 export const logoutUser = (req, res) => {
-  req.session.destroy();
-  req.logout();
-  return serverResponse(res, 200, 'Successfully logged out');
+	req.session.destroy();
+	req.logout();
+	return serverResponse(res, 200, 'Successfully logged out');
 };
 export const getDashboardCounts = async (req, res) => {
-  const { languageId } = req.body;
-  let counts = {};
-  const songs = await dbMedia.count({ type: 'audio' });
-  const videos = await dbMedia.count({ type: 'video' });
-  const published = await dbTopic.count({ languageId, isPublished: true });
-  const unPublished = await dbTopic.count({ languageId, isPublished: false });
-  counts = { songs, videos, published, unPublished };
-  return serverResponse(res, 200, 'Success', counts);
+	const { languageId } = req.body;
+	let counts = {};
+	const songs = await dbMedia.count({ type: 'audio' });
+	const videos = await dbMedia.count({ type: 'video' });
+	const published = await dbTopic.count({ languageId, isPublished: true });
+	const unPublished = await dbTopic.count({ languageId, isPublished: false });
+	counts = { songs, videos, published, unPublished };
+	return serverResponse(res, 200, 'Success', counts);
 };
 export const getTopicsByPublish = async (req, res) => {
-  const { languageId } = req.body;
-  const { offset, limit } = paginator(req.query);
-  const whereConditions = { languageId };
-  const topics = await dbTopic.findAll(
-    whereConditions,
-    constants.topicIncludes(),
-    [
-      ['isPublished', 'ASC'],
-      ['createdAt', 'DESC']
-    ],
-    null,
-    offset,
-    limit
-  );
-  return serverResponse(res, 200, 'Success', topics);
+	const { languageId } = req.body;
+	const { offset, limit } = paginator(req.query);
+	const whereConditions = { languageId };
+	const topics = await dbTopic.findAll(
+		whereConditions,
+		constants.topicIncludes(),
+		[
+			['isPublished', 'ASC'],
+			['createdAt', 'DESC']
+		],
+		null,
+		offset,
+		limit
+	);
+	return serverResponse(res, 200, 'Success', topics);
 };
 export const createUser = async (req, res) => {
-  req.body.password = hashPassword(req.body.password);
-  req.body.role = 3;
-  const newUser = await userDb.create(req.body);
+	req.body.password = hashPassword(req.body.password);
+	req.body.role = 3;
+	const newUser = await userDb.create(req.body);
 
-  return serverResponse(res, 201, 'Success', newUser);
+	return serverResponse(res, 201, 'Success', newUser);
+};
+export const getSystemUsers = async (req, res) => {
+	const { offset, limit } = paginator(req.query);
+	const conditions = { role: { [Op.ne]: '1' } };
+	const attributes = { exclude: ['password', 'previous_password'] };
+	const orderBy = [['names', 'ASC']];
+
+	const users = await userDb.findAll(
+		conditions,
+		null,
+		orderBy,
+		attributes,
+		offset,
+		limit
+	);
+
+	const usersCount = await userDb.count(conditions);
+
+	return serverResponse(res, 200, 'Success', users, usersCount);
 };
