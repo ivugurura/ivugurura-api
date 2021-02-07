@@ -7,14 +7,14 @@ export class ValidatorHelper extends ConstantHelper {
 		this.data = data;
 	}
 
-	validateInput(type) {
+	validateInput(type, action = '') {
 		let validateKeys = null;
 		switch (type) {
 			case 'login':
 				validateKeys = Joi.object().keys(this.getLoginKeys());
 				break;
 			case 'user':
-				validateKeys = Joi.object().keys(this.getUserKeys());
+				validateKeys = Joi.object().keys(this.getUserKeys(action));
 				break;
 			case 'newTopic':
 				validateKeys = Joi.object().keys(this.getTopicKeys());

@@ -25,16 +25,19 @@ export class ConstantHelper {
 			password: Joi.string().required()
 		};
 	}
-	getUserKeys() {
-		return {
+	getUserKeys(action) {
+		let baseKeys = {
 			names: Joi.string().required(),
 			username: Joi.string().required(),
 			email: Joi.string().required(),
-			password: Joi.string().required(),
+			password: Joi.string(),
 			profile_image: Joi.string(),
 			role: Joi.number().valid(2, 3).required(),
 			languageId: Joi.number()
 		};
+		return action === 'edit'
+			? { ...baseKeys, password: Joi.string() }
+			: baseKeys;
 	}
 	getSignupKeys() {
 		let userInfo = {

@@ -66,6 +66,16 @@ export const createUser = async (req, res) => {
 
 	return serverResponse(res, 201, 'Success', newUser);
 };
+export const updateUser = async (req, res) => {
+	const { password } = req.body;
+	const { userId: id } = req.params;
+	if (password && password !== '') {
+		req.body.password = hashPassword(password);
+	}
+	await userDb.update(req.body, { id });
+
+	return serverResponse(res, 200, 'Success');
+};
 export const getSystemUsers = async (req, res) => {
 	const { offset, limit } = paginator(req.query);
 	const conditions = { role: { [Op.ne]: '1' } };
@@ -84,4 +94,10 @@ export const getSystemUsers = async (req, res) => {
 	const usersCount = await userDb.count(conditions);
 
 	return serverResponse(res, 200, 'Success', users, usersCount);
+};
+export const deleteUser = async (req, res) => {
+	const { userId: id } = req.params;
+	await userDb.delete({ id });
+
+	return serverResponse(res, 200, 'User has been deleted');
 };

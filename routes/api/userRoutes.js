@@ -5,7 +5,9 @@ import {
 	getTopicsByPublish,
 	logoutUser,
 	createUser,
-	getSystemUsers
+	getSystemUsers,
+	updateUser,
+	deleteUser
 } from '../../controllers/userController';
 import {
 	catchErrors,
@@ -23,6 +25,13 @@ userRoutes.post(
 	catchErrors(isUserInfoValid),
 	catchErrors(createUser)
 );
+userRoutes.patch(
+	'/:userId',
+	isAdmin,
+	catchErrors(isUserInfoValid),
+	catchErrors(updateUser)
+);
+userRoutes.delete('/:userId', isAdmin, catchErrors(deleteUser));
 userRoutes.get('/', isAdmin, catchErrors(getSystemUsers));
 userRoutes.post('/login', isLoginInfoValid, catchErrors(userSignin));
 userRoutes.get('/dashboard', isAdminOrEditor, catchErrors(getDashboardCounts));
