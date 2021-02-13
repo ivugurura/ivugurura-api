@@ -5,7 +5,6 @@ import {
 	getOneAlbum,
 	editAlbumInfo,
 	deleteAlbum,
-	uploadFile,
 	addNewMedia,
 	deleteFile,
 	getMedia,
@@ -15,7 +14,7 @@ import {
 } from '../../controllers/albumController';
 import { uploadSingleFile } from '../../helpers';
 import {
-	isAdminOrEditor,
+	isAdmin,
 	catchErrors,
 	isAlbumValid,
 	doesAlbumExist,
@@ -25,7 +24,7 @@ import {
 } from '../../middlewares';
 
 const albumRoutes = Router();
-albumRoutes.post('/', isAdminOrEditor, isAlbumValid, catchErrors(createAlbum));
+albumRoutes.post('/', isAdmin, isAlbumValid, catchErrors(createAlbum));
 albumRoutes.get('/', getAlbums);
 albumRoutes.get(
 	'/:albumId',
@@ -34,7 +33,7 @@ albumRoutes.get(
 );
 albumRoutes.patch(
 	'/:albumId',
-	isAdminOrEditor,
+	isAdmin,
 	catchErrors(doesAlbumExist),
 	isAlbumValid,
 	catchErrors(editAlbumInfo)
@@ -42,13 +41,14 @@ albumRoutes.patch(
 
 albumRoutes.delete(
 	'/:albumId',
-	isAdminOrEditor,
+	isAdmin,
 	catchErrors(doesAlbumExist),
 	catchErrors(deleteAlbum)
 );
 
 albumRoutes.post(
 	'/upload/:fileType',
+	isAdmin,
 	isFileTypeValid,
 	catchErrors(uploadSingleFile)
 );
@@ -57,22 +57,17 @@ albumRoutes.delete(
 	isFileTypeValid,
 	catchErrors(deleteFile)
 );
-albumRoutes.post(
-	'/add',
-	isAdminOrEditor,
-	isMediaValid,
-	catchErrors(addNewMedia)
-);
+albumRoutes.post('/add', isAdmin, isMediaValid, catchErrors(addNewMedia));
 albumRoutes.patch(
 	'/media/:mediaId',
-	isAdminOrEditor,
+	isAdmin,
 	isMediaValid,
 	catchErrors(doesMediaExist),
 	catchErrors(updateMedia)
 );
 albumRoutes.delete(
 	'/media/:mediaId/del',
-	isAdminOrEditor,
+	isAdmin,
 	catchErrors(doesMediaExist),
 	catchErrors(deleteMedia)
 );

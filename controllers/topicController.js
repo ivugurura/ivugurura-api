@@ -108,6 +108,7 @@ export const getTopicComments = async (req, res) => {
 	return serverResponse(res, 200, 'Success', comments);
 };
 export const getAllCommentaries = async (req, res) => {
+	const { offset, limit } = paginator(req.query);
 	const attributes = [
 		'id',
 		'names',
@@ -122,13 +123,16 @@ export const getAllCommentaries = async (req, res) => {
 		['content', 'ASC']
 	];
 	const comments = await dbCommentHelper.findAll(
-		{ isPublished: false },
+		{},
 		constHelper.commentIncludes(),
 		orderBy,
-		attributes
+		attributes,
+		offset,
+		limit
 	);
+	const commentsCount = await dbCommentHelper.count();
 
-	return serverResponse(res, 200, 'Success', comments);
+	return serverResponse(res, 200, 'Success', comments, commentsCount);
 };
 export const publishComment = async (req, res) => {
 	const { commentId: id } = req.params;
