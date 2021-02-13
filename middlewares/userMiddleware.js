@@ -5,10 +5,11 @@ import {
 	getLang,
 	QueryHelper
 } from '../helpers';
-import { User, Sequelize } from '../models';
+import { User, Topic, Announcement, Sequelize } from '../models';
 import { translate } from '../locales';
 
 const userDb = new QueryHelper(User);
+const topicDb = new QueryHelper(Topic);
 const { Op } = Sequelize;
 export const isLoginInfoValid = (req, res, next) => {
 	if (req.isAuthenticated()) {
@@ -49,5 +50,20 @@ export const isMessageInfoValid = (req, res, next) => {
 	let validator = new ValidatorHelper(req.body);
 	const errorBody = validator.validateInput('message');
 	if (errorBody.error) return joiValidatorMsg(res, errorBody);
+	return next();
+};
+export const canUserBeDeleted = async (req, res, next) => {
+	const { userId } = req.params;
+	const anounceDb = new QueryHelper(Announcement);
+	const anyTopic = await topicDb.findOne({ userId });
+	const anyAnnouncement = await anounceDb.findOne({ userId });
+
+	if (anyTopic || anyAnnouncement) {
+		let message = 'This user cannot be deleted \n';
+		message += 'Since the person has performed some activities to the system';
+		message += '\nEither delete them first:(Topics or announcement)\n';
+		message += 'or deactivate the person instead.';
+		return serverResponse(res, 422, message);
+	}
 	return next();
 };

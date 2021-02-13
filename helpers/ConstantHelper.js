@@ -33,6 +33,7 @@ export class ConstantHelper {
 			password: Joi.string(),
 			profile_image: Joi.string(),
 			role: Joi.number().valid(2, 3).required(),
+			isActive: Joi.boolean().required(),
 			languageId: Joi.number()
 		};
 		return action === 'edit'

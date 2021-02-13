@@ -6,13 +6,14 @@ import {
 	generatJWT,
 	hashPassword
 } from '../helpers';
-import { Topic, Media, User, Sequelize } from '../models';
+import { Topic, Media, User, Sequelize, Commentary } from '../models';
 import { ConstantHelper } from '../helpers/ConstantHelper';
 
 const constants = new ConstantHelper();
 const dbMedia = new QueryHelper(Media);
 const dbTopic = new QueryHelper(Topic);
 const userDb = new QueryHelper(User);
+const commentDb = new QueryHelper(Commentary);
 const { Op } = Sequelize;
 export const userSignin = async (req, res, next) => {
 	passport.authenticate('local.login', (error, user) => {
@@ -37,27 +38,33 @@ export const getDashboardCounts = async (req, res) => {
 	let counts = {};
 	const songs = await dbMedia.count({ type: 'audio' });
 	const videos = await dbMedia.count({ type: 'video' });
+	const users = await userDb.count({ role: { [Op.ne]: '1' } });
+	const commentaries = await commentDb.count({});
 	const published = await dbTopic.count({ languageId, isPublished: true });
 	const unPublished = await dbTopic.count({ languageId, isPublished: false });
-	counts = { songs, videos, published, unPublished };
+	counts = { songs, videos, published, unPublished, users, commentaries };
 	return serverResponse(res, 200, 'Success', counts);
 };
 export const getTopicsByPublish = async (req, res) => {
 	const { languageId } = req.body;
 	const { offset, limit } = paginator(req.query);
 	const whereConditions = { languageId };
+	const orderBy = [
+		['isPublished', 'ASC'],
+		['createdAt', 'DESC']
+	];
 	const topics = await dbTopic.findAll(
 		whereConditions,
 		constants.topicIncludes(),
-		[
-			['isPublished', 'ASC'],
-			['createdAt', 'DESC']
-		],
+		orderBy,
 		null,
 		offset,
 		limit
 	);
-	return serverResponse(res, 200, 'Success', topics);
+
+	const topicsCount = await dbTopic.count(whereConditions);
+
+	return serverResponse(res, 200, 'Success', topics, topicsCount);
 };
 export const createUser = async (req, res) => {
 	req.body.password = hashPassword(req.body.password);

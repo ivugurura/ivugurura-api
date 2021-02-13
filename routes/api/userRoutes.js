@@ -15,7 +15,8 @@ import {
 	isSuperAdmin,
 	isUserInfoValid,
 	isAdminOrEditor,
-	isAdmin
+	isAdmin,
+	canUserBeDeleted
 } from '../../middlewares';
 
 const userRoutes = Router();
@@ -31,7 +32,12 @@ userRoutes.patch(
 	catchErrors(isUserInfoValid),
 	catchErrors(updateUser)
 );
-userRoutes.delete('/:userId', isAdmin, catchErrors(deleteUser));
+userRoutes.delete(
+	'/:userId',
+	isAdmin,
+	catchErrors(canUserBeDeleted),
+	catchErrors(deleteUser)
+);
 userRoutes.get('/', isAdmin, catchErrors(getSystemUsers));
 userRoutes.post('/login', isLoginInfoValid, catchErrors(userSignin));
 userRoutes.get('/dashboard', isAdminOrEditor, catchErrors(getDashboardCounts));
