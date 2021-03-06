@@ -4,7 +4,8 @@ import {
 	serverResponse,
 	QueryHelper,
 	uploadMany,
-	uploadSingle
+	uploadSingle,
+	paginator
 } from '../helpers';
 import { Album, Media, Topic } from '../models';
 import { ConstantHelper } from '../helpers/ConstantHelper';
@@ -89,13 +90,20 @@ export const addNewMedia = async (req, res) => {
 export const getMedia = async (req, res) => {
 	const { mediaType } = req.params;
 	const conditions = mediaType !== 'all' ? { type: mediaType } : null;
-	const orderBy = [['actionDate', 'ASC']];
+	const orderBy = [['actionDate', 'DESC']];
+	const { offset, limit } = paginator(req.query);
 	const medias = await dbMediaHelper.findAll(
 		conditions,
 		constHelper.mediaIncludes(),
-		orderBy
+		orderBy,
+		null,
+		offset,
+		limit
 	);
-	return serverResponse(res, 200, 'Success', medias);
+
+	const mediaCount = await dbMediaHelper.count(conditions);
+
+	return serverResponse(res, 200, 'Success', medias, mediaCount);
 };
 export const downloadSong = async (req, res) => {
 	const { mediaId } = req.params;
