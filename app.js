@@ -14,6 +14,7 @@ import { handleErrors } from './middlewares';
 import { security } from './config/security';
 import { appSocket } from './config/socketIo';
 import { session } from './config/session';
+import { dbBackup } from './crons';
 
 dotenv.config();
 localPassport(passport);
@@ -72,4 +73,8 @@ app.get('/*', (req, res) => {
  */
 appSocket(app);
 
+/**
+ * Backup database
+ */
+dbBackup();
 export default app;

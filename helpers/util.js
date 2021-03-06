@@ -151,3 +151,17 @@ export const isFileAllowed = (file, filePath, fileCallBack) => {
 };
 const MB = 1024 * 1024;
 export const ACCEPTED_FILE_SIZE = 100 * MB; //100 mbs
+
+const setTwoDigit = (digit) => {
+	return digit <= 9 ? `0${digit}` : digit;
+};
+export const currentDate = () => {
+	const date = new Date();
+	let year = date.getFullYear();
+	let month = setTwoDigit(date.getMonth() + 1);
+	let day = setTwoDigit(date.getDate());
+	let hour = setTwoDigit(date.getHours());
+	let min = setTwoDigit(date.getMinutes());
+	let sec = setTwoDigit(date.getSeconds());
+	return `${year}-${month}-${day}-${hour}-${min}-${sec}`;
+};
