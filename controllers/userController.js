@@ -48,11 +48,17 @@ export const getDashboardCounts = async (req, res) => {
 export const getTopicsByPublish = async (req, res) => {
 	const { languageId } = req.body;
 	const { offset, limit } = paginator(req.query);
-	const whereConditions = { languageId };
+	let whereConditions = { languageId };
 	const orderBy = [
 		['isPublished', 'ASC'],
 		['createdAt', 'DESC']
 	];
+	if (req.query.search) {
+		whereConditions = {
+			...whereConditions,
+			title: { [Op.iLike]: `%${req.query.search}%` }
+		};
+	}
 	const topics = await dbTopic.findAll(
 		whereConditions,
 		constants.topicIncludes(),
