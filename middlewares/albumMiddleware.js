@@ -24,9 +24,13 @@ export const doesAlbumExist = async (req, res, next) => {
 export const doesMediaExist = async (req, res, next) => {
 	let dbHelper = new QueryHelper(Media);
 	if (req.params.mediaId) {
-		const { mediaId: id } = req.params;
-		const media = await dbHelper.findOne({ id });
-		if (media) return next();
+		const { mediaId } = req.params;
+		const attribute = isNaN(mediaId) ? 'slug' : 'id';
+		const media = await dbHelper.findOne({ [attribute]: mediaId });
+		if (media) {
+			req.params.mediaId = media.id;
+			return next();
+		}
 	}
 	return serverResponse(res, 404, 'Media does not exist');
 };

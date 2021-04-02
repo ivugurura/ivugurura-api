@@ -4,6 +4,7 @@ module.exports = (sequelize, DataTypes) => {
 		'Media',
 		{
 			title: DataTypes.STRING,
+			slug: DataTypes.STRING,
 			mediaLink: DataTypes.STRING,
 			author: DataTypes.STRING,
 			actionDate: DataTypes.STRING,
@@ -24,6 +25,14 @@ module.exports = (sequelize, DataTypes) => {
 			foreignKey: 'albumId'
 		});
 		Media.belongsTo(models.Topic, { as: 'image', foreignKey: 'topicId' });
+		Media.hasMany(models.MediaShare, {
+			as: 'shares',
+			foreignKey: 'mediaId'
+		});
+		Media.hasMany(models.MediaDownload, {
+			as: 'downloads',
+			foreignKey: 'mediaId'
+		});
 	};
 	return Media;
 };

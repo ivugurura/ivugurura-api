@@ -5,14 +5,17 @@ import {
 	QueryHelper,
 	uploadMany,
 	uploadSingle,
-	paginator
+	paginator,
+	generateSlug
 } from '../helpers';
-import { Album, Media, Topic } from '../models';
+import { Album, Media, Topic, MediaDownload, MediaShare } from '../models';
 import { ConstantHelper } from '../helpers/ConstantHelper';
 
 const dbHelper = new QueryHelper(Album);
 const dbMediaHelper = new QueryHelper(Media);
 const dbTopicHelper = new QueryHelper(Topic);
+const dbMediaDownloadHelper = new QueryHelper(MediaDownload);
+const dbMediaShareHelper = new QueryHelper(MediaShare);
 const constHelper = new ConstantHelper();
 export const createAlbum = async (req, res) => {
 	const newAlbum = await dbHelper.create(req.body);
@@ -84,6 +87,8 @@ export const deleteFile = (req, res) => {
 	});
 };
 export const addNewMedia = async (req, res) => {
+	const { title } = req.body;
+	req.body.slug = generateSlug(title);
 	const newMedia = await dbMediaHelper.create(req.body);
 	return serverResponse(res, 201, 'Success', newMedia);
 };
@@ -115,12 +120,13 @@ export const downloadSong = async (req, res) => {
 		return serverResponse(res, 400, `You can't download this file`);
 	}
 	const songsDir = process.env.SONGS_ZONE;
-	readdir(songsDir, (error, audios) => {
+	readdir(songsDir, async (error, audios) => {
 		if (error)
 			return serverResponse(res, 503, `Sorry service not available. SDL`);
 		if (audios.indexOf(media.mediaLink) === -1) {
 			return serverResponse(res, 503, 'The song does not exist');
 		}
+		await dbMediaDownloadHelper.create({ mediaId: media.id });
 		return res.download(`${songsDir}/${media.mediaLink}`);
 	});
 };
@@ -137,6 +143,15 @@ export const deleteMedia = async (req, res) => {
 };
 export const updateMedia = async (req, res) => {
 	const { mediaId } = req.params;
+	if (req.body.title) {
+		req.body.slug = generateSlug(req.body.title);
+	}
 	await dbMediaHelper.update(req.body, { id: mediaId });
-	return serverResponse(res, 200, 'Song has been updated');
+	return serverResponse(res, 200, 'Successfully updated');
+};
+export const shareMedia = async (req, res) => {
+	const { mediaId } = req.params;
+
+	await dbMediaShareHelper.create({ mediaId });
+	return serverResponse(res, 200, 'Success');
 };

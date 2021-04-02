@@ -10,7 +10,8 @@ import {
 	getMedia,
 	downloadSong,
 	updateMedia,
-	deleteMedia
+	deleteMedia,
+	shareMedia
 } from '../../controllers/albumController';
 import { uploadSingleFile } from '../../helpers';
 import {
@@ -72,6 +73,15 @@ albumRoutes.delete(
 	catchErrors(deleteMedia)
 );
 albumRoutes.get('/medias/:mediaType', catchErrors(getMedia));
-albumRoutes.get('/download/:mediaId', catchErrors(downloadSong));
+albumRoutes.get(
+	'/download/:mediaId',
+	catchErrors(doesMediaExist),
+	catchErrors(downloadSong)
+);
+albumRoutes.get(
+	'/share/:mediaId',
+	catchErrors(doesMediaExist),
+	catchErrors(shareMedia)
+);
 
 export default albumRoutes;
