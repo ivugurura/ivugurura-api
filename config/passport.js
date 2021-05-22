@@ -34,7 +34,7 @@ export const localPassport = (passport) => {
 						if (!unHashPassword(password, user.password))
 							return done({ message: 'Invalid password' });
 						if (!user.isActive) {
-							let msg = 'You are allowed to access the system. ';
+							let msg = 'You are not allowed to access the system. ';
 							msg += "Please contact the Administrator. He'll let you in";
 							return done({ message: msg });
 						}
