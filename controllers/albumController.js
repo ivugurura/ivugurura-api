@@ -8,7 +8,14 @@ import {
 	paginator,
 	generateSlug
 } from '../helpers';
-import { Album, Media, Topic, MediaDownload, MediaShare } from '../models';
+import {
+	Album,
+	Media,
+	Topic,
+	MediaDownload,
+	MediaShare,
+	Sequelize
+} from '../models';
 import { ConstantHelper } from '../helpers/ConstantHelper';
 
 const dbHelper = new QueryHelper(Album);
@@ -17,6 +24,8 @@ const dbTopicHelper = new QueryHelper(Topic);
 const dbMediaDownloadHelper = new QueryHelper(MediaDownload);
 const dbMediaShareHelper = new QueryHelper(MediaShare);
 const constHelper = new ConstantHelper();
+const { Op } = Sequelize;
+
 export const createAlbum = async (req, res) => {
 	const newAlbum = await dbHelper.create(req.body);
 	return serverResponse(res, 201, 'Success', newAlbum);
@@ -94,7 +103,17 @@ export const addNewMedia = async (req, res) => {
 };
 export const getMedia = async (req, res) => {
 	const { mediaType } = req.params;
-	const conditions = mediaType !== 'all' ? { type: mediaType } : null;
+	let { search } = req.query;
+	let conditions = mediaType !== 'all' ? { type: mediaType } : {};
+	if (search) {
+		conditions = {
+			...conditions,
+			[Op.or]: [
+				{ title: { [Op.iLike]: `%${search}%` } },
+				{ author: { [Op.iLike]: `%${search}%` } }
+			]
+		};
+	}
 	const orderBy = [['actionDate', 'DESC']];
 	const { offset, limit } = paginator(req.query);
 	const medias = await dbMediaHelper.findAll(
