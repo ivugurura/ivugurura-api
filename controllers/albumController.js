@@ -124,14 +124,14 @@ export const getMedia = async (req, res) => {
 		offset,
 		limit
 	);
-	const toMediaCounts = medias.map((m) => ({
+	medias = medias.map((m) => ({
 		...m.toJSON(),
 		downloads: m.downloads.length,
 		shares: m.shares.length
 	}));
 	const mediaCount = await dbMediaHelper.count(conditions);
 
-	return serverResponse(res, 200, 'Success', toMediaCounts, mediaCount);
+	return serverResponse(res, 200, 'Success', medias, mediaCount);
 };
 export const downloadSong = async (req, res) => {
 	const { mediaId } = req.params;
