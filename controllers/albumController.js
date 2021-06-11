@@ -116,7 +116,7 @@ export const getMedia = async (req, res) => {
 	}
 	const orderBy = [['actionDate', 'DESC']];
 	const { offset, limit } = paginator(req.query);
-	const medias = await dbMediaHelper.findAll(
+	let medias = await dbMediaHelper.findAll(
 		conditions,
 		constHelper.mediaIncludes(),
 		orderBy,
@@ -124,10 +124,14 @@ export const getMedia = async (req, res) => {
 		offset,
 		limit
 	);
-
+	const toMediaCounts = medias.map((m) => ({
+		...m.toJSON(),
+		downloads: m.downloads.length,
+		shares: m.shares.length
+	}));
 	const mediaCount = await dbMediaHelper.count(conditions);
 
-	return serverResponse(res, 200, 'Success', medias, mediaCount);
+	return serverResponse(res, 200, 'Success', toMediaCounts, mediaCount);
 };
 export const downloadSong = async (req, res) => {
 	const { mediaId } = req.params;

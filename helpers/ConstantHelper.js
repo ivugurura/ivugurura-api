@@ -7,9 +7,10 @@ import {
 	Commentary,
 	Media,
 	TopicView,
-	Album
+	Album,
+	MediaDownload,
+	MediaShare
 } from '../models';
-import { systemRoles } from './util';
 
 export class ConstantHelper {
 	constructor() {
@@ -132,6 +133,16 @@ export class ConstantHelper {
 				model: Language,
 				as: 'language',
 				attributes: ['name']
+			},
+			{
+				model: MediaDownload,
+				as: 'downloads',
+				attributes: ['id']
+			},
+			{
+				model: MediaShare,
+				as: 'shares',
+				attributes: ['id']
 			}
 		];
 	}
