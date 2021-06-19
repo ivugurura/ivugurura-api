@@ -11,7 +11,8 @@ import {
 	downloadSong,
 	updateMedia,
 	deleteMedia,
-	shareMedia
+	shareMedia,
+	getMediaCounts
 } from '../../controllers/albumController';
 import { uploadSingleFile } from '../../helpers';
 import {
@@ -83,5 +84,6 @@ albumRoutes.get(
 	catchErrors(doesMediaExist),
 	catchErrors(shareMedia)
 );
+albumRoutes.get('/counts/media', isAdmin, catchErrors(getMediaCounts));
 
 export default albumRoutes;

@@ -133,6 +133,12 @@ export const getMedia = async (req, res) => {
 
 	return serverResponse(res, 200, 'Success', medias, mediaCount);
 };
+export const getMediaCounts = async (req, res) => {
+	const downloads = await dbMediaDownloadHelper.count();
+	const shares = await dbMediaShareHelper.count();
+
+	return serverResponse(res, 200, 'Success', { downloads, shares });
+};
 export const downloadSong = async (req, res) => {
 	const { mediaId } = req.params;
 	const media = await dbMediaHelper.findOne({ id: mediaId });
