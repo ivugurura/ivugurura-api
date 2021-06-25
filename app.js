@@ -32,8 +32,13 @@ security(app);
 sequelize
 	.authenticate()
 	.then(() => console.log('Database connected'))
-	.catch(() => {
-		console.log('Something wrong with db');
+	.catch((error) => {
+		const isDev = process.env.NODE_ENV === 'development';
+		if (isDev) {
+			console.log('DB_Error', error);
+		} else {
+			console.log('Something wrong with db');
+		}
 		process.exit(1);
 	});
 app.use(compression());
