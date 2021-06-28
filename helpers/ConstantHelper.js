@@ -53,6 +53,7 @@ export class ConstantHelper {
 	existingTopicKeys() {
 		return {
 			title: Joi.string(),
+			originalTitle: Joi.string(),
 			description: Joi.string(),
 			coverImage: Joi.string(),
 			content: Joi.string(),
