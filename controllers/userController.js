@@ -59,7 +59,7 @@ export const getTopicsByPublish = async (req, res) => {
 			title: { [Op.iLike]: `%${req.query.search}%` }
 		};
 	}
-	const topics = await dbTopic.findAll(
+	let topics = await dbTopic.findAll(
 		whereConditions,
 		constants.topicIncludes(),
 		orderBy,
@@ -67,6 +67,11 @@ export const getTopicsByPublish = async (req, res) => {
 		offset,
 		limit
 	);
+
+	topics = topics.map((topic) => ({
+		...topic.toJSON(),
+		views: topic.views.length
+	}));
 
 	const topicsCount = await dbTopic.count(whereConditions);
 

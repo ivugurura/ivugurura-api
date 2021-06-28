@@ -33,7 +33,7 @@ export const getAllTopics = async (req, res) => {
 	if (!isNaN(category)) {
 		conditions = { ...conditions, categoryId: category };
 	}
-	const topics = await dbHelper.findAll(
+	let topics = await dbHelper.findAll(
 		conditions,
 		constHelper.topicIncludes(),
 		orderBy,
@@ -41,6 +41,10 @@ export const getAllTopics = async (req, res) => {
 		offset,
 		limit
 	);
+	topics = topics.map((topic) => ({
+		...topic.toJSON(),
+		views: topic.views.length
+	}));
 	const topicsCount = await dbHelper.count(conditions);
 
 	return serverResponse(res, 200, 'Success', topics, topicsCount);
@@ -59,10 +63,12 @@ export const getOneTopic = async (req, res) => {
 };
 export const editTopic = async (req, res) => {
 	const { topicId: id } = req.params;
-	if (req.body.title) {
-		req.body.slug = generateSlug(req.body.title);
-		req.body.title = ucFirst(req.body.title);
+	const { title = '', originalTitle = '' } = req.body;
+	if (title.toLowerCase() !== originalTitle.toLowerCase()) {
+		req.body.slug = generateSlug(title);
+		req.body.title = ucFirst(title);
 	}
+
 	await dbHelper.update(req.body, { id });
 	return serverResponse(res, 200, 'The topic updated');
 };
