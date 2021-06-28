@@ -1,5 +1,5 @@
 import multer from 'multer';
-import { readdir, unlink } from 'fs';
+import { readdir, readdirSync, statSync, unlink } from 'fs';
 import {
 	serverResponse,
 	QueryHelper,
@@ -183,4 +183,15 @@ export const shareMedia = async (req, res) => {
 
 	await dbMediaShareHelper.create({ mediaId });
 	return serverResponse(res, 200, 'Success');
+};
+export const getTopicsCoverImages = async (_req, res) => {
+	const dir = process.env.IMAGES_ZONE;
+	let coverImages = readdirSync(dir)
+		.map((fileName) => ({
+			fileName,
+			createdAt: statSync(`${dir}/${fileName}`).mtime.getTime()
+		}))
+		.sort((a, b) => b.createdAt - a.createdAt);
+
+	return serverResponse(res, 200, 'Success', coverImages);
 };

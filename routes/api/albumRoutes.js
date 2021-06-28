@@ -12,7 +12,8 @@ import {
 	updateMedia,
 	deleteMedia,
 	shareMedia,
-	getMediaCounts
+	getMediaCounts,
+	getTopicsCoverImages
 } from '../../controllers/albumController';
 import { uploadSingleFile } from '../../helpers';
 import {
@@ -85,5 +86,6 @@ albumRoutes.get(
 	catchErrors(shareMedia)
 );
 albumRoutes.get('/counts/media', isAdmin, catchErrors(getMediaCounts));
+albumRoutes.get('/images/cover-images', catchErrors(getTopicsCoverImages));
 
 export default albumRoutes;
