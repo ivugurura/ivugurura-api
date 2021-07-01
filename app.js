@@ -1,5 +1,5 @@
 import express from 'express';
-import bodyParser from 'body-parser';
+// import bodyParser from 'body-parser';
 import dotenv from 'dotenv';
 import path from 'path';
 import cors from 'cors';
@@ -54,13 +54,13 @@ sequelize
 	});
 app.use(compression());
 app.use(
-	bodyParser.urlencoded({
+	express.urlencoded({
 		limit: '100mb',
 		parameterLimit: 100000,
 		extended: false
 	})
 );
-app.use(bodyParser.json({ limit: '100mb' }));
+app.use(express.json({ limit: '100mb' }));
 app.use(express.static(__dirname + '/build'));
 app.use('/songs', express.static('public/songs'));
 app.use('/images', express.static('public/images'));
