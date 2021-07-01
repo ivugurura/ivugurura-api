@@ -165,3 +165,17 @@ export const currentDate = () => {
 	let sec = setTwoDigit(date.getSeconds());
 	return `${year}-${month}-${day}-${hour}-${min}-${sec}`;
 };
+
+/**
+ *
+ * @param {String} title Description of the notifier
+ * @param {String} info The notifier content
+ */
+export const notifyMe = async (title = '', info = '') => {
+	try {
+		const content = mailFormatter('System', 'Reformation System', info);
+		await sendEmail(title, content, process.env.ADMIN_EMAIL);
+	} catch (error) {
+		throw new Error(error.message);
+	}
+};
