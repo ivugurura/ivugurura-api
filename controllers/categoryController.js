@@ -4,7 +4,6 @@ import { serverResponse, QueryHelper, generateSlug } from "../helpers";
 import { categoriesTopicQuery } from "../helpers/rawQueries";
 
 const dbHelper = new QueryHelper(Category);
-const topicDb = new QueryHelper(Topic);
 const constHelper = new ConstantHelper();
 const { Op } = Sequelize;
 export const createNewCategory = async (req, res) => {
@@ -19,7 +18,7 @@ export const getNavCategories = async (req, res) => {
     { languageId, categoryId: null },
     constHelper.categoryIncludes()
   );
-  return serverResponse(res, 201, "Success", categories);
+  return serverResponse(res, 200, "Success", categories);
 };
 
 export const getCategories = async (req, res) => {
@@ -40,7 +39,7 @@ export const getCategories = async (req, res) => {
       orderByName
     );
   }
-  return serverResponse(res, 201, "Success", categories);
+  return serverResponse(res, 200, "Success", categories);
 };
 export const getACategory = async (req, res) => {
   const { languageId, categoryId: id } = req.body;
