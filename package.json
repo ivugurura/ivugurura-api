@@ -11,6 +11,10 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "babel-node ./app.js",
     "dev": "nodemon --exec babel-node ./app.js",
+    "migrate": "sequelize db:migrate",
+    "migrate-down": "sequelize db:migrate:undo",
+    "seed-up": "sequelize db:seed:all",
+    "seed-down": "sequelize db:seed:undo:all",
     "compress": "tar zcvf build.tar.gz ./",
     "un-compress": "tar zxvf build.tar.gz"
   },
