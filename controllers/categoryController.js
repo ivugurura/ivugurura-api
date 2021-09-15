@@ -1,14 +1,16 @@
-import { Category, Sequelize } from '../models';
-import { ConstantHelper } from '../helpers/ConstantHelper';
-import { serverResponse, QueryHelper, generateSlug } from '../helpers';
+import { Category, Sequelize, Topic, sequelize } from "../models";
+import { ConstantHelper } from "../helpers/ConstantHelper";
+import { serverResponse, QueryHelper, generateSlug } from "../helpers";
+import { categoriesTopicQuery } from "../helpers/rawQueries";
 
 const dbHelper = new QueryHelper(Category);
+const topicDb = new QueryHelper(Topic);
 const constHelper = new ConstantHelper();
 const { Op } = Sequelize;
 export const createNewCategory = async (req, res) => {
   req.body.slug = generateSlug(req.body.name);
   let newCategory = await dbHelper.create(req.body);
-  return serverResponse(res, 201, 'Category created', newCategory);
+  return serverResponse(res, 201, "Category created", newCategory);
 };
 
 export const getNavCategories = async (req, res) => {
@@ -17,28 +19,38 @@ export const getNavCategories = async (req, res) => {
     { languageId, categoryId: null },
     constHelper.categoryIncludes()
   );
-  return serverResponse(res, 201, 'Success', categories);
+  return serverResponse(res, 201, "Success", categories);
 };
 
 export const getCategories = async (req, res) => {
   const { languageId } = req.body;
-  const orderByName = [['name', 'ASC']];
-  const categories = await dbHelper.findAll(
-    { languageId, categoryId: { [Op.not]: null } },
-    null,
-    orderByName
-  );
-  return serverResponse(res, 201, 'Success', categories);
+  const { categoryType } = req.query;
+  let db = dbHelper;
+  let categories = null;
+  if (categoryType === "with-topics") {
+    categories = await sequelize.query(categoriesTopicQuery, {
+      type: sequelize.QueryTypes.SELECT,
+      logging: false,
+    });
+  } else {
+    const orderByName = [["name", "ASC"]];
+    categories = await db.findAll(
+      { languageId, categoryId: { [Op.not]: null } },
+      null,
+      orderByName
+    );
+  }
+  return serverResponse(res, 201, "Success", categories);
 };
 export const getACategory = async (req, res) => {
   const { languageId, categoryId: id } = req.body;
-  const attributes = ['id', 'name', 'slug', 'createdAt'];
+  const attributes = ["id", "name", "slug", "createdAt"];
   const category = await dbHelper.findOne(
     { languageId, id },
     constHelper.oneCategoryIncludes(),
     attributes
   );
-  return serverResponse(res, 200, 'Success', category);
+  return serverResponse(res, 200, "Success", category);
 };
 export const editCategory = async (req, res) => {
   const { categoryId: id } = req.params;
@@ -46,11 +58,11 @@ export const editCategory = async (req, res) => {
     req.body.slug = generateSlug(req.body.name);
   }
   await dbHelper.update(req.body, { id });
-  return serverResponse(res, 200, 'The category updated');
+  return serverResponse(res, 200, "The category updated");
 };
 
 export const deleteCategory = async (req, res) => {
   const { categoryId: id } = req.params;
   await dbHelper.delete({ id });
-  return serverResponse(res, 200, 'The category deleted');
+  return serverResponse(res, 200, "The category deleted");
 };
