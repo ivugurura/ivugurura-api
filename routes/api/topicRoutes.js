@@ -1,17 +1,17 @@
-import { Router } from 'express';
+import { Router } from "express";
 import {
   catchErrors,
   isAdmin,
   isAdminOrEditor,
-  isTheOwner
-} from '../../middlewares';
+  isTheOwner,
+} from "../../middlewares";
 import {
   isNewTopicValidated,
   doesTopicExist,
   isExistingTopicValid,
   isCommentValid,
-  doesCommentExist
-} from '../../middlewares/topicMiddleware';
+  doesCommentExist,
+} from "../../middlewares/topicMiddleware";
 import {
   addNewTopic,
   getAllTopics,
@@ -21,19 +21,19 @@ import {
   addTopicComment,
   getTopicComments,
   getAllCommentaries,
-  publishComment
-} from '../../controllers/topicController';
+  publishComment,
+} from "../../controllers/topicController";
 
 const topicRoutes = Router();
 topicRoutes.post(
-  '/',
+  "/",
   isAdminOrEditor,
   isNewTopicValidated,
   catchErrors(addNewTopic)
 );
-topicRoutes.get('/', catchErrors(getAllTopics));
+topicRoutes.get("/", catchErrors(getAllTopics));
 topicRoutes.patch(
-  '/:topicIdOrSlug',
+  "/:topicIdOrSlug",
   isAdminOrEditor,
   catchErrors(doesTopicExist),
   catchErrors(isTheOwner),
@@ -41,35 +41,35 @@ topicRoutes.patch(
   catchErrors(editTopic)
 );
 topicRoutes.get(
-  '/:topicIdOrSlug',
+  "/:topicIdOrSlug",
   catchErrors(doesTopicExist),
   catchErrors(getOneTopic)
 );
 topicRoutes.delete(
-  '/:topicIdOrSlug',
+  "/:topicIdOrSlug",
   isAdminOrEditor,
   catchErrors(doesTopicExist),
   catchErrors(isTheOwner),
   catchErrors(deleteTopic)
 );
 topicRoutes.post(
-  '/:topicIdOrSlug/comments',
+  "/:topicIdOrSlug/comments",
   isCommentValid,
   catchErrors(doesTopicExist),
   catchErrors(addTopicComment)
 );
 topicRoutes.get(
-  '/:topicIdOrSlug/comments',
+  "/:topicIdOrSlug/comments",
   catchErrors(doesTopicExist),
   catchErrors(getTopicComments)
 );
 topicRoutes.get(
-  '/comments/all',
+  "/comments/all",
   isAdminOrEditor,
   catchErrors(getAllCommentaries)
 );
 topicRoutes.put(
-  '/publish/comments/:commentId',
+  "/publish/comments/:commentId",
   isAdmin,
   catchErrors(doesCommentExist),
   catchErrors(publishComment)
