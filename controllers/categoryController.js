@@ -28,7 +28,7 @@ export const getCategories = async (req, res) => {
   let db = dbHelper;
   let categories = null;
   if (categoryType === "with-topics") {
-    categories = await sequelize.query(categoriesTopicQuery, {
+    categories = await sequelize.query(categoriesTopicQuery(languageId), {
       type: sequelize.QueryTypes.SELECT,
       logging: false,
     });
