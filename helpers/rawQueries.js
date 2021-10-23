@@ -12,7 +12,7 @@ group by c.id, c."name", c.slug
 export const topicViewsQuery = (languageId) => {
   return `
   select 
-      t.id, t.title, t.slug, t."coverImage", t."content", t."createdAt", cast(t_v.topic_views as int)
+      t.id, t.title, t.description, t.slug, t."coverImage", t."content", t."createdAt", cast(t_v.topic_views as int)
     from topics t
     inner join (
       select "topicId", count(tv2."topicId") as topic_views 
