@@ -8,8 +8,9 @@ import {
   mailFormatter,
   sendEmail,
 } from "../helpers";
-import { Topic, TopicView, Commentary } from "../models";
+import { Topic, TopicView, Commentary, sequelize } from "../models";
 import { ConstantHelper } from "../helpers/ConstantHelper";
+import { categoriesTopicQuery, topicViewsQuery } from "../helpers/rawQueries";
 
 const dbHelper = new QueryHelper(Topic);
 const dbCommentHelper = new QueryHelper(Commentary);
@@ -49,6 +50,30 @@ export const getAllTopics = async (req, res) => {
 
   return serverResponse(res, 200, "Success", topics, topicsCount);
 };
+export const getHomeContents = async (req, res) => {
+  const { languageId } = req.body;
+  let conditions = { languageId, isPublished: true };
+  const offset = 0;
+  const limit = 4;
+  const recents = await dbHelper.findAll(
+    conditions,
+    constHelper.topicIncludes(),
+    null,
+    null,
+    offset,
+    limit
+  );
+  const categories = await sequelize.query(categoriesTopicQuery(languageId), {
+    type: sequelize.QueryTypes.SELECT,
+    logging: false,
+  });
+  const mostReads = await sequelize.query(topicViewsQuery(languageId), {
+    type: sequelize.QueryTypes.SELECT,
+    logging: false,
+  });
+  const data = { recents, categories, mostReads };
+  return serverResponse(res, 200, "Success", data);
+};
 export const getOneTopic = async (req, res) => {
   const viewDbHelper = new QueryHelper(TopicView);
   const { topicId: id } = req.params;
@@ -59,7 +84,7 @@ export const getOneTopic = async (req, res) => {
     { id, languageId },
     constHelper.oneTopicIncludes()
   );
-  return serverResponse(res, 200, "Success df", topic);
+  return serverResponse(res, 200, "Success", topic);
 };
 export const editTopic = async (req, res) => {
   const { topicId: id } = req.params;

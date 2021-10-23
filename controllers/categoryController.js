@@ -1,4 +1,4 @@
-import { Category, Sequelize, Topic, sequelize } from "../models";
+import { Category, Sequelize, sequelize } from "../models";
 import { ConstantHelper } from "../helpers/ConstantHelper";
 import { serverResponse, QueryHelper, generateSlug } from "../helpers";
 import { categoriesTopicQuery } from "../helpers/rawQueries";

@@ -7,9 +7,11 @@ import {
   searchInfo,
   sendContactUs,
 } from "../../controllers/manageController";
+import { getHomeContents } from "../../controllers/topicController";
 
 const manageRoutes = Router();
 manageRoutes.get("/search", catchErrors(searchInfo));
+manageRoutes.get("/home/contents", catchErrors(getHomeContents));
 manageRoutes.post(
   "/contact-us",
   isMessageInfoValid,
