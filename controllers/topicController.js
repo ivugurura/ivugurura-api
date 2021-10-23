@@ -55,7 +55,7 @@ export const getHomeContents = async (req, res) => {
   let conditions = { languageId, isPublished: true };
   const offset = 0;
   const limit = 4;
-  const recents = await dbHelper.findAll(
+  let recents = await dbHelper.findAll(
     conditions,
     constHelper.topicIncludes(),
     null,
@@ -63,6 +63,10 @@ export const getHomeContents = async (req, res) => {
     offset,
     limit
   );
+  recents = recents.map((topic) => ({
+    ...topic.toJSON(),
+    views: topic.views.length,
+  }));
   const categories = await sequelize.query(categoriesTopicQuery(languageId), {
     type: sequelize.QueryTypes.SELECT,
     logging: false,

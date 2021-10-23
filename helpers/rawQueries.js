@@ -19,7 +19,7 @@ export const topicViewsQuery = (languageId) => {
       from topic_views tv2 group by tv2."topicId"
     ) as t_v on t.id = t_v."topicId"
     where t."languageId"=${languageId} 
-    order by t_v.topic_views
+    order by t_v.topic_views asc
     limit 4;
   `;
 };
