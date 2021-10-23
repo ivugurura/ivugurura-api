@@ -17,6 +17,9 @@ export const topicViewsQuery = (languageId) => {
     inner join (
       select "topicId", count(tv2."topicId") as topic_views 
       from topic_views tv2 group by tv2."topicId"
-    ) as t_v on t.id = t_v."topicId" order by t_v.topic_views;
+    ) as t_v on t.id = t_v."topicId"
+    where t."languageId"=${languageId} 
+    order by t_v.topic_views
+    limit 4;
   `;
 };
