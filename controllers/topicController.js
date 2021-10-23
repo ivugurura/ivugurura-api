@@ -83,7 +83,7 @@ export const getOneTopic = async (req, res) => {
   const { topicId: id } = req.params;
   const { languageId } = req.body;
 
-  await viewDbHelper.findOrCreate({ topicId: id, ipAddress: req.ip });
+  await viewDbHelper.create({ topicId: id, ipAddress: req.ip });
   const topic = await dbHelper.findOne(
     { id, languageId },
     constHelper.oneTopicIncludes()
