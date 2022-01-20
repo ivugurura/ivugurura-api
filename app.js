@@ -14,7 +14,7 @@ import { handleErrors } from "./middlewares";
 import { security } from "./config/security";
 import { appSocket } from "./config/socketIo";
 import { session } from "./config/session";
-import { dbBackup } from "./crons";
+// import { dbBackup } from "./crons";
 import { notifyMe } from "./helpers";
 
 dotenv.config();
