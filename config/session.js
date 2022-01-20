@@ -5,10 +5,15 @@ import { ConstantHelper } from "../helpers/ConstantHelper";
 
 const constants = new ConstantHelper();
 const RedisStore = connectRedis(expressSession);
-const redisClient = createClient().on("error", (error) => {
-  process.stdout.write(`Redis error: ${error.message}\n`);
-  process.exit(1);
-});
+const redisClient = createClient({ legacyMode: true });
+
+redisClient
+  .connect()
+  .then(() => console.log("Redis connected"))
+  .catch((error) => {
+    process.stdout.write(`Redis error: ${error.message}\n`);
+    process.exit(1);
+  });
 
 const redisSessionStore = new RedisStore({
   host: process.env.REDIS_HOST,
@@ -27,7 +32,7 @@ export const session = () =>
     name: process.env.SESSION_NAME,
     cookie: {
       httpOnly: true,
-      secure: false,
+      secure: process.env.NODE_ENV === "production",
       domain: process.env.BASE_URL,
       path: "/",
       sameSite: true,
