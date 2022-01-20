@@ -92,5 +92,6 @@ appSocket(app);
 /**
  * Backup database
  */
-dbBackup();
+
+// dbBackup();
 export default app;
