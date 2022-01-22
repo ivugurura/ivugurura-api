@@ -9,14 +9,16 @@
   "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "babel-node ./app.js",
+    "start": "npm run build && node dist/app.js",
     "dev": "nodemon --exec babel-node ./app.js",
     "migrate": "sequelize db:migrate",
     "migrate-down": "sequelize db:migrate:undo",
     "seed-up": "sequelize db:seed:all",
     "seed-down": "sequelize db:seed:undo:all",
     "compress": "tar zcvf build.tar.gz ./",
-    "un-compress": "tar zxvf build.tar.gz"
+    "un-compress": "tar zxvf build.tar.gz",
+    "build": "npm run clean && babel ./src --out-dir dist",
+    "clean": "rimraf dist"
   },
   "repository": {
     "type": "git",
@@ -37,6 +39,7 @@
     "@babel/core": "^7.8.3",
     "@babel/node": "^7.8.3",
     "@babel/plugin-proposal-class-properties": "^7.8.3",
+    "@babel/plugin-transform-runtime": "^7.16.10",
     "@babel/polyfill": "^7.8.3",
     "@babel/preset-env": "^7.8.3",
     "@babel/register": "^7.8.3",

@@ -14,7 +14,7 @@ import { handleErrors } from "./middlewares";
 import { security } from "./config/security";
 import { appSocket } from "./config/socketIo";
 import { session } from "./config/session";
-// import { dbBackup } from "./crons";
+import { dbBackup } from "./crons";
 import { notifyMe } from "./helpers";
 
 dotenv.config();
@@ -61,7 +61,7 @@ app.use(
   })
 );
 app.use(express.json({ limit: "100mb" }));
-app.use(express.static(__dirname + "/build"));
+app.use(express.static("build"));
 app.use("/songs", express.static("public/songs"));
 app.use("/images", express.static("public/images"));
 app.use(session());
@@ -82,7 +82,7 @@ app.use(handleErrors);
  * The frontend/cLient
  */
 app.get("/*", (req, res) => {
-  res.sendFile(path.resolve(__dirname + "/build", "index.html"));
+  res.sendFile(path.resolve("build", "index.html"));
 });
 /**
  * Configure socket
@@ -93,5 +93,5 @@ appSocket(app);
  * Backup database
  */
 
-// dbBackup();
+dbBackup();
 export default app;
