@@ -32,7 +32,7 @@ export const session = () =>
     name: process.env.SESSION_NAME,
     cookie: {
       httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
+      secure: false,
       domain: process.env.BASE_URL,
       path: "/",
       sameSite: true,
