@@ -52,4 +52,8 @@ export class QueryHelper {
   async count(whereCondition = {}) {
     return this.model.count({ where: whereCondition, logging: false });
   }
+  async findAndCountAll(options = {}) {
+    const defaultOptions = { orderBy: [["createdAt", "DESC"]], logging: false };
+    return this.model.findAndCountAll({ ...defaultOptions, ...options });
+  }
 }
