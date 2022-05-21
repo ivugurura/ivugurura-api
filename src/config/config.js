@@ -1,7 +1,9 @@
-import dotenv from 'dotenv';
+import dotenv from "dotenv";
 
 dotenv.config();
 
+// query: { raw: true, nest: true }
+const queryOptions = {};
 module.exports = {
   development: {
     username: process.env.DB_USER,
@@ -14,7 +16,8 @@ module.exports = {
     //   charset: 'utf8mb4',
     //   collate: 'utf8mb4_unicode_ci'
     // },
-    seederStorage: 'sequelize'
+    seederStorage: "sequelize",
+    ...queryOptions,
   },
   test: {
     username: process.env.DB_USER,
@@ -24,11 +27,13 @@ module.exports = {
     port: process.env.DB_PORT,
     dialect: process.env.DB_DIALECT,
     dialectOptions: {
-      charset: 'utf8mb4'
+      charset: "utf8mb4",
     },
-    seederStorage: 'sequelize'
+    seederStorage: "sequelize",
+    ...queryOptions,
   },
   production: {
-    use_env_variable: 'DATABASE_URL'
-  }
+    use_env_variable: "DATABASE_URL",
+    ...queryOptions,
+  },
 };
