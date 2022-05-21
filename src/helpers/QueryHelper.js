@@ -54,6 +54,11 @@ export class QueryHelper {
   }
   async findAndCountAll(options = {}) {
     const defaultOptions = { orderBy: [["createdAt", "DESC"]], logging: false };
-    return this.model.findAndCountAll({ ...defaultOptions, ...options });
+    const rows = await this.model.findAll({ ...defaultOptions, ...options });
+    const count = await this.model.count({
+      ...defaultOptions,
+      where: options.where,
+    });
+    return { count, rows };
   }
 }
