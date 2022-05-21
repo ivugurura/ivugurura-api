@@ -1,22 +1,22 @@
-import multer from 'multer';
-import { readdir, readdirSync, statSync, unlink } from 'fs';
+import multer from "multer";
+import { readdir, readdirSync, statSync, unlink } from "fs";
 import {
-	serverResponse,
-	QueryHelper,
-	uploadMany,
-	uploadSingle,
-	paginator,
-	generateSlug
-} from '../helpers';
+  serverResponse,
+  QueryHelper,
+  uploadMany,
+  uploadSingle,
+  paginator,
+  generateSlug,
+} from "../helpers";
 import {
-	Album,
-	Media,
-	Topic,
-	MediaDownload,
-	MediaShare,
-	Sequelize
-} from '../models';
-import { ConstantHelper } from '../helpers/ConstantHelper';
+  Album,
+  Media,
+  Topic,
+  MediaDownload,
+  MediaShare,
+  Sequelize,
+} from "../models";
+import { ConstantHelper } from "../helpers/ConstantHelper";
 
 const dbHelper = new QueryHelper(Album);
 const dbMediaHelper = new QueryHelper(Media);
@@ -27,171 +27,181 @@ const constHelper = new ConstantHelper();
 const { Op } = Sequelize;
 
 export const createAlbum = async (req, res) => {
-	const newAlbum = await dbHelper.create(req.body);
-	return serverResponse(res, 201, 'Success', newAlbum);
+  const newAlbum = await dbHelper.create(req.body);
+  return serverResponse(res, 201, "Success", newAlbum);
 };
+
 export const getAlbums = async (req, res) => {
-	const albums = await dbHelper.findAll();
-	return serverResponse(res, 200, 'Success', albums);
+  const albums = await dbHelper.findAll();
+  return serverResponse(res, 200, "Success", albums);
 };
 
 export const getOneAlbum = async (req, res) => {
-	const { albumId: id } = req.params;
-	const album = await dbHelper.findOne({ id });
-	return serverResponse(res, 200, 'Success', album);
+  const { albumId: id } = req.params;
+  const album = await dbHelper.findOne({ id });
+  return serverResponse(res, 200, "Success", album);
 };
 
 export const editAlbumInfo = async (req, res) => {
-	const { albumId: id } = req.params;
-	await dbHelper.update(req.body, { id });
-	return serverResponse(res, 200, 'Album updated');
+  const { albumId: id } = req.params;
+  await dbHelper.update(req.body, { id });
+  return serverResponse(res, 200, "Album updated");
 };
 
 export const deleteAlbum = async (req, res) => {
-	const { albumId: id } = req.params;
-	await dbHelper.delete({ id });
-	return serverResponse(res, 200, 'Album deleted');
+  const { albumId: id } = req.params;
+  await dbHelper.delete({ id });
+  return serverResponse(res, 200, "Album deleted");
 };
 
 export const uploadFile = async (req, res) => {
-	const { isMany, prevFile, update } = req.query;
-	const { fileType } = req.params;
-	const { IMAGES_ZONE, SONGS_ZONE } = process.env;
+  const { isMany, prevFile, update } = req.query;
+  const { fileType } = req.params;
+  const { IMAGES_ZONE, SONGS_ZONE } = process.env;
 
-	const upload = isMany ? uploadMany : uploadSingle;
+  const upload = isMany ? uploadMany : uploadSingle;
 
-	const filePath = fileType === 'image' ? IMAGES_ZONE : SONGS_ZONE;
-	/**
-	 * Delete the previous file first then
-	 * Upload a new one
-	 */
-	unlink(`${filePath}/${prevFile}`, (error) => {
-		if (error) console.log('Error occurred, not deleted');
+  const filePath = fileType === "image" ? IMAGES_ZONE : SONGS_ZONE;
+  /**
+   * Delete the previous file first then
+   * Upload a new one
+   */
+  unlink(`${filePath}/${prevFile}`, (error) => {
+    if (error) console.log("Error occurred, not deleted");
 
-		upload(req, res, async (uploadError) => {
-			if (uploadError instanceof multer.MulterError || uploadError)
-				return serverResponse(res, 500, uploadError);
-			if (!req.file) return serverResponse(res, 400, 'No file selected');
-			const fileName = req.file.filename;
-			/**
-			 * Update a topic cover image if necessary
-			 */
-			if (fileType === 'image' && update !== 'null') {
-				await dbTopicHelper.update(
-					{ coverImage: fileName },
-					{ coverImage: prevFile }
-				);
-			}
-			return serverResponse(res, 200, 'File(s) uploaded', fileName);
-		});
-	});
+    upload(req, res, async (uploadError) => {
+      if (uploadError instanceof multer.MulterError || uploadError)
+        return serverResponse(res, 500, uploadError);
+      if (!req.file) return serverResponse(res, 400, "No file selected");
+      const fileName = req.file.filename;
+      /**
+       * Update a topic cover image if necessary
+       */
+      if (fileType === "image" && update !== "null") {
+        await dbTopicHelper.update(
+          { coverImage: fileName },
+          { coverImage: prevFile }
+        );
+      }
+      return serverResponse(res, 200, "File(s) uploaded", fileName);
+    });
+  });
 };
+
 export const deleteFile = (req, res) => {
-	const { fileName, fileType } = req.params;
-	const { IMAGES_ZONE, SONGS_ZONE } = process.env;
-	const filePath = fileType === 'image' ? IMAGES_ZONE : SONGS_ZONE;
-	unlink(`${filePath}/${fileName}`, (error) => {
-		if (error) return serverResponse(res, 500, 'File not delete');
-		return serverResponse(res, 200, 'File deleted');
-	});
+  const { fileName, fileType } = req.params;
+  const { IMAGES_ZONE, SONGS_ZONE } = process.env;
+  const filePath = fileType === "image" ? IMAGES_ZONE : SONGS_ZONE;
+  unlink(`${filePath}/${fileName}`, (error) => {
+    if (error) return serverResponse(res, 500, "File not delete");
+    return serverResponse(res, 200, "File deleted");
+  });
 };
+
 export const addNewMedia = async (req, res) => {
-	const { title } = req.body;
-	req.body.slug = generateSlug(title);
-	const newMedia = await dbMediaHelper.create(req.body);
-	return serverResponse(res, 201, 'Success', newMedia);
+  const { title } = req.body;
+  req.body.slug = generateSlug(title);
+  const newMedia = await dbMediaHelper.create(req.body);
+  return serverResponse(res, 201, "Success", newMedia);
 };
+
 export const getMedia = async (req, res) => {
-	const { mediaType } = req.params;
-	let { search } = req.query;
-	let conditions = mediaType !== 'all' ? { type: mediaType } : {};
-	if (search) {
-		conditions = {
-			...conditions,
-			[Op.or]: [
-				{ title: { [Op.iLike]: `%${search}%` } },
-				{ author: { [Op.iLike]: `%${search}%` } }
-			]
-		};
-	}
-	const orderBy = [['actionDate', 'DESC']];
-	const { offset, limit } = paginator(req.query);
-	let medias = await dbMediaHelper.findAll(
-		conditions,
-		constHelper.mediaIncludes(),
-		orderBy,
-		null,
-		offset,
-		limit
-	);
-	medias = medias.map((m) => ({
-		...m.toJSON(),
-		downloads: m.downloads.length,
-		shares: m.shares.length
-	}));
-	const mediaCount = await dbMediaHelper.count(conditions);
+  const { mediaType } = req.params;
+  let { search } = req.query;
+  let conditions = mediaType !== "all" ? { type: mediaType } : {};
+  if (search) {
+    conditions = {
+      ...conditions,
+      [Op.or]: [
+        { title: { [Op.iLike]: `%${search}%` } },
+        { author: { [Op.iLike]: `%${search}%` } },
+      ],
+    };
+  }
 
-	return serverResponse(res, 200, 'Success', medias, mediaCount);
+  const { offset, limit } = paginator(req.query);
+  let { count, rows } = await dbMediaHelper.findAndCountAll({
+    where: conditions,
+    include: constHelper.mediaIncludes(),
+    orderBy: [["actionDate", "DESC"]],
+    offset,
+    limit,
+  });
+
+  let medias = JSON.parse(JSON.stringify(rows));
+  medias = medias.map((m) => ({
+    ...m,
+    downloads: m.downloads.length,
+    shares: m.shares.length,
+  }));
+
+  return serverResponse(res, 200, "Success", medias, count);
 };
+
 export const getMediaCounts = async (req, res) => {
-	const downloads = await dbMediaDownloadHelper.count();
-	const shares = await dbMediaShareHelper.count();
+  const downloads = await dbMediaDownloadHelper.count();
+  const shares = await dbMediaShareHelper.count();
 
-	return serverResponse(res, 200, 'Success', { downloads, shares });
+  return serverResponse(res, 200, "Success", { downloads, shares });
 };
+
 export const downloadSong = async (req, res) => {
-	const { mediaId } = req.params;
-	const media = await dbMediaHelper.findOne({ id: mediaId });
-	if (!media) {
-		return serverResponse(res, 400, `Song does not exist`);
-	}
-	if (media.type !== 'audio') {
-		return serverResponse(res, 400, `You can't download this file`);
-	}
-	const songsDir = process.env.SONGS_ZONE;
-	readdir(songsDir, async (error, audios) => {
-		if (error)
-			return serverResponse(res, 503, `Sorry service not available. SDL`);
-		if (audios.indexOf(media.mediaLink) === -1) {
-			return serverResponse(res, 503, 'The song does not exist');
-		}
-		await dbMediaDownloadHelper.create({ mediaId: media.id });
-		return res.download(`${songsDir}/${media.mediaLink}`);
-	});
+  const { mediaId } = req.params;
+  const media = await dbMediaHelper.findOne({ id: mediaId });
+  if (!media) {
+    return serverResponse(res, 400, `Song does not exist`);
+  }
+  if (media.type !== "audio") {
+    return serverResponse(res, 400, `You can't download this file`);
+  }
+  const songsDir = process.env.SONGS_ZONE;
+  readdir(songsDir, async (error, audios) => {
+    if (error)
+      return serverResponse(res, 503, `Sorry service not available. SDL`);
+    if (audios.indexOf(media.mediaLink) === -1) {
+      return serverResponse(res, 503, "The song does not exist");
+    }
+    await dbMediaDownloadHelper.create({ mediaId: media.id });
+    return res.download(`${songsDir}/${media.mediaLink}`);
+  });
 };
+
 export const deleteMedia = async (req, res) => {
-	const { mediaId } = req.params;
-	const media = await dbMediaHelper.findOne({ id: mediaId });
-	const songLink = process.env.SONGS_ZONE + '/' + media.mediaLink;
-	await dbMediaHelper.delete({ id: mediaId });
+  const { mediaId } = req.params;
+  const media = await dbMediaHelper.findOne({ id: mediaId });
+  const songLink = process.env.SONGS_ZONE + "/" + media.mediaLink;
+  await dbMediaHelper.delete({ id: mediaId });
 
-	unlink(songLink, (error) => {
-		if (error) return serverResponse(res, 200, 'File not delete');
-		return serverResponse(res, 200, 'File deleted');
-	});
+  unlink(songLink, (error) => {
+    if (error) return serverResponse(res, 200, "File not delete");
+    return serverResponse(res, 200, "File deleted");
+  });
 };
+
 export const updateMedia = async (req, res) => {
-	const { mediaId } = req.params;
-	if (req.body.title) {
-		req.body.slug = generateSlug(req.body.title);
-	}
-	await dbMediaHelper.update(req.body, { id: mediaId });
-	return serverResponse(res, 200, 'Successfully updated');
+  const { mediaId } = req.params;
+  if (req.body.title) {
+    req.body.slug = generateSlug(req.body.title);
+  }
+  await dbMediaHelper.update(req.body, { id: mediaId });
+  return serverResponse(res, 200, "Successfully updated");
 };
+
 export const shareMedia = async (req, res) => {
-	const { mediaId } = req.params;
+  const { mediaId } = req.params;
 
-	await dbMediaShareHelper.create({ mediaId });
-	return serverResponse(res, 200, 'Success');
+  await dbMediaShareHelper.create({ mediaId });
+  return serverResponse(res, 200, "Success");
 };
-export const getTopicsCoverImages = async (_req, res) => {
-	const dir = process.env.IMAGES_ZONE;
-	let coverImages = readdirSync(dir)
-		.map((fileName) => ({
-			fileName,
-			createdAt: statSync(`${dir}/${fileName}`).mtime.getTime()
-		}))
-		.sort((a, b) => b.createdAt - a.createdAt);
 
-	return serverResponse(res, 200, 'Success', coverImages);
+export const getTopicsCoverImages = async (_req, res) => {
+  const dir = process.env.IMAGES_ZONE;
+  let coverImages = readdirSync(dir)
+    .map((fileName) => ({
+      fileName,
+      createdAt: statSync(`${dir}/${fileName}`).mtime.getTime(),
+    }))
+    .sort((a, b) => b.createdAt - a.createdAt);
+
+  return serverResponse(res, 200, "Success", coverImages);
 };

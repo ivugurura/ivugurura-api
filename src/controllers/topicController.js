@@ -15,6 +15,7 @@ import { categoriesTopicQuery, topicViewsQuery } from "../helpers/rawQueries";
 const dbHelper = new QueryHelper(Topic);
 const dbCommentHelper = new QueryHelper(Commentary);
 const constHelper = new ConstantHelper();
+
 export const addNewTopic = async (req, res) => {
   req.body.userId = req.user.id;
   req.body.slug = generateSlug(req.body.title);
@@ -22,6 +23,7 @@ export const addNewTopic = async (req, res) => {
   const newTopic = await dbHelper.create(req.body);
   return serverResponse(res, 201, "Created", newTopic);
 };
+
 export const getAllTopics = async (req, res) => {
   const { languageId } = req.body;
   const { category } = req.query;
@@ -34,22 +36,23 @@ export const getAllTopics = async (req, res) => {
   if (!isNaN(category)) {
     conditions = { ...conditions, categoryId: category };
   }
-  let topics = await dbHelper.findAll(
-    conditions,
-    constHelper.topicIncludes(),
-    orderBy,
-    null,
-    offset,
-    limit
-  );
-  topics = topics.map((topic) => ({
-    ...topic.toJSON(),
-    views: topic.views.length,
-  }));
-  const topicsCount = await dbHelper.count(conditions);
 
-  return serverResponse(res, 200, "Success", topics, topicsCount);
+  const { count, rows } = await dbHelper.findAndCountAll({
+    where: conditions,
+    include: constHelper.topicIncludes(),
+    orderBy,
+    offset,
+    limit,
+  });
+  let topics = JSON.parse(JSON.stringify(rows));
+  topics = topics.map((topic) => ({
+    ...topic,
+    views: topic.views.length || 0,
+  }));
+
+  return serverResponse(res, 200, "Success", topics, count);
 };
+
 export const getHomeContents = async (req, res) => {
   const { languageId } = req.body;
   let conditions = { languageId, isPublished: true };
@@ -63,8 +66,9 @@ export const getHomeContents = async (req, res) => {
     offset,
     limit
   );
+  recents = JSON.parse(JSON.stringify(recents));
   recents = recents.map((topic) => ({
-    ...topic.toJSON(),
+    ...topic,
     views: topic.views.length,
   }));
   const categories = await sequelize.query(categoriesTopicQuery(languageId), {
@@ -78,6 +82,7 @@ export const getHomeContents = async (req, res) => {
   const data = { recents, categories, mostReads };
   return serverResponse(res, 200, "Success", data);
 };
+
 export const getOneTopic = async (req, res) => {
   const viewDbHelper = new QueryHelper(TopicView);
   const { topicId: id } = req.params;
@@ -90,6 +95,7 @@ export const getOneTopic = async (req, res) => {
   );
   return serverResponse(res, 200, "Success", topic);
 };
+
 export const editTopic = async (req, res) => {
   const { topicId: id } = req.params;
   const { title = "", originalTitle = "" } = req.body;
@@ -101,6 +107,7 @@ export const editTopic = async (req, res) => {
   await dbHelper.update(req.body, { id });
   return serverResponse(res, 200, "The topic updated");
 };
+
 export const deleteTopic = async (req, res) => {
   const { topicId: id } = req.params;
   const { coverImage } = req.body;
@@ -111,6 +118,7 @@ export const deleteTopic = async (req, res) => {
     return serverResponse(res, 200, "The topic deleted");
   });
 };
+
 export const addTopicComment = async (req, res) => {
   const { topicId } = req.params;
   req.body.topicId = topicId;
@@ -131,6 +139,7 @@ export const addTopicComment = async (req, res) => {
 
   return serverResponse(res, 201, "Success", newComment);
 };
+
 export const getTopicComments = async (req, res) => {
   const { topicId } = req.params;
   const attributes = ["names", "content", "createdAt"];
@@ -142,6 +151,7 @@ export const getTopicComments = async (req, res) => {
   );
   return serverResponse(res, 200, "Success", comments);
 };
+
 export const getAllCommentaries = async (req, res) => {
   const { offset, limit } = paginator(req.query);
   const attributes = [
@@ -157,18 +167,17 @@ export const getAllCommentaries = async (req, res) => {
     ["isPublished", "ASC"],
     ["content", "ASC"],
   ];
-  const comments = await dbCommentHelper.findAll(
-    {},
-    constHelper.commentIncludes(),
+  const { count, rows } = await dbCommentHelper.findAndCountAll({
+    include: constHelper.commentIncludes(),
     orderBy,
     attributes,
     offset,
-    limit
-  );
-  const commentsCount = await dbCommentHelper.count();
+    limit,
+  });
 
-  return serverResponse(res, 200, "Success", comments, commentsCount);
+  return serverResponse(res, 200, "Success", rows, count);
 };
+
 export const publishComment = async (req, res) => {
   const { commentId: id } = req.params;
   const attributes = ["isPublished"];
