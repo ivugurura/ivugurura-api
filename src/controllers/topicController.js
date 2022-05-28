@@ -99,7 +99,7 @@ export const getOneTopic = async (req, res) => {
 export const editTopic = async (req, res) => {
   const { topicId: id } = req.params;
   const { title = "", originalTitle = "" } = req.body;
-  if (title.toLowerCase() !== originalTitle.toLowerCase()) {
+  if (title && title.toLowerCase() !== originalTitle.toLowerCase()) {
     req.body.slug = generateSlug(title);
     req.body.title = ucFirst(title);
   }
