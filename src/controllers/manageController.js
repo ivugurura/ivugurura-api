@@ -107,6 +107,16 @@ export const getChatUsers = async (req, res) => {
 
 export const getYoutubeVideos = async (req, res) => {
   const { searchKey, pageSize, pageToken } = req.query;
+  //Pause google api key for now
+  return serverResponse(res, 200, "Success", {
+    items: [],
+    nextPageToken: "",
+    prevPageToken: "",
+    pageInfo: {
+      totalResults: 0,
+      resultsPerPage: 0,
+    },
+  });
   const { data } = await axiosYouTube.get("/search", {
     params: {
       q: searchKey,

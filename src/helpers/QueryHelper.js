@@ -30,6 +30,18 @@ export class QueryHelper {
       group,
     });
   }
+  async count(whereCondition = {}) {
+    return this.model.count({ where: whereCondition, logging: false });
+  }
+  async findAndCountAll(options = {}) {
+    const defaultOptions = { orderBy: [["createdAt", "ASC"]], logging: false };
+    const rows = await this.model.findAll({ ...defaultOptions, ...options });
+    const count = await this.model.count({
+      ...defaultOptions,
+      where: options.where,
+    });
+    return { count, rows };
+  }
   async create(data) {
     return this.model.create(data, { logging: false });
   }
@@ -48,17 +60,5 @@ export class QueryHelper {
       defaults,
       logging: false,
     });
-  }
-  async count(whereCondition = {}) {
-    return this.model.count({ where: whereCondition, logging: false });
-  }
-  async findAndCountAll(options = {}) {
-    const defaultOptions = { orderBy: [["createdAt", "DESC"]], logging: false };
-    const rows = await this.model.findAll({ ...defaultOptions, ...options });
-    const count = await this.model.count({
-      ...defaultOptions,
-      where: options.where,
-    });
-    return { count, rows };
   }
 }
