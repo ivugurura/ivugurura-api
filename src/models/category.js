@@ -1,7 +1,7 @@
-'use strict';
-export default (sequelize, DataTypes) => {
+"use strict";
+module.exports = (sequelize, DataTypes) => {
   const Category = sequelize.define(
-    'Category',
+    "Category",
     {
       name: {
         type: DataTypes.STRING,
@@ -16,21 +16,21 @@ export default (sequelize, DataTypes) => {
         required: true,
       },
     },
-    { tableName: 'categories' }
+    { tableName: "categories" }
   );
   Category.associate = (models) => {
-    Category.belongsTo(models.Language, { as: 'language' });
+    Category.belongsTo(models.Language, { as: "language" });
     Category.belongsTo(models.Category, {
-      as: 'parent',
-      foreignKey: 'categoryId',
+      as: "parent",
+      foreignKey: "categoryId",
     });
     Category.hasMany(models.Topic, {
-      foreignKey: 'categoryId',
-      as: 'relatedTopics',
+      foreignKey: "categoryId",
+      as: "relatedTopics",
     });
     Category.hasMany(models.Category, {
-      as: 'categories',
-      foreignKey: 'categoryId',
+      as: "categories",
+      foreignKey: "categoryId",
     });
   };
   return Category;
