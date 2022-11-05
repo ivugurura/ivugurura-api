@@ -1,7 +1,7 @@
-import socketIo from 'socket.io';
+import { Server } from "socket.io";
 // import http from 'http';
-import { ChatRoom, QueryHelper } from '../helpers';
-import { Message } from '../models';
+import { ChatRoom, QueryHelper } from "../helpers";
+import { Message } from "../models";
 
 const port = process.env.PORT || 3000;
 const chatRoom = new ChatRoom();
@@ -18,30 +18,32 @@ export const appSocket = (app) => {
   const server = app.listen(port, () =>
     console.log(`listening on port ${port}`)
   );
-  const io = socketIo(server);
+  const io = new Server(server, {
+    allowEIO3: true,
+  });
 
-  io.on('connect', (socket) => {
-    socket.on('join', ({ userId, name }, socketJoinCb) => {
+  io.on("connect", (socket) => {
+    socket.on("join", ({ userId, name }, socketJoinCb) => {
       const newUser = chatRoom.addUser(socket.id, userId, name);
 
       socket.join(chatRoom.roomName);
-      socket.emit('join-message', {
+      socket.emit("join-message", {
         senderId: userId,
-        senderName: 'Reformation Voice',
-        content: `${newUser.name}, Welcome to Reformation voice`
+        senderName: "Reformation Voice",
+        content: `${newUser.name}, Welcome to Reformation voice`,
       });
-      socket.broadcast.to(chatRoom.roomName).emit('join-message', {
+      socket.broadcast.to(chatRoom.roomName).emit("join-message", {
         senderId: userId,
-        senderName: 'Reformation Voice',
-        content: `${newUser.name} has joined`
+        senderName: "Reformation Voice",
+        content: `${newUser.name} has joined`,
       });
-      io.to(chatRoom.roomName).emit('users-list', {
-        users: chatRoom.getRoomUsers()
+      io.to(chatRoom.roomName).emit("users-list", {
+        users: chatRoom.getRoomUsers(),
       });
       socketJoinCb();
     });
     socket.on(
-      'send-message',
+      "send-message",
       ({ message, receiverId, fromAdmin }, sendMessageCb) => {
         const user = chatRoom.userExist(socket.id);
         if (user) {
@@ -51,39 +53,39 @@ export const appSocket = (app) => {
             senderName: name,
             content: message,
             receiverId,
-            fromAdmin
+            fromAdmin,
           };
           messageDb
             .create(newMessage)
             .then(() => {
-              io.to(chatRoom.roomName).emit('new-message', {
+              io.to(chatRoom.roomName).emit("new-message", {
                 senderId: userId,
                 senderName: name,
                 content: message,
                 receiverId,
-                fromAdmin
+                fromAdmin,
               });
               sendMessageCb();
             })
             .catch(() => {
-              socket.emit('send-message-error', {
-                message: 'Message not sent'
+              socket.emit("send-message-error", {
+                message: "Message not sent",
               });
               sendMessageCb();
             });
         } else {
-          socket.emit('send-message-error', {
-            message: 'Message not sent. Reflesh the page and try again'
+          socket.emit("send-message-error", {
+            message: "Message not sent. Reflesh the page and try again",
           });
           sendMessageCb();
         }
       }
     );
-    socket.on('disconnect', () => {
+    socket.on("disconnect", () => {
       const user = chatRoom.removeUser(socket.id);
       if (user) {
-        io.to(chatRoom.roomName).emit('users-list', {
-          users: chatRoom.getRoomUsers()
+        io.to(chatRoom.roomName).emit("users-list", {
+          users: chatRoom.getRoomUsers(),
         });
       }
     });
