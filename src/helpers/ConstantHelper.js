@@ -10,6 +10,7 @@ import {
   Album,
   MediaDownload,
   MediaShare,
+  EntityDisplay,
 } from "../models";
 
 export class ConstantHelper {
@@ -114,6 +115,13 @@ export class ConstantHelper {
       languageId: Joi.number().required(),
     };
   }
+  entityDisplayKeys() {
+    return {
+      type: Joi.string().valid("topic", "media").required(),
+      displayType: Joi.string().valid("carsoul", "home").required(),
+      languageId: Joi.number().required(),
+    };
+  }
   albumIncludes() {
     return [
       {
@@ -206,7 +214,7 @@ export class ConstantHelper {
       },
     ];
   }
-  topicIncludes() {
+  topicIncludes(toIncludeDisplay = false) {
     return [
       ...this.announcementIncludes(),
       {
@@ -219,6 +227,16 @@ export class ConstantHelper {
         as: "views",
         attributes: ["ipAddress"],
       },
+      ...(toIncludeDisplay
+        ? [
+            {
+              model: EntityDisplay,
+              as: "entities",
+              attributes: ["id", "type"],
+              where: { type: "topic" },
+            },
+          ]
+        : []),
     ];
   }
   commentKeys() {
