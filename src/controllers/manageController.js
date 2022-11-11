@@ -1,4 +1,4 @@
-import { Category, Topic, Message, Sequelize } from "../models";
+import { Category, Topic, Message, Sequelize, EntityDisplay } from "../models";
 import {
   QueryHelper,
   serverResponse,
@@ -12,6 +12,7 @@ import {
 const categoryDb = new QueryHelper(Category);
 const topicDb = new QueryHelper(Topic);
 const messageDb = new QueryHelper(Message);
+const tbEntityDisplay = new QueryHelper(EntityDisplay);
 const { Op } = Sequelize;
 
 /**
@@ -128,4 +129,20 @@ export const getYoutubeVideos = async (req, res) => {
     },
   });
   return serverResponse(res, 200, "Success", data);
+};
+export const addToEntityDisplay = async (req, res) => {
+  await tbEntityDisplay.findOrCreate(
+    {
+      entityId: req.params.id,
+      type: "topic",
+    },
+    req.body
+  );
+  return serverResponse(res, 201, "Successfully created");
+};
+export const deleteFromEntityDisplay = async (req, res) => {
+  const { entityId } = req.params;
+  const { type } = req.body;
+  await tbEntityDisplay.delete({ entityId, type });
+  return serverResponse(res, 200, "Removed");
 };
