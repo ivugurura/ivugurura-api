@@ -39,16 +39,18 @@ export const getAllTopics = async (req, res) => {
 
   const { count, rows } = await dbHelper.findAndCountAll({
     where: conditions,
-    include: constHelper.topicIncludes(),
+    include: constHelper.topicIncludes(category === "carsoul"),
     orderBy,
     offset,
     limit,
   });
-  let topics = JSON.parse(JSON.stringify(rows));
-  topics = topics.map((topic) => ({
-    ...topic,
-    views: topic.views.length || 0,
-  }));
+
+  const topics = rows
+    .map((x) => x.get({ plain: true }))
+    .map((topic) => ({
+      ...topic,
+      views: topic.views?.length || 0,
+    }));
 
   return serverResponse(res, 200, "Success", topics, count);
 };
