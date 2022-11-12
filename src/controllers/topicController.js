@@ -98,7 +98,8 @@ export const getOneTopic = async (req, res) => {
     null, { pain: true, nested: true }
   );
   topic = topic.get({ plain: true })
-  topic = { ...topic, views: topic.views?.length }
+  const category = topic.category || { relatedTopics: [] }
+  topic = { ...topic, category, views: topic.views?.length }
   return serverResponse(res, 200, "Success", topic);
 };
 
