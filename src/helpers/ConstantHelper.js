@@ -11,8 +11,10 @@ import {
   MediaDownload,
   MediaShare,
   EntityDisplay,
+  Sequelize
 } from "../models";
 
+const { Op } = Sequelize;
 export class ConstantHelper {
   constructor() {
     this.hour = 3600000;
@@ -187,17 +189,18 @@ export class ConstantHelper {
       },
     ];
   }
-  oneTopicIncludes() {
+  oneTopicIncludes(topicId) {
     return [
       ...this.topicIncludes(),
       {
         model: Category,
         as: "category",
+        attributes: ['name'],
         include: [
           {
             model: Topic,
             as: "relatedTopics",
-            where: { isPublished: true },
+            where: { isPublished: true, id: { [Op.ne]: topicId } },
             attributes: ["title", "slug", "description", "coverImage"],
           },
         ],
@@ -206,11 +209,6 @@ export class ConstantHelper {
         model: Commentary,
         as: "commentaries",
         attributes: ["content", "names", "createdAt"],
-      },
-      {
-        model: TopicView,
-        as: "views",
-        attributes: ["ipAddress"],
       },
     ];
   }

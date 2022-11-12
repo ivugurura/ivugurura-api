@@ -92,10 +92,13 @@ export const getOneTopic = async (req, res) => {
   const { languageId } = req.body;
 
   await viewDbHelper.create({ topicId: id, ipAddress: req.ip });
-  const topic = await dbHelper.findOne(
+  let topic = await dbHelper.findOne(
     { id, languageId },
-    constHelper.oneTopicIncludes()
+    constHelper.oneTopicIncludes(id),
+    null, { pain: true, nested: true }
   );
+  topic = topic.get({ plain: true })
+  topic = { ...topic, views: topic.views?.length }
   return serverResponse(res, 200, "Success", topic);
 };
 
