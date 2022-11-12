@@ -54,7 +54,7 @@ export const getTopicsByPublish = async (req, res) => {
   let whereConditions = { languageId };
   const orderBy = [
     ["isPublished", "ASC"],
-    ["createdAt", "DESC"],
+    ["createdAt", "ASC"],
   ];
   if (req.query.search) {
     whereConditions = {

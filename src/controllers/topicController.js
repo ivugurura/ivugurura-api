@@ -31,7 +31,7 @@ export const getAllTopics = async (req, res) => {
   let orderBy = [["title", "ASC"]];
   let conditions = { languageId, isPublished: true };
   if (category === "carsoul") {
-    orderBy = [["createdAt", "DESC"]];
+    orderBy = [["createdAt", "ASC"]];
   }
   if (!isNaN(category)) {
     conditions = { ...conditions, categoryId: category };
