@@ -109,15 +109,15 @@ export const getChatUsers = async (req, res) => {
 export const getYoutubeVideos = async (req, res) => {
   const { searchKey, pageSize, pageToken } = req.query;
   //Pause google api key for now
-  return serverResponse(res, 200, "Success", {
-    items: [],
-    nextPageToken: "",
-    prevPageToken: "",
-    pageInfo: {
-      totalResults: 0,
-      resultsPerPage: 0,
-    },
-  });
+  // return serverResponse(res, 200, "Success", {
+  //   items: [],
+  //   nextPageToken: "",
+  //   prevPageToken: "",
+  //   pageInfo: {
+  //     totalResults: 0,
+  //     resultsPerPage: 0,
+  //   },
+  // });
   const { data } = await axiosYouTube.get("/search", {
     params: {
       q: searchKey,
@@ -131,14 +131,15 @@ export const getYoutubeVideos = async (req, res) => {
   return serverResponse(res, 200, "Success", data);
 };
 export const addToEntityDisplay = async (req, res) => {
-  await tbEntityDisplay.findOrCreate(
-    {
-      entityId: req.params.id,
-      type: "topic",
-    },
-    req.body
-  );
-  return serverResponse(res, 201, "Successfully created");
+  const entityBody = { ...req.body, entityId: req.params.id };
+  const entityOptions = { entityId: req.params.id, type: req.body.type }
+  const exist = await tbEntityDisplay.findOne(entityOptions);
+  if (exist) {
+    await tbEntityDisplay.delete(entityOptions);
+  } else {
+    await tbEntityDisplay.create(entityBody);
+  }
+  return serverResponse(res, 201, "Success");
 };
 export const deleteFromEntityDisplay = async (req, res) => {
   const { entityId } = req.params;
