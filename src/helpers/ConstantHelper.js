@@ -214,7 +214,19 @@ export class ConstantHelper {
       },
     ];
   }
-  topicIncludes(toIncludeDisplay = false) {
+  getTopicDisplayIncludes(toIncludeDisplay = false, conditions = {}) {
+    return (toIncludeDisplay
+      ? [
+        {
+          model: EntityDisplay,
+          as: "entities",
+          attributes: ["id", "type"],
+          ...conditions,
+        },
+      ]
+      : [])
+  }
+  topicIncludes(toIncludeDisplay = false, conditions = {}) {
     return [
       ...this.announcementIncludes(),
       {
@@ -227,16 +239,7 @@ export class ConstantHelper {
         as: "views",
         attributes: ["ipAddress"],
       },
-      ...(toIncludeDisplay
-        ? [
-            {
-              model: EntityDisplay,
-              as: "entities",
-              attributes: ["id", "type"],
-              where: { type: "topic" },
-            },
-          ]
-        : []),
+      ...this.getTopicDisplayIncludes(toIncludeDisplay, conditions),
     ];
   }
   commentKeys() {
