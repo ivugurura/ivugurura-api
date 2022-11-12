@@ -9,7 +9,7 @@
   "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node dist/app.js",
+    "start": "ulimit -c 0; node dist/app.js",
     "dev": "nodemon --exec babel-node src/app.js",
     "migrate": "sequelize db:migrate",
     "migrate-down": "sequelize db:migrate:undo",
