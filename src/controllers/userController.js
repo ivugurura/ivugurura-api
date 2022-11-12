@@ -64,16 +64,17 @@ export const getTopicsByPublish = async (req, res) => {
   }
   let { count, rows } = await dbTopic.findAndCountAll({
     where: whereConditions,
-    include: constants.topicIncludes(),
+    include: constants.topicIncludes(true),
     orderBy,
     offset,
     limit,
   });
-  let topics = JSON.parse(JSON.stringify(rows));
-  topics = topics.map((topic) => ({
-    ...topic,
-    views: topic.views.length,
-  }));
+  const topics = rows
+    .map((x) => x.get({ plain: true }))
+    .map((topic) => ({
+      ...topic,
+      views: topic.views.length,
+    }));
 
   return serverResponse(res, 200, "Success", topics, count);
 };

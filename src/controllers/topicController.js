@@ -39,7 +39,7 @@ export const getAllTopics = async (req, res) => {
 
   const { count, rows } = await dbHelper.findAndCountAll({
     where: conditions,
-    include: constHelper.topicIncludes(category === "carsoul"),
+    include: constHelper.topicIncludes(category === "carsoul", { where: { type: 'topic' } }),
     orderBy,
     offset,
     limit,
@@ -62,17 +62,18 @@ export const getHomeContents = async (req, res) => {
   const limit = 4;
   let recents = await dbHelper.findAll(
     conditions,
-    constHelper.topicIncludes(),
+    constHelper.topicIncludes(true),
     null,
     null,
     offset,
     limit
   );
-  recents = JSON.parse(JSON.stringify(recents));
-  recents = recents.map((topic) => ({
-    ...topic,
-    views: topic.views.length,
-  }));
+  recents = recents
+    .map((x) => x.get({ plain: true }))
+    .map((topic) => ({
+      ...topic,
+      views: topic.views.length,
+    }));
   const categories = await sequelize.query(categoriesTopicQuery(languageId), {
     type: sequelize.QueryTypes.SELECT,
     logging: false,

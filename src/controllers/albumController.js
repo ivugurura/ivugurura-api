@@ -128,8 +128,7 @@ export const getMedia = async (req, res) => {
     limit,
   });
 
-  let medias = JSON.parse(JSON.stringify(rows));
-  medias = medias.map((m) => ({
+  const medias = rows.map((x) => x.get({ plain: true })).map((m) => ({
     ...m,
     downloads: m.downloads.length,
     shares: m.shares.length,
