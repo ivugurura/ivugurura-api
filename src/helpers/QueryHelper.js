@@ -44,7 +44,7 @@ export class QueryHelper {
   }
   async findAndCountAll(options = {}) {
     const defaultOptions = {
-      orderBy: [["createdAt", "ASC"]],
+      order: [["createdAt", "ASC"]],
       logging: false,
       ...queryOptions,
     };

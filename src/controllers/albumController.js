@@ -123,7 +123,7 @@ export const getMedia = async (req, res) => {
   let { count, rows } = await dbMediaHelper.findAndCountAll({
     where: conditions,
     include: constHelper.mediaIncludes(),
-    orderBy: [["actionDate", "DESC"]],
+    order: [["actionDate", "DESC"]],
     offset,
     limit,
   });
