@@ -108,17 +108,7 @@ export const getChatUsers = async (req, res) => {
 
 export const getYoutubeVideos = async (req, res) => {
   const { searchKey, pageSize, pageToken } = req.query;
-  //Pause google api key for now
-  // return serverResponse(res, 200, "Success", {
-  //   items: [],
-  //   nextPageToken: "",
-  //   prevPageToken: "",
-  //   pageInfo: {
-  //     totalResults: 0,
-  //     resultsPerPage: 0,
-  //   },
-  // });
-  const { data } = await axiosYouTube.get("/search", {
+  axiosYouTube.get("/search", {
     params: {
       q: searchKey,
       type: "video",
@@ -127,8 +117,20 @@ export const getYoutubeVideos = async (req, res) => {
       order: "date",
       pageToken,
     },
+  }).then(({ data }) => {
+    return serverResponse(res, 200, "Success", data);
+  }).catch(() => {
+    // don't throw an error get
+    return serverResponse(res, 200, "Success", {
+      items: [],
+      nextPageToken: "",
+      prevPageToken: "",
+      pageInfo: {
+        totalResults: 0,
+        resultsPerPage: 0,
+      },
+    });
   });
-  return serverResponse(res, 200, "Success", data);
 };
 export const addToEntityDisplay = async (req, res) => {
   const entityBody = { ...req.body, entityId: req.params.id };
