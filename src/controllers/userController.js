@@ -52,9 +52,9 @@ export const getTopicsByPublish = async (req, res) => {
   const { languageId } = req.body;
   const { offset, limit } = paginator(req.query);
   let whereConditions = { languageId };
-  const orderBy = [
+  const order = [
     ["isPublished", "ASC"],
-    ["createdAt", "DESC"],
+    ["createdAt", "DESC"]
   ];
   if (req.query.search) {
     whereConditions = {
@@ -64,16 +64,17 @@ export const getTopicsByPublish = async (req, res) => {
   }
   let { count, rows } = await dbTopic.findAndCountAll({
     where: whereConditions,
-    include: constants.topicIncludes(),
-    orderBy,
+    include: constants.topicIncludes(true),
+    order,
     offset,
     limit,
   });
-  let topics = JSON.parse(JSON.stringify(rows));
-  topics = topics.map((topic) => ({
-    ...topic,
-    views: topic.views.length,
-  }));
+  const topics = rows
+    .map((x) => x.get({ plain: true }))
+    .map((topic) => ({
+      ...topic,
+      views: topic.views.length,
+    }));
 
   return serverResponse(res, 200, "Success", topics, count);
 };
@@ -103,7 +104,7 @@ export const getSystemUsers = async (req, res) => {
 
   const { count, rows } = await userDb.findAndCountAll({
     where: { role: { [Op.ne]: "1" } },
-    orderBy: [["names", "ASC"]],
+    order: [["names", "ASC"]],
     attributes,
     offset,
     limit,

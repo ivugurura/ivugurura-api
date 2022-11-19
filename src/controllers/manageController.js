@@ -1,4 +1,4 @@
-import { Category, Topic, Message, Sequelize } from "../models";
+import { Category, Topic, Message, Sequelize, EntityDisplay } from "../models";
 import {
   QueryHelper,
   serverResponse,
@@ -12,6 +12,7 @@ import {
 const categoryDb = new QueryHelper(Category);
 const topicDb = new QueryHelper(Topic);
 const messageDb = new QueryHelper(Message);
+const tbEntityDisplay = new QueryHelper(EntityDisplay);
 const { Op } = Sequelize;
 
 /**
@@ -107,17 +108,7 @@ export const getChatUsers = async (req, res) => {
 
 export const getYoutubeVideos = async (req, res) => {
   const { searchKey, pageSize, pageToken } = req.query;
-  //Pause google api key for now
-  return serverResponse(res, 200, "Success", {
-    items: [],
-    nextPageToken: "",
-    prevPageToken: "",
-    pageInfo: {
-      totalResults: 0,
-      resultsPerPage: 0,
-    },
-  });
-  const { data } = await axiosYouTube.get("/search", {
+  axiosYouTube.get("/search", {
     params: {
       q: searchKey,
       type: "video",
@@ -126,6 +117,35 @@ export const getYoutubeVideos = async (req, res) => {
       order: "date",
       pageToken,
     },
+  }).then(({ data }) => {
+    return serverResponse(res, 200, "Success", data);
+  }).catch(() => {
+    // don't throw an error get
+    return serverResponse(res, 200, "Success", {
+      items: [],
+      nextPageToken: "",
+      prevPageToken: "",
+      pageInfo: {
+        totalResults: 0,
+        resultsPerPage: 0,
+      },
+    });
   });
-  return serverResponse(res, 200, "Success", data);
+};
+export const addToEntityDisplay = async (req, res) => {
+  const entityBody = { ...req.body, entityId: req.params.id };
+  const entityOptions = { entityId: req.params.id, type: req.body.type }
+  const exist = await tbEntityDisplay.findOne(entityOptions);
+  if (exist) {
+    await tbEntityDisplay.delete(entityOptions);
+  } else {
+    await tbEntityDisplay.create(entityBody);
+  }
+  return serverResponse(res, 201, "Success");
+};
+export const deleteFromEntityDisplay = async (req, res) => {
+  const { entityId } = req.params;
+  const { type } = req.body;
+  await tbEntityDisplay.delete({ entityId, type });
+  return serverResponse(res, 200, "Removed");
 };

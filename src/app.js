@@ -18,7 +18,6 @@ import { dbBackup } from "./crons";
 import { notifyMe } from "./helpers";
 
 dotenv.config();
-localPassport(passport);
 
 const app = express();
 
@@ -68,6 +67,7 @@ app.use(session());
 /**
  * Initialize passport and session
  */
+localPassport(passport);
 app.use(passport.initialize());
 app.use(passport.session());
 /**

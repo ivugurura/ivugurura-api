@@ -1,13 +1,21 @@
+import { Model } from "sequelize";
+
+const queryOptions = {};
 export class QueryHelper {
+  /**
+   *
+   * @param {Model} model
+   */
   constructor(model) {
     this.model = model;
   }
-  async findOne(whereCondition = {}, include = null, attributes) {
+  async findOne(whereCondition = {}, include = null, attributes, otherOptions = {}) {
     return this.model.findOne({
       where: whereCondition,
       logging: false,
       include,
       attributes,
+      ...otherOptions
     });
   }
   async findAll(
@@ -28,14 +36,22 @@ export class QueryHelper {
       include,
       attributes,
       group,
+      ...queryOptions,
     });
   }
   async count(whereCondition = {}) {
     return this.model.count({ where: whereCondition, logging: false });
   }
   async findAndCountAll(options = {}) {
-    const defaultOptions = { orderBy: [["createdAt", "ASC"]], logging: false };
-    const rows = await this.model.findAll({ ...defaultOptions, ...options });
+    const defaultOptions = {
+      order: [["createdAt", "ASC"]],
+      logging: false,
+      ...queryOptions,
+    };
+    const rows = await this.model.findAll({
+      ...defaultOptions,
+      ...options,
+    });
     const count = await this.model.count({
       ...defaultOptions,
       where: options.where,
