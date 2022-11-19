@@ -93,10 +93,13 @@ export const getOneTopic = async (req, res) => {
 
   await viewDbHelper.create({ topicId: id, ipAddress: req.ip });
   let topic = await dbHelper.findOne(
-    { id, languageId },
+    { id },
     constHelper.oneTopicIncludes(id),
     null, { pain: true, nested: true }
   );
+  if (topic.languageId !== languageId) {
+    return serverResponse(res, 400, 'The topic is not matching the language')
+  }
   topic = topic.get({ plain: true })
   const category = topic.category || { relatedTopics: [] }
   topic = { ...topic, category, views: topic.views?.length }
