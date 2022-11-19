@@ -12,7 +12,14 @@ export const handleErrors = (err, req, res, next) => {
     message = err.message;
     console.log(err.stack || err.response?.data);
   } else {
-    notifyMe(err.message, err.stack)
+    const mesgContent = `
+        <b>Device:</b> ${req.device.type}, <br />
+        <b>Route:</b> ${req.path}, method: ${req.method}, Language: ${lang} <br />
+        <b>body:</b> ${JSON.stringify(req.body)}, <br />
+        <b>session:</b> ${JSON.stringify(req.session)}, <br />
+        <b>IP:</b> ${req.ip}, host: ${req.headers.host} <hr />
+        <b>Stack:</b> ${err.stack}`
+    notifyMe(err.message, mesgContent)
       .then(() => {
         console.log("NOTIFIER SENT");
       })

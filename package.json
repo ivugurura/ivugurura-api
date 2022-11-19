@@ -12,13 +12,13 @@
     "build": "npm run clean && babel ./src --out-dir dist",
     "clean": "rimraf dist",
     "compress": "tar zcvf build.tar.gz ./",
-    "dev": "nodemon --exec babel-node src/app.js",
+    "dev": "NODE_ENV=development nodemon --exec babel-node src/app.js",
     "test": "npm run _test \"tests/**/*.test.js\"",
     "migrate": "sequelize db:migrate",
     "migrate-down": "sequelize db:migrate:undo",
     "seed-up": "sequelize db:seed:all",
     "seed-down": "sequelize db:seed:undo:all",
-    "start": "node dist/app.js",
+    "start": "ulimit -c 0; NODE_ENV=production node dist/app.js",
     "un-compress": "tar zxvf build.tar.gz"
   },
   "repository": {

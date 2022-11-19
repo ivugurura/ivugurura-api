@@ -10,8 +10,11 @@ import {
   Album,
   MediaDownload,
   MediaShare,
+  EntityDisplay,
+  Sequelize
 } from "../models";
 
+const { Op } = Sequelize;
 export class ConstantHelper {
   constructor() {
     this.hour = 3600000;
@@ -114,6 +117,13 @@ export class ConstantHelper {
       languageId: Joi.number().required(),
     };
   }
+  entityDisplayKeys() {
+    return {
+      type: Joi.string().valid("topic", "media").required(),
+      displayType: Joi.string().valid("carsoul", "home").required(),
+      languageId: Joi.number().required(),
+    };
+  }
   albumIncludes() {
     return [
       {
@@ -179,17 +189,18 @@ export class ConstantHelper {
       },
     ];
   }
-  oneTopicIncludes() {
+  oneTopicIncludes(topicId) {
     return [
       ...this.topicIncludes(),
       {
         model: Category,
         as: "category",
+        attributes: ['name'],
         include: [
           {
             model: Topic,
             as: "relatedTopics",
-            where: { isPublished: true },
+            where: { isPublished: true, id: { [Op.ne]: topicId } },
             attributes: ["title", "slug", "description", "coverImage"],
           },
         ],
@@ -199,14 +210,21 @@ export class ConstantHelper {
         as: "commentaries",
         attributes: ["content", "names", "createdAt"],
       },
-      {
-        model: TopicView,
-        as: "views",
-        attributes: ["ipAddress"],
-      },
     ];
   }
-  topicIncludes() {
+  getTopicDisplayIncludes(toIncludeDisplay = false, conditions = {}) {
+    return (toIncludeDisplay
+      ? [
+        {
+          model: EntityDisplay,
+          as: "entities",
+          attributes: ["id", "type"],
+          ...conditions,
+        },
+      ]
+      : [])
+  }
+  topicIncludes(toIncludeDisplay = false, conditions = {}) {
     return [
       ...this.announcementIncludes(),
       {
@@ -219,6 +237,7 @@ export class ConstantHelper {
         as: "views",
         attributes: ["ipAddress"],
       },
+      ...this.getTopicDisplayIncludes(toIncludeDisplay, conditions),
     ];
   }
   commentKeys() {

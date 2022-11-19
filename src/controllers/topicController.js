@@ -28,10 +28,10 @@ export const getAllTopics = async (req, res) => {
   const { languageId } = req.body;
   const { category } = req.query;
   const { offset, limit } = paginator(req.query);
-  let orderBy = [["title", "ASC"]];
+  let order = [["title", "ASC"]];
   let conditions = { languageId, isPublished: true };
   if (category === "carsoul") {
-    orderBy = [["createdAt", "DESC"]];
+    order = [["createdAt", "ASC"]];
   }
   if (!isNaN(category)) {
     conditions = { ...conditions, categoryId: category };
@@ -39,16 +39,18 @@ export const getAllTopics = async (req, res) => {
 
   const { count, rows } = await dbHelper.findAndCountAll({
     where: conditions,
-    include: constHelper.topicIncludes(),
-    orderBy,
+    include: constHelper.topicIncludes(category === "carsoul", { where: { type: 'topic' } }),
+    order,
     offset,
     limit,
   });
-  let topics = JSON.parse(JSON.stringify(rows));
-  topics = topics.map((topic) => ({
-    ...topic,
-    views: topic.views.length || 0,
-  }));
+
+  const topics = rows
+    .map((x) => x.get({ plain: true }))
+    .map((topic) => ({
+      ...topic,
+      views: topic.views?.length || 0,
+    }));
 
   return serverResponse(res, 200, "Success", topics, count);
 };
@@ -60,17 +62,18 @@ export const getHomeContents = async (req, res) => {
   const limit = 4;
   let recents = await dbHelper.findAll(
     conditions,
-    constHelper.topicIncludes(),
+    constHelper.topicIncludes(true),
     null,
     null,
     offset,
     limit
   );
-  recents = JSON.parse(JSON.stringify(recents));
-  recents = recents.map((topic) => ({
-    ...topic,
-    views: topic.views.length,
-  }));
+  recents = recents
+    .map((x) => x.get({ plain: true }))
+    .map((topic) => ({
+      ...topic,
+      views: topic.views.length,
+    }));
   const categories = await sequelize.query(categoriesTopicQuery(languageId), {
     type: sequelize.QueryTypes.SELECT,
     logging: false,
@@ -89,10 +92,17 @@ export const getOneTopic = async (req, res) => {
   const { languageId } = req.body;
 
   await viewDbHelper.create({ topicId: id, ipAddress: req.ip });
-  const topic = await dbHelper.findOne(
-    { id, languageId },
-    constHelper.oneTopicIncludes()
+  let topic = await dbHelper.findOne(
+    { id },
+    constHelper.oneTopicIncludes(id),
+    null, { pain: true, nested: true }
   );
+  if (topic.languageId !== languageId) {
+    return serverResponse(res, 400, 'The topic is not matching the language')
+  }
+  topic = topic.get({ plain: true })
+  const category = topic.category || { relatedTopics: [] }
+  topic = { ...topic, category, views: topic.views?.length }
   return serverResponse(res, 200, "Success", topic);
 };
 
@@ -163,13 +173,13 @@ export const getAllCommentaries = async (req, res) => {
     "isPublished",
     "createdAt",
   ];
-  const orderBy = [
+  const order = [
     ["isPublished", "ASC"],
     ["content", "ASC"],
   ];
   const { count, rows } = await dbCommentHelper.findAndCountAll({
     include: constHelper.commentIncludes(),
-    orderBy,
+    order,
     attributes,
     offset,
     limit,

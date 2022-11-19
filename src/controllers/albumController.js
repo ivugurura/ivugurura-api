@@ -123,13 +123,12 @@ export const getMedia = async (req, res) => {
   let { count, rows } = await dbMediaHelper.findAndCountAll({
     where: conditions,
     include: constHelper.mediaIncludes(),
-    orderBy: [["actionDate", "DESC"]],
+    order: [["actionDate", "DESC"]],
     offset,
     limit,
   });
 
-  let medias = JSON.parse(JSON.stringify(rows));
-  medias = medias.map((m) => ({
+  const medias = rows.map((x) => x.get({ plain: true })).map((m) => ({
     ...m,
     downloads: m.downloads.length,
     shares: m.shares.length,
