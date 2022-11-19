@@ -8,18 +8,17 @@
   },
   "main": "app.js",
   "scripts": {
-    "_test": "NODE_ENV=test nyc mocha -r @babel/register --color --exit",
-    "build": "npm run clean && babel ./src --out-dir dist",
-    "clean": "rimraf dist",
-    "compress": "tar zcvf build.tar.gz ./",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "ulimit -c 0; NODE_ENV=production node dist/app.js",
     "dev": "NODE_ENV=development nodemon --exec babel-node src/app.js",
-    "test": "npm run _test \"tests/**/*.test.js\"",
     "migrate": "sequelize db:migrate",
     "migrate-down": "sequelize db:migrate:undo",
     "seed-up": "sequelize db:seed:all",
     "seed-down": "sequelize db:seed:undo:all",
-    "start": "ulimit -c 0; NODE_ENV=production node dist/app.js",
-    "un-compress": "tar zxvf build.tar.gz"
+    "compress": "tar zcvf build.tar.gz ./",
+    "un-compress": "tar zxvf build.tar.gz",
+    "build": "npm run clean && babel ./src --out-dir dist",
+    "clean": "rimraf dist"
   },
   "repository": {
     "type": "git",
@@ -66,7 +65,6 @@
     "passport-local": "^1.0.0",
     "pg": "^8.3.3",
     "pg-hstore": "^2.3.3",
-    "pm2": "^5.2.2",
     "redis": "^4.0.2",
     "sequelize": "^6.24.0",
     "sequelize-cli": "^6.2.0",
@@ -76,13 +74,7 @@
     "uniqid": "^5.2.0"
   },
   "devDependencies": {
-    "@faker-js/faker": "^7.6.0",
-    "chai": "^4.3.6",
-    "chai-as-promised": "^7.1.1",
     "eslint": "^8.7.0",
-    "faker": "^6.6.6",
-    "mocha": "^10.1.0",
-    "nodemon": "^2.0.20",
-    "nyc": "^15.1.0"
+    "nodemon": "^2.0.20"
   }
 }
