@@ -1,0 +1,18 @@
+version: '3.7'
+
+services:
+  api-server:
+    container_name: ivugurura_api
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - 5600:5600
+    volumes:
+      - /app/node_modules
+      - ./:/app
+    environment:
+      - DB_HOST=host.docker.internal
+      - REDIS_HOST=host.docker.internal
+    env_file:
+      - .env
