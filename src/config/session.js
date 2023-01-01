@@ -5,7 +5,7 @@ import { ConstantHelper } from "../helpers/ConstantHelper";
 
 const constants = new ConstantHelper();
 const RedisStore = connectRedis(expressSession);
-const redisClient = createClient({ legacyMode: true });
+const redisClient = createClient({ socket: { host: process.env.REDIS_HOST }, legacyMode: true });
 
 redisClient
   .connect()
