@@ -1,0 +1,47 @@
+name: Ivugurura API CI/CD
+
+on:
+  push:
+    push:
+      branches: [develop]
+    pull_request:
+      branches: [develop]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [14.x]
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+      - name: Install packages and run tests
+        run: |
+          npm install
+          npm run test
+        env:
+          CI: true
+
+  deploy:
+    needs: [test]
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Prepare SSH and deploy the app
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USERNAME }}
+          key: ${{ secrets.SSH_KEY }}
+          port: ${{ secrets.SSH_PORT }}
+          script: |
+            cd ~/ivugururaApi
+            git pull origin master
+            npm install --production
+            pm2 restart node-app
