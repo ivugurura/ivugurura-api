@@ -1,5 +1,5 @@
 import axios from "axios";
-import bcrypt from "bcrypt";
+import bcrypt from "bcryptjs";
 import slugify from "slugify";
 import uniqid from "uniqid";
 import path from "path";

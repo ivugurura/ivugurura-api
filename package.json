@@ -9,7 +9,7 @@
   "main": "app.js",
   "scripts": {
     "_test": "NODE_ENV=test nyc mocha -r @babel/register --color --exit",
-    "build": "npm run clean && babel ./src --out-dir dist",
+    "build": "babel ./src --out-dir dist",
     "clean": "rimraf dist",
     "compress": "tar zcvf build.tar.gz ./",
     "dev": "NODE_ENV=development nodemon --exec babel-node src/app.js",
@@ -46,7 +46,7 @@
     "@babel/register": "^7.8.3",
     "@sendgrid/mail": "^7.2.2",
     "axios": "^0.27.2",
-    "bcrypt": "^5.0.0",
+    "bcryptjs": "^2.4.3",
     "cls-hooked": "^4.2.2",
     "compression": "^1.7.4",
     "connect-redis": "^6.0.0",
