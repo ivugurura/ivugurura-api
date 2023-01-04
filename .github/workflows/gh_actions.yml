@@ -46,6 +46,3 @@ jobs:
           port: ${{ secrets.SSH_PORT }}
           script: |
             cd ~/ivugururaApi
-            git pull origin develop
-            npm install --production
-            pm2 restart 0
