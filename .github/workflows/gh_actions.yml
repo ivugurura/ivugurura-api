@@ -52,4 +52,4 @@ jobs:
             cd ~/ivugururaApi
             git pull origin master
             npm install --omit=dev
-            pm2 restart 0
+            echo "Should start the server by: pm2 restart 0"
