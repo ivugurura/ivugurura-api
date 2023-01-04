@@ -45,7 +45,9 @@ jobs:
           key: ${{ secrets.SSH_KEY }}
           port: ${{ secrets.SSH_PORT }}
           script: |
+            eval $(ssh-agent)
+            ssh-add ${{ secrets.SSH_KEY_LOCATION }}
             cd ~/ivugururaApi
-            git pull origin develop
+            git pull origin master
             npm install --production
             pm2 restart 0
