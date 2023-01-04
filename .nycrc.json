@@ -1,0 +1,13 @@
+{
+  "all": true,
+  "check-coverage": true,
+  "reporter": ["lcov", "text"],
+  "include": ["src/**/*.js"],
+  "exclude": [
+    "src/migrations",
+    "src/seeders"
+  ],
+  "lines": 0,
+  "functions": 0,
+  "statements": 0
+}
