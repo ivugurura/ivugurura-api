@@ -14,7 +14,7 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [14.x]
+        node-version: [14.17.6]
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
@@ -45,11 +45,8 @@ jobs:
           key: ${{ secrets.SSH_KEY }}
           port: ${{ secrets.SSH_PORT }}
           script: |
-            echo "Refleshing SSH keys..."
-            eval $(ssh-agent)
-            ssh-add
-            ssh-add ${{ secrets.SSH_KEY_LOCATION }}
             cd ~/ivugururaApi
-            git pull origin master
+            git pull origin develop
             npm install --omit=dev
-            echo "Should start the server by: pm2 restart 0"
+            echo "Restart the server"
+            pm2 restart 0
