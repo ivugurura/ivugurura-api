@@ -9,13 +9,18 @@ export class QueryHelper {
   constructor(model) {
     this.model = model;
   }
-  async findOne(whereCondition = {}, include = null, attributes, otherOptions = {}) {
+  async findOne(
+    whereCondition = {},
+    include = null,
+    attributes,
+    otherOptions = {}
+  ) {
     return this.model.findOne({
       where: whereCondition,
       logging: false,
       include,
       attributes,
-      ...otherOptions
+      ...otherOptions,
     });
   }
   async findAll(
