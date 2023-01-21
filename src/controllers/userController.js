@@ -30,8 +30,10 @@ export const userSignin = async (req, res, next) => {
 };
 
 export const logoutUser = (req, res) => {
-  req.session.destroy();
-  req.logout();
+  if (req.isAuthenticated()) {
+    req.session.destroy();
+    req.logout();
+  }
   return serverResponse(res, 200, "Successfully logged out");
 };
 
@@ -54,7 +56,7 @@ export const getTopicsByPublish = async (req, res) => {
   let whereConditions = { languageId };
   const order = [
     ["isPublished", "ASC"],
-    ["createdAt", "DESC"]
+    ["createdAt", "DESC"],
   ];
   if (req.query.search) {
     whereConditions = {

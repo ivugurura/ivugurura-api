@@ -74,7 +74,7 @@ export const authenticatedUser = async (req) => {
     } catch (error) {
       return null;
     }
-  } else if ((useragent.browser = "PostmanRuntime" && req.isAuthenticated())) {
+  } else if (useragent.browser === "PostmanRuntime" && req.isAuthenticated()) {
     return user;
   }
   return null;
