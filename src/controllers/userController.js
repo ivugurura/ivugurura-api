@@ -29,12 +29,12 @@ export const userSignin = async (req, res, next) => {
   })(req, req, next);
 };
 
-export const logoutUser = (req, res) => {
-  if (req.isAuthenticated()) {
+export const logoutUser = (req, res, next) => {
+  req.logout((error) => {
+    if (error) return next(error);
     req.session.destroy();
-    req.logout();
-  }
-  return serverResponse(res, 200, "Successfully logged out");
+    return serverResponse(res, 200, "Successfully logged out");
+  });
 };
 
 export const getDashboardCounts = async (req, res) => {

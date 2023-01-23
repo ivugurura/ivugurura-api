@@ -7,7 +7,7 @@ import passport from "passport";
 import userAgent from "express-useragent";
 import compression from "compression";
 import { capture } from "express-device";
-import { localPassport } from "./config/passport";
+import { configurePassport } from "./config/passport";
 import { sequelize } from "./models";
 import routes from "./routes";
 import { handleErrors } from "./middlewares";
@@ -63,11 +63,11 @@ app.use(express.json({ limit: "100mb" }));
 app.use(express.static("build"));
 app.use("/songs", express.static("public/songs"));
 app.use("/images", express.static("public/images"));
-app.use(session());
 /**
  * Initialize passport and session
  */
-localPassport(passport);
+app.use(session());
+configurePassport(passport);
 app.use(passport.initialize());
 app.use(passport.session());
 /**

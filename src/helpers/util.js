@@ -61,7 +61,7 @@ export const authenticatedUser = async (req) => {
   if (
     useragent.isFirefox ||
     useragent.isOpera ||
-    useragent.isChromeOS ||
+    useragent.isChrome ||
     useragent.isEdge
   ) {
     const token = headers.authorization;
