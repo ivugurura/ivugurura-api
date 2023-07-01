@@ -1,4 +1,5 @@
 import { unlink } from "fs";
+import { convert } from "html-to-text";
 import {
   QueryHelper,
   serverResponse,
@@ -7,6 +8,7 @@ import {
   ucFirst,
   mailFormatter,
   sendEmail,
+  truncateString,
 } from "../helpers";
 import { Topic, TopicView, Commentary, sequelize } from "../models";
 import { ConstantHelper } from "../helpers/ConstantHelper";
@@ -26,7 +28,7 @@ export const addNewTopic = async (req, res) => {
 
 export const getAllTopics = async (req, res) => {
   const { languageId } = req.body;
-  const { category } = req.query;
+  const { category, truncate = 20, canTruncate = "no" } = req.query;
   const { offset, limit } = paginator(req.query);
   let order = [["title", "ASC"]];
   let conditions = { languageId, isPublished: true };
@@ -39,7 +41,9 @@ export const getAllTopics = async (req, res) => {
 
   const { count, rows } = await dbHelper.findAndCountAll({
     where: conditions,
-    include: constHelper.topicIncludes(category === "carsoul", { where: { type: 'topic' } }),
+    include: constHelper.topicIncludes(category === "carsoul", {
+      where: { type: "topic" },
+    }),
     order,
     offset,
     limit,
@@ -47,10 +51,17 @@ export const getAllTopics = async (req, res) => {
 
   const topics = rows
     .map((x) => x.get({ plain: true }))
-    .map((topic) => ({
-      ...topic,
-      views: topic.views?.length || 0,
-    }));
+    .map((topic) => {
+      let content = topic.content;
+      if (canTruncate === "yes") {
+        content = truncateString(convert(topic.content), truncate);
+      }
+      return {
+        ...topic,
+        views: topic.views?.length || 0,
+        content,
+      };
+    });
 
   return serverResponse(res, 200, "Success", topics, count);
 };
@@ -95,14 +106,15 @@ export const getOneTopic = async (req, res) => {
   let topic = await dbHelper.findOne(
     { id },
     constHelper.oneTopicIncludes(id),
-    null, { pain: true, nested: true }
+    null,
+    { pain: true, nested: true }
   );
   if (topic.languageId !== languageId) {
-    return serverResponse(res, 400, 'The topic is not matching the language')
+    return serverResponse(res, 400, "The topic is not matching the language");
   }
-  topic = topic.get({ plain: true })
-  const category = topic.category || { relatedTopics: [] }
-  topic = { ...topic, category, views: topic.views?.length }
+  topic = topic.get({ plain: true });
+  const category = topic.category || { relatedTopics: [] };
+  topic = { ...topic, category, views: topic.views?.length };
   return serverResponse(res, 200, "Success", topic);
 };
 
