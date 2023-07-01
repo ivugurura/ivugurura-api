@@ -46,6 +46,10 @@ jobs:
           port: ${{ secrets.SSH_PORT }}
           script: |
             cd ~/ivugururaApi
+            echo "Refleshing SSH keys..."
+            eval $(ssh-agent);
+            ssh-add;
+            ssh-add "${{ secrets.KEY_NAME }}";
             git pull origin develop
             npm install --omit=dev
             echo "Restart the server"
