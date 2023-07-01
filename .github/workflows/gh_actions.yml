@@ -49,7 +49,7 @@ jobs:
             echo "Refleshing SSH keys..."
             eval $(ssh-agent);
             ssh-add;
-            ssh-add "${{ secrets.KEY_NAME }}";
+            ssh-add ${{ secrets.KEY_NAME }};
             git pull origin develop
             npm install --omit=dev
             echo "Restart the server"
