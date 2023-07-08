@@ -26,7 +26,7 @@ export class QueryHelper {
   async findAll(
     whereCondition,
     include,
-    orderBy = [["createdAt", "ASC"]],
+    orderBy = [["createdAt", "DESC"]],
     attributes,
     offset = 0,
     limit = 20,
