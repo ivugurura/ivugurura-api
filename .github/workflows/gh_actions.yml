@@ -50,6 +50,7 @@ jobs:
             eval $(ssh-agent);
             ssh-add;
             ssh-add ${{ secrets.KEY_NAME }};
+            git reset --hard
             git pull origin develop
             npm install --omit=dev
             echo "Restart the server"
