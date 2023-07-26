@@ -4,17 +4,16 @@
   "description": "Reformation and revival",
   "private": true,
   "engines": {
-    "node": "14.17.6",
-    "npm": ">=6.14.15"
+    "node": ">=16.20.0"
   },
-  "main": "app.js",
+  "main": "src/app.js",
   "scripts": {
     "_test": "NODE_ENV=test nyc mocha -r @babel/register --color --exit",
-    "build": "npm run clean && babel ./src --out-dir dist",
+    "build": "yarn clean && babel ./src --out-dir dist",
     "clean": "rimraf dist",
     "compress": "tar zcvf build.tar.gz ./",
     "dev": "NODE_ENV=development nodemon --exec babel-node src/app.js",
-    "test": "npm run _test \"tests/**/*.test.js\"",
+    "test": "yarn _test \"tests/**/*.test.js\"",
     "migrate": "sequelize db:migrate",
     "migrate-down": "sequelize db:migrate:undo",
     "seed-up": "sequelize db:seed:all",
