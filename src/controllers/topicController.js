@@ -35,7 +35,7 @@ export const getAllTopics = async (req, res) => {
   if (category === "carsoul") {
     order = [["createdAt", "ASC"]];
   }
-  if (!isNaN(category)) {
+  if (category !== "" && !isNaN(category)) {
     conditions = { ...conditions, categoryId: category };
   }
 

@@ -52,8 +52,10 @@ export const generateSlug = (title) => {
   return slug;
 };
 export const paginator = ({ page, pageSize }) => {
-  const limit = pageSize ? +pageSize : 20;
-  const offset = page && +page !== 0 ? (+page - 1) * limit : 0;
+  page = isNaN(Number(page)) ? 0 : Number(page);
+  pageSize = isNaN(Number(pageSize)) ? 20 : Number(pageSize);
+  const limit = pageSize;
+  const offset = page > 0 ? (page - 1) * limit : 0;
   return { limit, offset };
 };
 export const authenticatedUser = async (req) => {
