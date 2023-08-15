@@ -106,12 +106,7 @@ export const getOneTopic = async (req, res) => {
   await viewDbHelper.create({ topicId: id, ipAddress: req.ip });
   console.log("==End creating topic view==");
   console.log("==Start fetching topic==");
-  let topic = await dbHelper.findOne(
-    { id },
-    constHelper.oneTopicIncludes(id),
-    null,
-    { pain: true, nested: true }
-  );
+  let topic = await dbHelper.findOne({ id }, constHelper.oneTopicIncludes(id));
   console.log("==End fetching topic==");
   if (topic.languageId !== languageId) {
     return serverResponse(res, 400, "The topic is not matching the language");
