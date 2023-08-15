@@ -98,23 +98,30 @@ export const getHomeContents = async (req, res) => {
 };
 
 export const getOneTopic = async (req, res) => {
+  console.log("==Start================");
   const viewDbHelper = new QueryHelper(TopicView);
   const { topicId: id } = req.params;
   const { languageId } = req.body;
-
+  console.log("==Start creating topic view==");
   await viewDbHelper.create({ topicId: id, ipAddress: req.ip });
+  console.log("==End creating topic view==");
+  console.log("==Start fetching topic==");
   let topic = await dbHelper.findOne(
     { id },
     constHelper.oneTopicIncludes(id),
     null,
     { pain: true, nested: true }
   );
+  console.log("==End fetching topic==");
   if (topic.languageId !== languageId) {
     return serverResponse(res, 400, "The topic is not matching the language");
   }
+  console.log("==Start converting topic==");
   topic = topic.get({ plain: true });
+  console.log("==End converting topic==");
   const category = topic.category || { relatedTopics: [] };
   topic = { ...topic, category, views: topic.views?.length };
+  console.log("==End================");
   return serverResponse(res, 200, "Success", topic);
 };
 
