@@ -11,7 +11,7 @@ import {
   MediaDownload,
   MediaShare,
   EntityDisplay,
-  Sequelize
+  Sequelize,
 } from "../models";
 
 const { Op } = Sequelize;
@@ -157,7 +157,7 @@ export class ConstantHelper {
       },
     ];
   }
-  announcementIncludes() {
+  identifierIncludes() {
     return [
       {
         model: User,
@@ -189,13 +189,12 @@ export class ConstantHelper {
       },
     ];
   }
-  oneTopicIncludes(topicId) {
+  topicCategorIncludes() {
     return [
-      ...this.topicIncludes(),
       {
         model: Category,
         as: "category",
-        attributes: ['name'],
+        attributes: ["name"],
         include: [
           {
             model: Topic,
@@ -205,28 +204,36 @@ export class ConstantHelper {
           },
         ],
       },
+    ];
+  }
+  commentariesIncludes() {
+    return [
       {
         model: Commentary,
         as: "commentaries",
+        where: { isPublished: true },
         attributes: ["content", "names", "createdAt"],
       },
     ];
   }
+  oneTopicIncludes(topicId) {
+    return [...this.topicIncludes(), ...this.topicCategorIncludes()];
+  }
   getTopicDisplayIncludes(toIncludeDisplay = false, conditions = {}) {
-    return (toIncludeDisplay
+    return toIncludeDisplay
       ? [
-        {
-          model: EntityDisplay,
-          as: "entities",
-          attributes: ["id", "type"],
-          ...conditions,
-        },
-      ]
-      : [])
+          {
+            model: EntityDisplay,
+            as: "entities",
+            attributes: ["id", "type"],
+            ...conditions,
+          },
+        ]
+      : [];
   }
   topicIncludes(toIncludeDisplay = false, conditions = {}) {
     return [
-      ...this.announcementIncludes(),
+      ...this.identifierIncludes(),
       {
         model: Category,
         as: "category",

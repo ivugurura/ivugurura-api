@@ -10,7 +10,7 @@ import {
   sendEmail,
   truncateString,
 } from "../helpers";
-import { Topic, TopicView, Commentary, sequelize } from "../models";
+import { Topic, TopicView, Commentary, Category, sequelize } from "../models";
 import { ConstantHelper } from "../helpers/ConstantHelper";
 import { categoriesTopicQuery, topicViewsQuery } from "../helpers/rawQueries";
 
@@ -102,20 +102,32 @@ export const getOneTopic = async (req, res) => {
   const viewDbHelper = new QueryHelper(TopicView);
   const { topicId: id } = req.params;
   const { languageId } = req.body;
+
   console.log("==Start creating topic view==");
   await viewDbHelper.create({ topicId: id, ipAddress: req.ip });
   console.log("==End creating topic view==");
   console.log("==Start fetching topic==");
-  let topic = await dbHelper.findOne({ id }, constHelper.oneTopicIncludes(id));
+  let topic = await dbHelper.findOne({ id }, constHelper.topicIncludes());
   console.log("==End fetching topic==");
+
   if (topic.languageId !== languageId) {
     return serverResponse(res, 400, "The topic is not matching the language");
   }
+
   console.log("==Start converting topic==");
-  topic = topic.get({ plain: true });
+  topic = JSON.parse(JSON.stringify(topic));
   console.log("==End converting topic==");
-  const category = topic.category || { relatedTopics: [] };
-  topic = { ...topic, category, views: topic.views?.length };
+  const related = await dbHelper.findAll(
+    { categoryId: topic.categoryId, [Op.not]: { id: id } },
+    null,
+    [["title", "ASC"]],
+    null,
+    0,
+    10
+  );
+  const views = await viewDbHelper.count({ topicId: id });
+  const category = { ...topic.category, relatedTopics: related };
+  topic = { ...topic, category, views };
   console.log("==End================");
   return serverResponse(res, 200, "Success", topic);
 };
