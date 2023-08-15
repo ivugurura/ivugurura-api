@@ -10,13 +10,14 @@ import {
   sendEmail,
   truncateString,
 } from "../helpers";
-import { Topic, TopicView, Commentary, Category, sequelize } from "../models";
+import { Topic, TopicView, Commentary, sequelize, Sequelize } from "../models";
 import { ConstantHelper } from "../helpers/ConstantHelper";
 import { categoriesTopicQuery, topicViewsQuery } from "../helpers/rawQueries";
 
 const dbHelper = new QueryHelper(Topic);
 const dbCommentHelper = new QueryHelper(Commentary);
 const constHelper = new ConstantHelper();
+const { Op } = Sequelize;
 
 export const addNewTopic = async (req, res) => {
   req.body.userId = req.user.id;
