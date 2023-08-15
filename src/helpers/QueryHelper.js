@@ -17,7 +17,7 @@ export class QueryHelper {
   ) {
     return this.model.findOne({
       where: whereCondition,
-      logging: true,
+      logging: false,
       include,
       attributes,
       ...otherOptions,
