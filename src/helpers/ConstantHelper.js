@@ -237,7 +237,7 @@ export class ConstantHelper {
       {
         model: Category,
         as: "category",
-        attributes: ["name"],
+        attributes: ["name", "slug"],
       },
       {
         model: TopicView,
