@@ -15,17 +15,17 @@ export const categoriesTopicQuery = (languageId) => {
 `;
 };
 
-export const topicViewsQuery = (languageId) => {
+export const topicViewsQuery = (languageId, limit = 4) => {
   return `
-  select 
+    SELECT 
       t.id, t.title, t.description, t.slug, t."coverImage", t."content", t."createdAt", cast(t_v.topic_views as int)
-    from topics t
-    inner join (
-      select "topicId", count(tv2."topicId") as topic_views 
-      from topic_views tv2 group by tv2."topicId"
-    ) as t_v on t.id = t_v."topicId"
-    where t."languageId"=${languageId} AND t."isPublished"=true
-    order by t_v.topic_views desc
-    limit 4;
+    FROM topics t
+    LEFT JOIN (
+      SELECT "topicId", COUNT(tv2."topicId") AS topic_views 
+      FROM topic_views tv2 GROUP BY tv2."topicId"
+    ) AS t_v ON t.id = t_v."topicId"
+    WHERE t."languageId"=${languageId} AND t."isPublished"=true
+    ORDER BY t_v.topic_views DESC
+    LIMIT ${limit};
   `;
 };
