@@ -2,12 +2,14 @@ import passport from "passport";
 import {
   serverResponse,
   QueryHelper,
-  paginator,
+  getPaginator,
   generatJWT,
   hashPassword,
+  truncateString,
 } from "../helpers";
 import { Topic, Media, User, Sequelize, Commentary } from "../models";
 import { ConstantHelper } from "../helpers/ConstantHelper";
+import { convert } from "html-to-text";
 
 const constants = new ConstantHelper();
 const dbMedia = new QueryHelper(Media);
@@ -52,25 +54,24 @@ export const getDashboardCounts = async (req, res) => {
 
 export const getTopicsByPublish = async (req, res) => {
   const { languageId } = req.body;
-  const { truncate = 20, canTruncate = "no" } = req.query;
-  const { offset, limit } = paginator(req.query);
+  const { truncate = 20, canTruncate = "no", search } = req.query;
+  const paginator = getPaginator(req.query);
   let whereConditions = { languageId };
   const order = [
     ["isPublished", "ASC"],
     ["createdAt", "DESC"],
   ];
-  if (req.query.search) {
+  if (search) {
     whereConditions = {
       ...whereConditions,
-      title: { [Op.iLike]: `%${req.query.search}%` },
+      title: { [Op.iLike]: `%${search}%` },
     };
   }
   let { count, rows } = await dbTopic.findAndCountAll({
     where: whereConditions,
     include: constants.topicIncludes(true),
     order,
-    offset,
-    limit,
+    ...paginator,
   });
   const topics = rows
     .map((x) => x.get({ plain: true }))
@@ -109,7 +110,7 @@ export const updateUser = async (req, res) => {
 };
 
 export const getSystemUsers = async (req, res) => {
-  const { offset, limit } = paginator(req.query);
+  const { offset, limit } = getPaginator(req.query);
   const attributes = { exclude: ["password", "previous_password"] };
 
   const { count, rows } = await userDb.findAndCountAll({

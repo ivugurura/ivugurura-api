@@ -5,7 +5,7 @@ import {
   sendEmail,
   authenticatedUser,
   mailFormatter,
-  paginator,
+  getPaginator,
   axiosYouTube,
 } from "../helpers";
 
@@ -92,7 +92,7 @@ export const getListenerMessages = async (req, res) => {
 export const getChatUsers = async (req, res) => {
   const attributes = ["senderId", "senderName"];
   const group = ["senderId", "senderName"];
-  const { offset, limit } = paginator(req.query);
+  const { offset, limit } = getPaginator(req.query);
   const users = await messageDb.findAll(
     null,
     null,
@@ -108,33 +108,36 @@ export const getChatUsers = async (req, res) => {
 
 export const getYoutubeVideos = async (req, res) => {
   const { searchKey, pageSize, pageToken } = req.query;
-  axiosYouTube.get("/search", {
-    params: {
-      q: searchKey,
-      type: "video",
-      channelId: "UCCzVYqdLwgNMLMsP-NKNnIQ",
-      maxResults: pageSize || 5,
-      order: "date",
-      pageToken,
-    },
-  }).then(({ data }) => {
-    return serverResponse(res, 200, "Success", data);
-  }).catch(() => {
-    // don't throw an error get
-    return serverResponse(res, 200, "Success", {
-      items: [],
-      nextPageToken: "",
-      prevPageToken: "",
-      pageInfo: {
-        totalResults: 0,
-        resultsPerPage: 0,
+  axiosYouTube
+    .get("/search", {
+      params: {
+        q: searchKey,
+        type: "video",
+        channelId: "UCCzVYqdLwgNMLMsP-NKNnIQ",
+        maxResults: pageSize || 5,
+        order: "date",
+        pageToken,
       },
+    })
+    .then(({ data }) => {
+      return serverResponse(res, 200, "Success", data);
+    })
+    .catch(() => {
+      // don't throw an error get
+      return serverResponse(res, 200, "Success", {
+        items: [],
+        nextPageToken: "",
+        prevPageToken: "",
+        pageInfo: {
+          totalResults: 0,
+          resultsPerPage: 0,
+        },
+      });
     });
-  });
 };
 export const addToEntityDisplay = async (req, res) => {
   const entityBody = { ...req.body, entityId: req.params.id };
-  const entityOptions = { entityId: req.params.id, type: req.body.type }
+  const entityOptions = { entityId: req.params.id, type: req.body.type };
   const exist = await tbEntityDisplay.findOne(entityOptions);
   if (exist) {
     await tbEntityDisplay.delete(entityOptions);

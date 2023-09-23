@@ -51,11 +51,15 @@ export const generateSlug = (title) => {
   const slug = `${slugify(title, { lower: true })}-${uniqueId}`;
   return slug;
 };
-export const paginator = ({ page, pageSize }) => {
-  page = isNaN(Number(page)) ? 0 : Number(page);
-  pageSize = isNaN(Number(pageSize)) ? 20 : Number(pageSize);
-  const limit = pageSize;
-  const offset = page > 0 ? (page - 1) * limit : 0;
+export const getPaginator = ({ page, pageSize }) => {
+  let pageNumber = 0;
+  let rowsPerPage = 20;
+  if (page && pageSize) {
+    pageNumber = Number(page);
+    rowsPerPage = Number(pageSize);
+  }
+  const limit = rowsPerPage;
+  const offset = pageNumber > 0 ? (pageNumber - 1) * limit : 0;
   return { limit, offset };
 };
 export const authenticatedUser = async (req) => {

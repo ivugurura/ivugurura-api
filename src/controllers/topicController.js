@@ -4,7 +4,7 @@ import {
   QueryHelper,
   serverResponse,
   generateSlug,
-  paginator,
+  getPaginator,
   ucFirst,
   mailFormatter,
   sendEmail,
@@ -30,7 +30,7 @@ export const addNewTopic = async (req, res) => {
 export const getAllTopics = async (req, res) => {
   const { languageId } = req.body;
   const { category, truncate = 20, canTruncate = "no" } = req.query;
-  const { offset, limit } = paginator(req.query);
+  const { offset, limit } = getPaginator(req.query);
   let order = [["title", "ASC"]];
   let conditions = { languageId, isPublished: true };
   if (category === "carsoul") {
@@ -182,7 +182,7 @@ export const getTopicComments = async (req, res) => {
 };
 
 export const getAllCommentaries = async (req, res) => {
-  const { offset, limit } = paginator(req.query);
+  const { offset, limit } = getPaginator(req.query);
   const attributes = [
     "id",
     "names",

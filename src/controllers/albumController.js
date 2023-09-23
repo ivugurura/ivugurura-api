@@ -5,7 +5,7 @@ import {
   QueryHelper,
   uploadMany,
   uploadSingle,
-  paginator,
+  getPaginator,
   generateSlug,
 } from "../helpers";
 import {
@@ -119,7 +119,7 @@ export const getMedia = async (req, res) => {
     };
   }
 
-  const { offset, limit } = paginator(req.query);
+  const { offset, limit } = getPaginator(req.query);
   let { count, rows } = await dbMediaHelper.findAndCountAll({
     where: conditions,
     include: constHelper.mediaIncludes(),
@@ -128,11 +128,13 @@ export const getMedia = async (req, res) => {
     limit,
   });
 
-  const medias = rows.map((x) => x.get({ plain: true })).map((m) => ({
-    ...m,
-    downloads: m.downloads.length,
-    shares: m.shares.length,
-  }));
+  const medias = rows
+    .map((x) => x.get({ plain: true }))
+    .map((m) => ({
+      ...m,
+      downloads: m.downloads.length,
+      shares: m.shares.length,
+    }));
 
   return serverResponse(res, 200, "Success", medias, count);
 };
