@@ -52,6 +52,7 @@ export const getDashboardCounts = async (req, res) => {
 
 export const getTopicsByPublish = async (req, res) => {
   const { languageId } = req.body;
+  const { truncate = 20, canTruncate = "no" } = req.query;
   const { offset, limit } = paginator(req.query);
   let whereConditions = { languageId };
   const order = [
@@ -73,10 +74,17 @@ export const getTopicsByPublish = async (req, res) => {
   });
   const topics = rows
     .map((x) => x.get({ plain: true }))
-    .map((topic) => ({
-      ...topic,
-      views: topic.views.length,
-    }));
+    .map((topic) => {
+      let content = topic.content;
+      if (canTruncate === "yes") {
+        content = truncateString(convert(topic.content), truncate);
+      }
+      return {
+        ...topic,
+        views: topic.views?.length || 0,
+        content,
+      };
+    });
 
   return serverResponse(res, 200, "Success", topics, count);
 };
