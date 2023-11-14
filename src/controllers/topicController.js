@@ -20,7 +20,7 @@ const constHelper = new ConstantHelper();
 const { Op } = Sequelize;
 
 export const addNewTopic = async (req, res) => {
-  req.body.userId = req.user.id;
+  req.body.userId = req.user?.id || 2;
   req.body.slug = generateSlug(req.body.title);
   req.body.title = ucFirst(req.body.title);
   const newTopic = await dbHelper.create(req.body);
@@ -197,7 +197,9 @@ export const getAllCommentaries = async (req, res) => {
     ["content", "ASC"],
   ];
   const { count, rows } = await dbCommentHelper.findAndCountAll({
-    include: constHelper.commentIncludes(),
+    include: constHelper.commentIncludes({
+      where: { languageId: req.body.languageId },
+    }),
     order,
     attributes,
     offset,

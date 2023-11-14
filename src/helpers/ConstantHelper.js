@@ -101,7 +101,7 @@ export class ConstantHelper {
   getTopicKeys() {
     return {
       title: Joi.string().required(),
-      description: Joi.string().required(),
+      description: Joi.string(),
       content: Joi.string().required(),
       isPublished: Joi.boolean(),
       categoryId: Joi.number().required(),
@@ -256,12 +256,13 @@ export class ConstantHelper {
       website: Joi.string().allow(""),
     };
   }
-  commentIncludes() {
+  commentIncludes(options) {
     return [
       {
         model: Topic,
         as: "topic",
         attributes: ["title", "description"],
+        ...options,
       },
     ];
   }

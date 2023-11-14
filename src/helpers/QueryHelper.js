@@ -53,15 +53,15 @@ export class QueryHelper {
       logging: false,
       ...queryOptions,
     };
-    const rows = await this.model.findAll({
+    return this.model.findAndCountAll({
       ...defaultOptions,
       ...options,
     });
-    const count = await this.model.count({
-      ...defaultOptions,
-      where: options.where,
-    });
-    return { count, rows };
+    // const count = await this.model.count({
+    //   ...defaultOptions,
+    //   where: options.where,
+    // });
+    // return { count, rows };
   }
   async create(data) {
     return this.model.create(data, { logging: false });

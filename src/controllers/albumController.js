@@ -109,6 +109,9 @@ export const getMedia = async (req, res) => {
   const { mediaType } = req.params;
   let { search } = req.query;
   let conditions = mediaType !== "all" ? { type: mediaType } : {};
+  if (mediaType !== "image") {
+    conditions = { ...conditions, languageId: req.body.languageId };
+  }
   if (search) {
     conditions = {
       ...conditions,
