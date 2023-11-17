@@ -32,7 +32,7 @@ export const createAlbum = async (req, res) => {
 };
 
 export const getAlbums = async (req, res) => {
-  const albums = await dbHelper.findAll();
+  const albums = await dbHelper.findAll({ languageId: req.body.languageId });
   return serverResponse(res, 200, "Success", albums);
 };
 

@@ -77,7 +77,7 @@ export const uploadSingleFile = async (req, res) => {
 
     if (!req.file) return serverResponse(res, 400, "No file selected");
     const fileName = req.file.filename;
-    if (fileType === "image" && update !== "null") {
+    if (fileType === "image" && update === "yes") {
       await dbTopicHelper.update(
         { coverImage: fileName },
         { coverImage: prevFile }
