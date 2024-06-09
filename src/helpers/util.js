@@ -59,7 +59,7 @@ export const getPaginator = ({ page, pageSize }) => {
     rowsPerPage = Number(pageSize);
   }
   const limit = rowsPerPage;
-  const offset = pageNumber > 0 ? (pageNumber - 1) * limit : 0;
+  const offset = pageNumber > 1 ? (pageNumber - 1) * limit : 0;
   return { limit, offset };
 };
 export const authenticatedUser = async (req) => {

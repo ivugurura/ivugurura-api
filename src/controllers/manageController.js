@@ -1,3 +1,4 @@
+import { convert } from "html-to-text";
 import { Category, Topic, Message, Sequelize, EntityDisplay } from "../models";
 import {
   QueryHelper,
@@ -7,6 +8,7 @@ import {
   mailFormatter,
   getPaginator,
   axiosYouTube,
+  truncateString,
 } from "../helpers";
 
 const categoryDb = new QueryHelper(Category);
@@ -39,7 +41,7 @@ export const searchInfo = async (req, res) => {
     topicConditions,
     null,
     [["title", "ASC"]],
-    ["id", "title", "slug", "description"]
+    ["id", "title", "slug", "description", "content", "updatedAt"]
   );
   const categories = await categoryDb.findAll(
     categoryConditions,
@@ -47,7 +49,15 @@ export const searchInfo = async (req, res) => {
     [["name", "ASC"]],
     ["id", "name", "slug"]
   );
-  const searched = { topics, categories };
+  const searched = {
+    topics: topics
+      .map((x) => x.get({ plain: true }))
+      .map((topic) => ({
+        ...topic,
+        content: truncateString(convert(topic.content), 130),
+      })),
+    categories,
+  };
   return serverResponse(res, 200, "Success", searched);
 };
 export const sendContactUs = async (req, res) => {
