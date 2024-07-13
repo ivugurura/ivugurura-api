@@ -88,10 +88,9 @@ app.get("/*", (req, res) => {
  * Configure socket
  */
 appSocket(app);
-
 /**
  * Backup database
  */
-
 dbBackup();
+
 export default app;
