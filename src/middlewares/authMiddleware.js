@@ -11,6 +11,7 @@ import { Topic } from "../models";
 const topicDb = new QueryHelper(Topic);
 export const isAuthenticated = async (req, res, next) => {
   const user = await authenticatedUser(req);
+  req.user = user;
   if (user) return next();
 
   const lang = getLang(req);
@@ -21,6 +22,7 @@ export const isAuthenticated = async (req, res, next) => {
 export const isEditor = async (req, res, next) => {
   const user = await authenticatedUser(req);
   if (user && user.role === systemRoles.editor) {
+    req.user = user;
     return next();
   }
   const lang = getLang(req);
@@ -32,6 +34,7 @@ export const isEditor = async (req, res, next) => {
 export const isAdmin = async (req, res, next) => {
   const user = await authenticatedUser(req);
   if (user && user.role <= systemRoles.admin) {
+    req.user = user;
     return next();
   }
 
@@ -43,6 +46,7 @@ export const isAdmin = async (req, res, next) => {
 
 export const isAdminOrEditor = async (req, res, next) => {
   const user = await authenticatedUser(req);
+  req.user = user;
   if (user && user.role <= systemRoles.editor) return next();
   const lang = getLang(req);
   const message = translate[lang].notAdmin;
@@ -51,6 +55,7 @@ export const isAdminOrEditor = async (req, res, next) => {
 };
 export const isTheOwner = async (req, res, next) => {
   const user = await authenticatedUser(req);
+  req.user = user;
   const { topicId: id } = req.params;
   const topic = await topicDb.findOne({ id, userId: user.id });
   if (topic) return next();
@@ -61,6 +66,7 @@ export const isTheOwner = async (req, res, next) => {
 };
 export const isSuperAdmin = async (req, res, next) => {
   const user = await authenticatedUser(req);
+  req.user = user;
   if (user && user.email === process.env.ADMIN_EMAIL) return next();
   return serverResponse(res, 401, "You are not allowed to perform action");
 };
