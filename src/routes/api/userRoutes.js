@@ -8,6 +8,7 @@ import {
   getSystemUsers,
   updateUser,
   deleteUser,
+  getMyProfile,
 } from "../../controllers/userController";
 import {
   catchErrors,
@@ -17,6 +18,7 @@ import {
   isAdminOrEditor,
   isAdmin,
   canUserBeDeleted,
+  isAuthenticated,
 } from "../../middlewares";
 
 const userRoutes = Router();
@@ -39,6 +41,7 @@ userRoutes.delete(
   catchErrors(deleteUser)
 );
 userRoutes.get("/", isAdmin, catchErrors(getSystemUsers));
+userRoutes.get("/my-profile", isAuthenticated, catchErrors(getMyProfile));
 userRoutes.post("/login", isLoginInfoValid, catchErrors(userSignin));
 userRoutes.get("/dashboard", isAdminOrEditor, catchErrors(getDashboardCounts));
 userRoutes.get("/topics", isAdminOrEditor, catchErrors(getTopicsByPublish));

@@ -124,6 +124,10 @@ export const getSystemUsers = async (req, res) => {
   return serverResponse(res, 200, "Success", rows, count);
 };
 
+export const getMyProfile = async (req, res) => {
+  return serverResponse(res, 200, "Success", req.user);
+};
+
 export const deleteUser = async (req, res) => {
   const { userId: id } = req.params;
   await userDb.delete({ id });
