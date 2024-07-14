@@ -187,6 +187,30 @@ export const notifyMe = async (title = "", info = "") => {
   }
 };
 
+/**
+ *
+ * @param {*} error SequelizeError
+ */
+export const dbConnectFail = (error) => {
+  const isDev = process.env.NODE_ENV === "development";
+  const isProduction = process.env.NODE_ENV === "production";
+  if (isDev) {
+    console.log("DB_Error", error);
+    process.exit(1);
+  }
+  if (isProduction) {
+    notifyMe("Something wrong with db", error.stack)
+      .then(() => {
+        console.log("Notified");
+        process.exit(1);
+      })
+      .catch((err) => {
+        console.log("Not Notified", err.message);
+        process.exit(1);
+      });
+  }
+};
+
 export const axiosYouTube = axios.create({
   baseURL: "https://www.googleapis.com/youtube/v3",
   params: {

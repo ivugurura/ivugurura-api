@@ -14,7 +14,7 @@ import { security } from "./config/security";
 import { appSocket } from "./config/socketIo";
 import { session } from "./config/session";
 import { dbBackup } from "./crons";
-import { notifyMe } from "./helpers";
+import { dbConnectFail, notifyMe } from "./helpers";
 
 dotenv.config();
 
@@ -31,25 +31,8 @@ security(app);
 sequelize
   .authenticate()
   .then(() => console.log("Database connected"))
-  .catch((error) => {
-    const isDev = process.env.NODE_ENV === "development";
-    const isProduction = process.env.NODE_ENV === "production";
-    if (isDev) {
-      console.log("DB_Error", error);
-      process.exit(1);
-    }
-    if (isProduction) {
-      notifyMe("Something wrong with db", error.stack)
-        .then(() => {
-          console.log("Notified");
-          process.exit(1);
-        })
-        .catch((err) => {
-          console.log("Not Notified", err.message);
-          process.exit(1);
-        });
-    }
-  });
+  .catch(dbConnectFail);
+
 app.use(compression());
 app.use(
   express.urlencoded({
