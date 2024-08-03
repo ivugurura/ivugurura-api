@@ -134,7 +134,7 @@ export const getYoutubeVideos = async (req, res) => {
     })
     .catch((error) => {
       // don't throw an error get
-      console.log({ error });
+      console.log({ error: error.data });
 
       return serverResponse(res, 200, "Success", {
         items: [],
