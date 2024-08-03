@@ -132,8 +132,10 @@ export const getYoutubeVideos = async (req, res) => {
     .then(({ data }) => {
       return serverResponse(res, 200, "Success", data);
     })
-    .catch(() => {
+    .catch((error) => {
       // don't throw an error get
+      console.log({ error });
+
       return serverResponse(res, 200, "Success", {
         items: [],
         nextPageToken: "",
