@@ -6,10 +6,12 @@ import {
   generatJWT,
   hashPassword,
   truncateString,
+  getLang,
 } from "../helpers";
 import { Topic, Media, User, Sequelize, Commentary } from "../models";
 import { ConstantHelper } from "../helpers/ConstantHelper";
 import { convert } from "html-to-text";
+import { translate } from "../locales";
 
 const constants = new ConstantHelper();
 const dbMedia = new QueryHelper(Media);
@@ -40,6 +42,7 @@ export const logoutUser = (req, res, next) => {
 };
 
 export const getDashboardCounts = async (req, res) => {
+  const lang = getLang(req);
   const { languageId } = req.body;
   let counts = {};
   const songs = await dbMedia.count({ type: "audio" });
@@ -48,7 +51,14 @@ export const getDashboardCounts = async (req, res) => {
   const commentaries = await commentDb.count({});
   const published = await dbTopic.count({ languageId, isPublished: true });
   const unPublished = await dbTopic.count({ languageId, isPublished: false });
-  counts = { songs, videos, published, unPublished, users, commentaries };
+  counts = {
+    [translate[lang].songs]: songs,
+    [translate[lang].videos]: videos,
+    [translate[lang].published]: published,
+    [translate[lang].unPublished]: unPublished,
+    [translate[lang].users]: users,
+    [translate[lang].commentaries]: commentaries,
+  };
   return serverResponse(res, 200, "Success", counts);
 };
 
