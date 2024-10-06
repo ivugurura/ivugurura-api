@@ -11,7 +11,7 @@ export const kn = {
   songs: "indirimbo",
   videos: "amavidewo",
   published: "published",
-  unpublished: "unpublished",
+  unPublished: "unpublished",
   users: "abakozi",
   commentaries: "ibitekerezo",
 };

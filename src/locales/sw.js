@@ -11,7 +11,7 @@ export const sw = {
   songs: "nyimbo",
   videos: "video",
   published: "iliyochapishwa",
-  unpublished: "haijachapishwa",
+  unPublished: "haijachapishwa",
   users: "watumiaji",
   commentaries: "maoni",
 };

@@ -45,8 +45,8 @@ export const getDashboardCounts = async (req, res) => {
   const lang = getLang(req);
   const { languageId } = req.body;
   let counts = {};
-  const songs = await dbMedia.count({ type: "audio" });
-  const videos = await dbMedia.count({ type: "video" });
+  const songs = await dbMedia.count({ languageId, type: "audio" });
+  const videos = await dbMedia.count({ languageId, type: "video" });
   const users = await userDb.count({ role: { [Op.ne]: "1" } });
   const commentaries = await commentDb.count({});
   const published = await dbTopic.count({ languageId, isPublished: true });

@@ -11,7 +11,7 @@ export const fr = {
   songs: "songs",
   videos: "videos",
   published: "published",
-  unpublished: "unpublished",
+  unPublished: "unpublished",
   users: "users",
   commentaries: "commentaries",
 };
