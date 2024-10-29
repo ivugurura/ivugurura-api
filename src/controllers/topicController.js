@@ -31,10 +31,13 @@ export const getAllTopics = async (req, res) => {
   const { languageId } = req.body;
   const { category, truncate = 20, canTruncate = "no" } = req.query;
   const { offset, limit } = getPaginator(req.query);
-  let order = [["title", "ASC"]];
+  let order = [
+    ["createdAt", "DESC"],
+    ["title", "ASC"],
+  ];
   let conditions = { languageId, isPublished: true };
   if (category === "carsoul") {
-    order = [["createdAt", "ASC"]];
+    order = [["createdAt", "DESC"]];
   }
   if (category !== "" && !isNaN(category)) {
     conditions = { ...conditions, categoryId: category };
