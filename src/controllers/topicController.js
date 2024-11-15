@@ -78,8 +78,8 @@ export const getHomeContents = async (req, res) => {
   let recents = await dbHelper.findAll(
     conditions,
     constHelper.topicIncludes(true),
-    null,
-    null,
+    undefined,
+    undefined,
     offset,
     limit
   );

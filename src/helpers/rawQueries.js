@@ -25,7 +25,7 @@ export const topicViewsQuery = (languageId, limit = 4) => {
       FROM topic_views tv2 GROUP BY tv2."topicId"
     ) AS t_v ON t.id = t_v."topicId"
     WHERE t."languageId"=${languageId} AND t."isPublished"=true
-    ORDER BY t_v.topic_views DESC
+    ORDER BY t_v.topic_views ASC
     LIMIT ${limit};
   `;
 };
