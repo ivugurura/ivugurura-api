@@ -96,15 +96,23 @@ export const getHomeContents = async (req, res) => {
   ]);
   recents = recents
     .map((x) => x.get({ plain: true }))
-    .map((topic) => ({
-      ...topic,
-      description: truncateString(convert(topic.content), 50),
-      views: topic.views.length,
-    }));
-  mostReads = mostReads.map((mr) => ({
-    ...mr,
-    description: truncateString(convert(mr.content), 50),
-  }));
+    .map((topic) => {
+      const trancated = truncateString(convert(mr.content), 70);
+      return {
+        ...topic,
+        content: trancated,
+        description: trancated,
+        views: topic.views.length,
+      };
+    });
+  mostReads = mostReads.map((mr) => {
+    const trancated = truncateString(convert(mr.content), 70);
+    return {
+      ...mr,
+      content: trancated,
+      description: trancated,
+    };
+  });
   const data = { recents, categories, mostReads };
   return serverResponse(res, 200, "Success", data);
 };
@@ -120,17 +128,27 @@ export const getOneTopic = async (req, res) => {
   if (topic.languageId !== languageId) {
     return serverResponse(res, 400, "The topic is not matching the language");
   }
+  const trancated = truncateString(convert(topic.content), 70);
 
   topic = JSON.parse(JSON.stringify(topic));
-  const related = await dbHelper.findAll(
-    { categoryId: topic.categoryId, [Op.not]: { id: id } },
-    null,
-    [["title", "ASC"]],
-    null,
-    0,
-    10
-  );
-  const views = await viewDbHelper.count({ topicId: id });
+  topic.description = trancated;
+  let [related, views] = await Promise.all([
+    dbHelper.findAll(
+      { categoryId: topic.categoryId, [Op.not]: { id: id } },
+      undefined,
+      [["title", "ASC"]],
+      undefined,
+      0,
+      10
+    ),
+    viewDbHelper.count({ topicId: id }),
+  ]);
+  related = related
+    .map((x) => x.get({ plain: true }))
+    .map((topic) => {
+      const trancated = truncateString(convert(mr.content), 70);
+      return { ...topic, content: trancated, description: trancated };
+    });
   const category = { ...topic.category, relatedTopics: related };
   topic = { ...topic, category, views };
   return serverResponse(res, 200, "Success", topic);
