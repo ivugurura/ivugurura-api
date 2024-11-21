@@ -75,28 +75,36 @@ export const getHomeContents = async (req, res) => {
   let conditions = { languageId, isPublished: true };
   const offset = 0;
   const limit = 4;
-  let recents = await dbHelper.findAll(
-    conditions,
-    constHelper.topicIncludes(true),
-    undefined,
-    undefined,
-    offset,
-    limit
-  );
+
+  let [recents, categories, mostReads] = await Promise.all([
+    dbHelper.findAll(
+      conditions,
+      constHelper.topicIncludes(true),
+      undefined,
+      undefined,
+      offset,
+      limit
+    ),
+    sequelize.query(categoriesTopicQuery(languageId), {
+      type: sequelize.QueryTypes.SELECT,
+      logging: false,
+    }),
+    sequelize.query(topicViewsQuery(languageId), {
+      type: sequelize.QueryTypes.SELECT,
+      logging: false,
+    }),
+  ]);
   recents = recents
     .map((x) => x.get({ plain: true }))
     .map((topic) => ({
       ...topic,
+      description: truncateString(convert(topic.content), 50),
       views: topic.views.length,
     }));
-  const categories = await sequelize.query(categoriesTopicQuery(languageId), {
-    type: sequelize.QueryTypes.SELECT,
-    logging: false,
-  });
-  const mostReads = await sequelize.query(topicViewsQuery(languageId), {
-    type: sequelize.QueryTypes.SELECT,
-    logging: false,
-  });
+  mostReads = mostReads.map((mr) => ({
+    ...mr,
+    description: truncateString(convert(mr.content), 50),
+  }));
   const data = { recents, categories, mostReads };
   return serverResponse(res, 200, "Success", data);
 };
