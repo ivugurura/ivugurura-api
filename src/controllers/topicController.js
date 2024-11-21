@@ -96,22 +96,18 @@ export const getHomeContents = async (req, res) => {
   ]);
   recents = recents
     .map((x) => x.get({ plain: true }))
-    .map((topic) => {
-      const trancated = truncateString(convert(mr.content), 70);
+    .map((rec) => {
+      const trancated = truncateString(convert(rec.content), 70);
       return {
-        ...topic,
+        ...rec,
         content: trancated,
         description: trancated,
-        views: topic.views.length,
+        views: rec.views.length,
       };
     });
   mostReads = mostReads.map((mr) => {
     const trancated = truncateString(convert(mr.content), 70);
-    return {
-      ...mr,
-      content: trancated,
-      description: trancated,
-    };
+    return { ...mr, content: trancated, description: trancated };
   });
   const data = { recents, categories, mostReads };
   return serverResponse(res, 200, "Success", data);
@@ -145,9 +141,9 @@ export const getOneTopic = async (req, res) => {
   ]);
   related = related
     .map((x) => x.get({ plain: true }))
-    .map((topic) => {
-      const trancated = truncateString(convert(mr.content), 70);
-      return { ...topic, content: trancated, description: trancated };
+    .map((rel) => {
+      const trancated = truncateString(convert(rel.content), 70);
+      return { ...rel, content: trancated, description: trancated };
     });
   const category = { ...topic.category, relatedTopics: related };
   topic = { ...topic, category, views };
