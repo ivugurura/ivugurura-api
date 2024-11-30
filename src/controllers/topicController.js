@@ -246,3 +246,11 @@ export const publishComment = async (req, res) => {
   await dbCommentHelper.update({ isPublished: !isPublished }, { id });
   return serverResponse(res, 200, "Published successfully");
 };
+
+export const deleteComments = async (req, res) => {
+  const { commentIds } = req.body;
+
+  await dbCommentHelper.delete({ id: commentIds });
+
+  return serverResponse(res, 200, "Successfully deleted");
+};

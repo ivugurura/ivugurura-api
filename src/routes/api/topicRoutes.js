@@ -22,6 +22,7 @@ import {
   getTopicComments,
   getAllCommentaries,
   publishComment,
+  deleteComments,
 } from "../../controllers/topicController";
 
 const topicRoutes = Router();
@@ -52,6 +53,7 @@ topicRoutes.delete(
   catchErrors(isTheOwner),
   catchErrors(deleteTopic)
 );
+topicRoutes.delete("/comments", isAdmin, catchErrors(deleteComments));
 topicRoutes.post(
   "/:topicIdOrSlug/comments",
   isCommentValid,
