@@ -1,7 +1,7 @@
-'use strict';
+"use strict";
 module.exports = (sequelize, DataTypes) => {
   const Commentary = sequelize.define(
-    'Commentary',
+    "Commentary",
     {
       content: {
         type: DataTypes.TEXT,
@@ -12,12 +12,20 @@ module.exports = (sequelize, DataTypes) => {
       email: DataTypes.STRING,
       website: DataTypes.STRING,
     },
-    { tableName: 'commentaries' }
+    { tableName: "commentaries" }
   );
   Commentary.associate = function (models) {
     Commentary.belongsTo(models.Topic, {
-      as: 'topic',
-      foreignKey: 'topicId',
+      as: "topic",
+      foreignKey: "topicId",
+    });
+    Commentary.belongsTo(models.Commentary, {
+      as: "parent",
+      foreignKey: "parentId",
+    });
+    Commentary.hasMany(models.Commentary, {
+      as: "replies",
+      foreignKey: "parentId",
     });
   };
   return Commentary;
