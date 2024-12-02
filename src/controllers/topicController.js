@@ -198,7 +198,7 @@ export const getTopicComments = async (req, res) => {
   const { topicId } = req.params;
   const attributes = ["names", "content", "createdAt"];
   const comments = await dbCommentHelper.findAll(
-    { topicId, isPublished: true },
+    { topicId, isPublished: true, parentId: null },
     null,
     null,
     attributes
@@ -222,6 +222,7 @@ export const getAllCommentaries = async (req, res) => {
     ["content", "ASC"],
   ];
   const { count, rows } = await dbCommentHelper.findAndCountAll({
+    where: { parentId: null },
     include: constHelper.commentIncludes({
       where: { languageId: req.body.languageId },
     }),
