@@ -255,3 +255,21 @@ export const deleteComments = async (req, res) => {
 
   return serverResponse(res, 200, "Successfully deleted");
 };
+
+export const replyToComment = async (req, res) => {
+  const { content, replyType } = req.body;
+  const { commentId: id, topicId } = req.params;
+
+  const newCommentBody = { content, topicId, parentId: id };
+  if (replyType === "public") {
+    await Promise.all([
+      dbCommentHelper.create(newCommentBody),
+      dbCommentHelper.update({ isPublished: true }, { id }),
+    ]);
+  } else {
+    const comment = await dbCommentHelper.findOne({ id });
+    console.log("//Build comment email", comment);
+  }
+
+  return serverResponse(res, 200, "Success");
+};
