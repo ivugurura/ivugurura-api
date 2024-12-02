@@ -124,6 +124,13 @@ export class ConstantHelper {
       languageId: Joi.number().required(),
     };
   }
+  commentReplyKeys() {
+    return {
+      replyType: Joi.string().valid("private", "public").required(),
+      content: Joi.string().required(),
+      languageId: Joi.number().required(),
+    };
+  }
   albumIncludes() {
     return [
       {
@@ -261,7 +268,7 @@ export class ConstantHelper {
       {
         model: Topic,
         as: "topic",
-        attributes: ["title", "description"],
+        attributes: ["title", "slug"],
         ...options,
       },
     ];
