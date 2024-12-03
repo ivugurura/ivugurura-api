@@ -238,6 +238,24 @@ export class ConstantHelper {
         ]
       : [];
   }
+  commentAllIncludes(options) {
+    return [
+      {
+        model: Topic,
+        as: "topic",
+        attributes: ["title", "slug"],
+        ...options,
+      },
+    ];
+  }
+  commentIncludes() {
+    return [
+      {
+        model: Commentary,
+        as: "replies",
+      },
+    ];
+  }
   topicIncludes(toIncludeDisplay = false, conditions = {}) {
     return [
       ...this.identifierIncludes(),
@@ -262,15 +280,5 @@ export class ConstantHelper {
       languageId: Joi.number().required(),
       website: Joi.string().allow(""),
     };
-  }
-  commentIncludes(options) {
-    return [
-      {
-        model: Topic,
-        as: "topic",
-        attributes: ["title", "slug"],
-        ...options,
-      },
-    ];
   }
 }
