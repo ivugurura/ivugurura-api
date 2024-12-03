@@ -9,10 +9,12 @@ import {
   mailFormatter,
   sendEmail,
   truncateString,
+  replyTemplate,
 } from "../helpers";
 import { Topic, TopicView, Commentary, sequelize, Sequelize } from "../models";
 import { ConstantHelper } from "../helpers/ConstantHelper";
 import { categoriesTopicQuery, topicViewsQuery } from "../helpers/rawQueries";
+import { translate } from "../locales";
 
 const dbHelper = new QueryHelper(Topic);
 const dbCommentHelper = new QueryHelper(Commentary);
@@ -199,7 +201,7 @@ export const getTopicComments = async (req, res) => {
   const attributes = ["names", "content", "createdAt"];
   const comments = await dbCommentHelper.findAll(
     { topicId, isPublished: true, parentId: null },
-    null,
+    constHelper.commentIncludes(),
     null,
     attributes
   );
@@ -223,7 +225,7 @@ export const getAllCommentaries = async (req, res) => {
   ];
   const { count, rows } = await dbCommentHelper.findAndCountAll({
     where: { parentId: null },
-    include: constHelper.commentIncludes({
+    include: constHelper.commentAllIncludes({
       where: { languageId: req.body.languageId },
     }),
     order,
@@ -267,8 +269,23 @@ export const replyToComment = async (req, res) => {
       dbCommentHelper.update({ isPublished: true }, { id }),
     ]);
   } else {
-    const comment = await dbCommentHelper.findOne({ id });
-    console.log("//Build comment email", comment);
+    const comment = await dbCommentHelper.findOne(
+      { id },
+      constHelper.commentAllIncludes()
+    );
+    const lang = getLang(req);
+    const emailData = {
+      appName: translate[lang].appName,
+      slug: comment.topic.slug,
+      header: `${translate[lang].replyTitle}: ${comment.topic.title}`,
+      commentor: comment.names,
+      commentBody: comment.content,
+      rrv: translate[lang].logo,
+      commentReply: content,
+      action: translate[lang].readyAgain,
+    };
+    const emailContent = replyTemplate(emailData, lang);
+    sendEmail(subject, emailContent, process.env.CONTACT_EMAIL);
   }
 
   return serverResponse(res, 200, "Success");
