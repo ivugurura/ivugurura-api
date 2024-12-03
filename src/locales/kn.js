@@ -1,4 +1,5 @@
 export const kn = {
+  logo: "Ubugorozi",
   appName: "Ijwi rw ubugorozi",
   welcomeMesg: "Murakaza neza kw ijwi ry ubugorozi",
   error404: "Ibyo mushaka ntibibashije kuboneka",
@@ -14,4 +15,6 @@ export const kn = {
   unPublished: "unpublished",
   users: "abakozi",
   commentaries: "ibitekerezo",
+  replyTitle: "Hari comment ku gitekerezo mwatanze ku kigisho cyitwa",
+  readyAgain: "Kanda kuri iyi link wongerere wiyibutse",
 };
