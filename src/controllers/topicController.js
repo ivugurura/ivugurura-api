@@ -139,7 +139,7 @@ export const getOneTopic = async (req, res) => {
       0,
       10
     ),
-    viewDbHelper.count({ topicId: id }),
+    viewDbHelper.count({ where: { topicId: id } }),
   ]);
   related = related
     .map((x) => x.get({ plain: true }))

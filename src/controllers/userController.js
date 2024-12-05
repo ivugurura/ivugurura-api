@@ -45,12 +45,20 @@ export const getDashboardCounts = async (req, res) => {
   const lang = getLang(req);
   const { languageId } = req.body;
   let counts = {};
-  const songs = await dbMedia.count({ languageId, type: "audio" });
-  const videos = await dbMedia.count({ languageId, type: "video" });
-  const users = await userDb.count({ role: { [Op.ne]: "1" } });
-  const commentaries = await commentDb.count({});
-  const published = await dbTopic.count({ languageId, isPublished: true });
-  const unPublished = await dbTopic.count({ languageId, isPublished: false });
+  const songs = await dbMedia.count({ where: { languageId, type: "audio" } });
+  const videos = await dbMedia.count({ where: { languageId, type: "video" } });
+  const users = await userDb.count({ where: { role: { [Op.ne]: "1" } } });
+  const commentaries = await commentDb.count({
+    include: constants.commentAllIncludes({
+      where: { languageId: req.body.languageId },
+    }),
+  });
+  const published = await dbTopic.count({
+    where: { languageId, isPublished: true },
+  });
+  const unPublished = await dbTopic.count({
+    where: { languageId, isPublished: false },
+  });
   counts = {
     [translate[lang].songs]: songs,
     [translate[lang].videos]: videos,
