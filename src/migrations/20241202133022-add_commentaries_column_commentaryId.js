@@ -13,12 +13,17 @@ module.exports = {
           as: "parent",
         },
       }),
+      queryInterface.addColumn("commentaries", "privateReply", {
+        type: Sequelize.TEXT,
+        allowNull: true,
+      }),
     ]);
   },
 
   down: (queryInterface, Sequelize) => {
     return Promise.all([
       queryInterface.removeColumn("commentaries", "parentId"),
+      queryInterface.removeColumn("commentaries", "privateReply"),
     ]);
   },
 };

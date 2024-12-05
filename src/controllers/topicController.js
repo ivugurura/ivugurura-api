@@ -10,6 +10,7 @@ import {
   sendEmail,
   truncateString,
   replyTemplate,
+  getLang,
 } from "../helpers";
 import { Topic, TopicView, Commentary, sequelize, Sequelize } from "../models";
 import { ConstantHelper } from "../helpers/ConstantHelper";
@@ -216,6 +217,7 @@ export const getAllCommentaries = async (req, res) => {
     "email",
     "website",
     "content",
+    "privateReply",
     "isPublished",
     "createdAt",
   ];
@@ -263,21 +265,23 @@ export const replyToComment = async (req, res) => {
   const { commentId: id, topicId } = req.params;
 
   const newCommentBody = { content, topicId, parentId: id };
+  const comment = await dbCommentHelper.findOne(
+    { id },
+    constHelper.commentAllIncludes()
+  );
   if (replyType === "public") {
     await Promise.all([
       dbCommentHelper.create(newCommentBody),
       dbCommentHelper.update({ isPublished: true }, { id }),
     ]);
   } else {
-    const comment = await dbCommentHelper.findOne(
-      { id },
-      constHelper.commentAllIncludes()
-    );
     const lang = getLang(req);
+    let subject = `${translate[lang].replyTitle}: ${comment.topic.title}`;
     const emailData = {
       appName: translate[lang].appName,
+      title: comment.topic.title,
       slug: comment.topic.slug,
-      header: `${translate[lang].replyTitle}: ${comment.topic.title}`,
+      header: `${subject}: "${comment.topic.title}"`,
       commentor: comment.names,
       commentBody: comment.content,
       rrv: translate[lang].logo,
@@ -285,7 +289,11 @@ export const replyToComment = async (req, res) => {
       action: translate[lang].readyAgain,
     };
     const emailContent = replyTemplate(emailData, lang);
-    sendEmail(subject, emailContent, process.env.CONTACT_EMAIL);
+    const newContent = [comment.privateReply, content]
+      .filter(Boolean)
+      .join("~");
+    await dbCommentHelper.update({ privateReply: newContent }, { id });
+    await sendEmail(subject, emailContent, comment.email);
   }
 
   return serverResponse(res, 200, "Success");

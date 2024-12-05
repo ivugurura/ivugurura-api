@@ -11,6 +11,7 @@ module.exports = (sequelize, DataTypes) => {
       names: DataTypes.STRING,
       email: DataTypes.STRING,
       website: DataTypes.STRING,
+      privateReply: DataTypes.TEXT,
     },
     { tableName: "commentaries" }
   );
