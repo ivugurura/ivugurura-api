@@ -11,6 +11,7 @@ import {
   isExistingTopicValid,
   isCommentValid,
   doesCommentExist,
+  isCommentReplyValidated,
 } from "../../middlewares/topicMiddleware";
 import {
   addNewTopic,
@@ -22,6 +23,8 @@ import {
   getTopicComments,
   getAllCommentaries,
   publishComment,
+  deleteComments,
+  replyToComment,
 } from "../../controllers/topicController";
 
 const topicRoutes = Router();
@@ -45,6 +48,7 @@ topicRoutes.get(
   catchErrors(doesTopicExist),
   catchErrors(getOneTopic)
 );
+topicRoutes.delete("/comments", isAdmin, catchErrors(deleteComments));
 topicRoutes.delete(
   "/:topicIdOrSlug",
   isAdminOrEditor,
@@ -62,6 +66,13 @@ topicRoutes.get(
   "/:topicIdOrSlug/comments",
   catchErrors(doesTopicExist),
   catchErrors(getTopicComments)
+);
+topicRoutes.post(
+  "/:topicIdOrSlug/comments/:commentId",
+  isCommentReplyValidated,
+  catchErrors(doesTopicExist),
+  catchErrors(doesCommentExist),
+  catchErrors(replyToComment)
 );
 topicRoutes.get(
   "/comments/all",

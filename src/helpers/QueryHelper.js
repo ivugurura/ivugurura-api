@@ -44,8 +44,15 @@ export class QueryHelper {
       ...queryOptions,
     });
   }
-  async count(whereCondition = {}) {
-    return this.model.count({ where: whereCondition, logging: false });
+  async count(options = {}) {
+    const countOption = {
+      logging: false,
+      ...options,
+      limit: undefined,
+      offset: undefined,
+    };
+    const allRows = await this.model.findAll(countOption);
+    return allRows.length;
   }
   async findAndCountAll(options = {}) {
     const defaultOptions = {
@@ -57,10 +64,8 @@ export class QueryHelper {
       ...defaultOptions,
       ...options,
     });
-    const count = await this.model.count({
-      ...defaultOptions,
-      where: options.where,
-    });
+
+    const count = await this.count(options);
     return { count, rows };
   }
   async create(data) {

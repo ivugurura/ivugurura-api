@@ -1,4 +1,5 @@
 export const en = {
+  logo: "Reform",
   appName: "Reformation voice",
   welcomeMesg: "Welcome to Reformation voice",
   error404: "It is not found",
@@ -14,4 +15,6 @@ export const en = {
   unPublished: "unPublished",
   users: "users",
   commentaries: "commentaries",
+  replyTitle: "You got a reply to the comment you made on the topic called",
+  readyAgain: "Click this link to read the topic again",
 };

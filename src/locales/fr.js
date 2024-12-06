@@ -1,4 +1,5 @@
 export const fr = {
+  logo: "La Réforme",
   appName: "Voix de la Réforme",
   welcomeMesg: "Bienvenue sur la voix de la Réforme",
   error404: "On ne le trouve pas",
@@ -15,4 +16,7 @@ export const fr = {
   unPublished: "inédites",
   users: "utilisateurs",
   commentaries: "commentaires",
+  replyTitle:
+    "Vous avez reçu une réponse au commentaire que vous avez fait sur le sujet",
+  readyAgain: "Cliquez sur ce lien pour relire le sujet",
 };

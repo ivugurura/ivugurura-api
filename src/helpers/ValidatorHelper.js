@@ -43,6 +43,9 @@ export class ValidatorHelper extends ConstantHelper {
       case "entity-display":
         validateKeys = Joi.object().keys(this.entityDisplayKeys());
         break;
+      case "commentReply":
+        validateKeys = Joi.object().keys(this.commentReplyKeys());
+        break;
       default:
         break;
     }

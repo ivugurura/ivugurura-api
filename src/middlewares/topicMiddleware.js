@@ -64,3 +64,9 @@ export const isEntityDisplayValid = (req, res, next) => {
   if (errorBody.error) return joiValidatorMsg(res, errorBody);
   return next();
 };
+export const isCommentReplyValidated = (req, res, next) => {
+  let validator = new ValidatorHelper(req.body);
+  const errorBody = validator.validateInput("commentReply");
+  if (errorBody.error) return joiValidatorMsg(res, errorBody);
+  return next();
+};

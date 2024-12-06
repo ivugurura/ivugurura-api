@@ -9,10 +9,13 @@ import {
   mailFormatter,
   sendEmail,
   truncateString,
+  replyTemplate,
+  getLang,
 } from "../helpers";
 import { Topic, TopicView, Commentary, sequelize, Sequelize } from "../models";
 import { ConstantHelper } from "../helpers/ConstantHelper";
 import { categoriesTopicQuery, topicViewsQuery } from "../helpers/rawQueries";
+import { translate } from "../locales";
 
 const dbHelper = new QueryHelper(Topic);
 const dbCommentHelper = new QueryHelper(Commentary);
@@ -137,7 +140,7 @@ export const getOneTopic = async (req, res) => {
       0,
       10
     ),
-    viewDbHelper.count({ topicId: id }),
+    viewDbHelper.count({ where: { topicId: id } }),
   ]);
   related = related
     .map((x) => x.get({ plain: true }))
@@ -198,8 +201,8 @@ export const getTopicComments = async (req, res) => {
   const { topicId } = req.params;
   const attributes = ["names", "content", "createdAt"];
   const comments = await dbCommentHelper.findAll(
-    { topicId, isPublished: true },
-    null,
+    { topicId, isPublished: true, parentId: null },
+    constHelper.commentIncludes(),
     null,
     attributes
   );
@@ -214,6 +217,7 @@ export const getAllCommentaries = async (req, res) => {
     "email",
     "website",
     "content",
+    "privateReply",
     "isPublished",
     "createdAt",
   ];
@@ -222,7 +226,8 @@ export const getAllCommentaries = async (req, res) => {
     ["content", "ASC"],
   ];
   const { count, rows } = await dbCommentHelper.findAndCountAll({
-    include: constHelper.commentIncludes({
+    where: { parentId: null },
+    include: constHelper.commentAllIncludes({
       where: { languageId: req.body.languageId },
     }),
     order,
@@ -245,4 +250,51 @@ export const publishComment = async (req, res) => {
 
   await dbCommentHelper.update({ isPublished: !isPublished }, { id });
   return serverResponse(res, 200, "Published successfully");
+};
+
+export const deleteComments = async (req, res) => {
+  const { commentIds } = req.body;
+
+  await dbCommentHelper.delete({ id: commentIds });
+
+  return serverResponse(res, 200, "Successfully deleted");
+};
+
+export const replyToComment = async (req, res) => {
+  const { content, replyType } = req.body;
+  const { commentId: id, topicId } = req.params;
+
+  const newCommentBody = { content, topicId, parentId: id };
+  const comment = await dbCommentHelper.findOne(
+    { id },
+    constHelper.commentAllIncludes()
+  );
+  if (replyType === "public") {
+    await Promise.all([
+      dbCommentHelper.create(newCommentBody),
+      dbCommentHelper.update({ isPublished: true }, { id }),
+    ]);
+  } else {
+    const lang = getLang(req);
+    let subject = `${translate[lang].replyTitle}: ${comment.topic.title}`;
+    const emailData = {
+      appName: translate[lang].appName,
+      title: comment.topic.title,
+      slug: comment.topic.slug,
+      header: `${subject}: "${comment.topic.title}"`,
+      commentor: comment.names,
+      commentBody: comment.content,
+      rrv: translate[lang].logo,
+      commentReply: content,
+      action: translate[lang].readyAgain,
+    };
+    const emailContent = replyTemplate(emailData, lang);
+    const newContent = [comment.privateReply, content]
+      .filter(Boolean)
+      .join("~");
+    await dbCommentHelper.update({ privateReply: newContent }, { id });
+    await sendEmail(subject, emailContent, comment.email);
+  }
+
+  return serverResponse(res, 200, "Success");
 };
