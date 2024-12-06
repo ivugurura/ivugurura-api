@@ -70,10 +70,10 @@ export const getDashboardCounts = async (req, res) => {
   return serverResponse(res, 200, "Success", counts);
 };
 
-export const getTopicsByPublish = async (req, res) => {
+export const getTopicsForAdmin = async (req, res) => {
   const { languageId } = req.body;
   const { truncate = 20, canTruncate = "no", search } = req.query;
-  const paginator = getPaginator(req.query);
+  const { limit, offset } = getPaginator(req.query);
   let whereConditions = { languageId };
   const order = [
     ["isPublished", "ASC"],
@@ -85,12 +85,17 @@ export const getTopicsByPublish = async (req, res) => {
       title: { [Op.iLike]: `%${search}%` },
     };
   }
-  let { count, rows } = await dbTopic.findAndCountAll({
-    where: whereConditions,
-    include: constants.topicIncludes(true),
-    order,
-    ...paginator,
-  });
+  let [rows, count] = await Promise.all([
+    dbTopic.findAll(
+      whereConditions,
+      constants.topicIncludes(true),
+      order,
+      undefined,
+      offset,
+      limit
+    ),
+    dbTopic.count({ where: whereConditions }),
+  ]);
   const topics = rows
     .map((x) => x.get({ plain: true }))
     .map((topic) => {

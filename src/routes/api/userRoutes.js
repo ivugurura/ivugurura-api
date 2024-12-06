@@ -2,7 +2,7 @@ import { Router } from "express";
 import {
   userSignin,
   getDashboardCounts,
-  getTopicsByPublish,
+  getTopicsForAdmin,
   logoutUser,
   createUser,
   getSystemUsers,
@@ -44,7 +44,7 @@ userRoutes.get("/", isAdmin, catchErrors(getSystemUsers));
 userRoutes.get("/my-profile", isAuthenticated, catchErrors(getMyProfile));
 userRoutes.post("/login", isLoginInfoValid, catchErrors(userSignin));
 userRoutes.get("/dashboard", isAdminOrEditor, catchErrors(getDashboardCounts));
-userRoutes.get("/topics", isAdminOrEditor, catchErrors(getTopicsByPublish));
+userRoutes.get("/topics", isAdminOrEditor, catchErrors(getTopicsForAdmin));
 userRoutes.use("/logout", logoutUser);
 
 export default userRoutes;
