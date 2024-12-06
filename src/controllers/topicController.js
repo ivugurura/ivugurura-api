@@ -276,7 +276,7 @@ export const replyToComment = async (req, res) => {
     ]);
   } else {
     const lang = getLang(req);
-    let subject = `${translate[lang].replyTitle}: ${comment.topic.title}`;
+    const subject = translate[lang].replyTitle;
     const emailData = {
       appName: translate[lang].appName,
       title: comment.topic.title,
