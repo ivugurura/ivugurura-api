@@ -51,8 +51,7 @@ export class QueryHelper {
       limit: undefined,
       offset: undefined,
     };
-    const allRows = await this.model.findAll(countOption);
-    return allRows.length;
+    return this.model.count(countOption);
   }
   async findAndCountAll(options = {}) {
     const defaultOptions = {
@@ -60,7 +59,7 @@ export class QueryHelper {
       logging: false,
       ...queryOptions,
     };
-    const rows = await this.model.findAll({
+    return this.model.findAndCountAll({
       ...defaultOptions,
       ...options,
     });
