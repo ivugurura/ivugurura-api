@@ -44,6 +44,13 @@ export class QueryHelper {
       ...queryOptions,
     });
   }
+  async countWithIncludes(options = { where: {}, include: {} }) {
+    const countOption = {
+      logging: false,
+      ...options,
+    };
+    return this.model.count(countOption);
+  }
   async count(options = {}) {
     const countOption = {
       logging: false,
@@ -63,9 +70,6 @@ export class QueryHelper {
       ...defaultOptions,
       ...options,
     });
-
-    const count = await this.count(options);
-    return { count, rows };
   }
   async create(data) {
     return this.model.create(data, { logging: false });

@@ -46,15 +46,19 @@ export const getAllTopics = async (req, res) => {
     conditions = { ...conditions, categoryId: category };
   }
 
-  const { count, rows } = await dbHelper.findAndCountAll({
-    where: conditions,
-    include: constHelper.topicIncludes(category === "carsoul", {
-      where: { type: "topic" },
-    }),
-    order,
-    offset,
-    limit,
-  });
+  const [rows, count] = await Promise.all([
+    dbHelper.findAll(
+      conditions,
+      constHelper.topicIncludes(category === "carsoul", {
+        where: { type: "topic" },
+      }),
+      order,
+      undefined,
+      offset,
+      limit
+    ),
+    dbHelper.count({ where: conditions }),
+  ]);
 
   const topics = rows
     .map((x) => x.get({ plain: true }))

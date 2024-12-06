@@ -123,13 +123,17 @@ export const getMedia = async (req, res) => {
   }
 
   const { offset, limit } = getPaginator(req.query);
-  let { count, rows } = await dbMediaHelper.findAndCountAll({
-    where: conditions,
-    include: constHelper.mediaIncludes(),
-    order: [["actionDate", "DESC"]],
-    offset,
-    limit,
-  });
+  let [rows, count] = await Promise.all([
+    dbMediaHelper.findAll({
+      where: conditions,
+      include: constHelper.mediaIncludes(),
+      order: [["actionDate", "DESC"]],
+      undefined,
+      offset,
+      limit,
+    }),
+    dbMediaHelper.count({ where: conditions }),
+  ]);
 
   const medias = rows
     .map((x) => x.get({ plain: true }))
