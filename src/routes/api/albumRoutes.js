@@ -86,6 +86,6 @@ albumRoutes.get(
   catchErrors(shareMedia)
 );
 albumRoutes.get("/counts/media", isAdmin, catchErrors(getMediaCounts));
-albumRoutes.get("/images/cover-images", catchErrors(getTopicsCoverImages));
+albumRoutes.get("/resources/:resourceType", catchErrors(getPublicResources));
 
 export default albumRoutes;

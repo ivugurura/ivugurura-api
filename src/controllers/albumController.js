@@ -202,9 +202,13 @@ export const shareMedia = async (req, res) => {
   return serverResponse(res, 200, "Success");
 };
 
-export const getTopicsCoverImages = async (_req, res) => {
-  const dir = process.env.IMAGES_ZONE;
-  let coverImages = readdirSync(dir)
+export const getPublicResources = async (req, res) => {
+  let dir = process.env.IMAGES_ZONE;
+  if (req.params.resourceType === "audio") {
+    dir = process.env.SONGS_ZONE;
+  }
+
+  const resources = readdirSync(dir)
     .map((fileName) => ({
       fileName,
       createdAt: statSync(`${dir}/${fileName}`).mtime.getTime(),
