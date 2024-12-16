@@ -13,7 +13,9 @@ import {
   deleteMedia,
   shareMedia,
   getMediaCounts,
-  getTopicsCoverImages,
+  getPublicResources,
+  getAllMedia,
+  bulkCreateMedia,
 } from "../../controllers/albumController";
 import { uploadSingleFile } from "../../helpers";
 import {
@@ -24,6 +26,7 @@ import {
   isFileTypeValid,
   isMediaValid,
   doesMediaExist,
+  isSuperAdmin,
 } from "../../middlewares";
 
 const albumRoutes = Router();
@@ -61,6 +64,7 @@ albumRoutes.delete(
   catchErrors(deleteFile)
 );
 albumRoutes.post("/add", isAdmin, isMediaValid, catchErrors(addNewMedia));
+albumRoutes.post("/sync", isSuperAdmin, catchErrors(bulkCreateMedia));
 albumRoutes.patch(
   "/media/:mediaId",
   isAdmin,
@@ -75,6 +79,7 @@ albumRoutes.delete(
   catchErrors(deleteMedia)
 );
 albumRoutes.get("/medias/:mediaType", catchErrors(getMedia));
+albumRoutes.get("/medias/all/:mediaType", catchErrors(getAllMedia));
 albumRoutes.get(
   "/download/:mediaId",
   catchErrors(doesMediaExist),

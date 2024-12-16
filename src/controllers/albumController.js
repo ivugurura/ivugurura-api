@@ -146,6 +146,34 @@ export const getMedia = async (req, res) => {
   return serverResponse(res, 200, "Success", medias, count);
 };
 
+export const getAllMedia = async (req, res) => {
+  const { mediaType } = req.params;
+  let conditions = { type: mediaType };
+
+  const { offset, limit } = getPaginator(req.query);
+  let [rows, count] = await Promise.all([
+    dbMediaHelper.findAll(
+      conditions,
+      constHelper.mediaIncludes(),
+      [["actionDate", "DESC"]],
+      undefined,
+      offset,
+      limit
+    ),
+    dbMediaHelper.count({ where: conditions }),
+  ]);
+
+  const medias = rows
+    .map((x) => x.get({ plain: true }))
+    .map((m) => ({
+      ...m,
+      downloads: m.downloads.length,
+      shares: m.shares.length,
+    }));
+
+  return serverResponse(res, 200, "Success", medias, count);
+};
+
 export const getMediaCounts = async (req, res) => {
   const downloads = await dbMediaDownloadHelper.count();
   const shares = await dbMediaShareHelper.count();
@@ -215,5 +243,21 @@ export const getPublicResources = async (req, res) => {
     }))
     .sort((a, b) => b.createdAt - a.createdAt);
 
-  return serverResponse(res, 200, "Success", coverImages);
+  return serverResponse(res, 200, "Success", resources);
+};
+
+export const bulkCreateMedia = async (req, res) => {
+  const result = { succeeded: 0, failed: 0 };
+  await Promise.all(
+    req.body.assets.map(async (asset) => {
+      if (asset.title && asset.languageId && asset.albumId) {
+        asset.slug = generateSlug(asset.title);
+        await dbMediaHelper.create(asset);
+        result.succeeded += 1;
+      } else {
+        result.failed += 1;
+      }
+    })
+  );
+  return serverResponse(res, 200, "Success", result);
 };
