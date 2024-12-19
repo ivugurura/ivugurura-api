@@ -253,7 +253,7 @@ export const getPublicResources = async (req, res) => {
 export const bulkCreateMedia = async (req, res) => {
   const result = { succeeded: 0, failed: 0 };
 
-  req.body.assets.map(async (asset) => {
+  for (let asset of req.body.assets) {
     if (asset.title && asset.languageId && asset.albumId) {
       asset.slug = generateSlug(asset.title);
       asset.title = ucFirst(asset.title);
@@ -265,6 +265,6 @@ export const bulkCreateMedia = async (req, res) => {
     } else {
       result.failed += 1;
     }
-  });
+  }
   return serverResponse(res, 200, "Success", result);
 };
