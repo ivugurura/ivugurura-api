@@ -7,6 +7,7 @@ import {
   uploadSingle,
   getPaginator,
   generateSlug,
+  ucFirst,
 } from "../helpers";
 import {
   Album,
