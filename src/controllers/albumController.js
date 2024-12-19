@@ -101,6 +101,7 @@ export const deleteFile = (req, res) => {
 export const addNewMedia = async (req, res) => {
   const { title } = req.body;
   req.body.slug = generateSlug(title);
+  req.body.title = ucFirst(title);
   const newMedia = await dbMediaHelper.create(req.body);
   return serverResponse(res, 201, "Success", newMedia);
 };
@@ -216,8 +217,10 @@ export const deleteMedia = async (req, res) => {
 
 export const updateMedia = async (req, res) => {
   const { mediaId } = req.params;
+  const { title } = req.body;
   if (req.body.title) {
-    req.body.slug = generateSlug(req.body.title);
+    req.body.title = ucFirst(title);
+    req.body.slug = generateSlug(title);
   }
   await dbMediaHelper.update(req.body, { id: mediaId });
   return serverResponse(res, 200, "Successfully updated");
@@ -248,16 +251,19 @@ export const getPublicResources = async (req, res) => {
 
 export const bulkCreateMedia = async (req, res) => {
   const result = { succeeded: 0, failed: 0 };
-  await Promise.all(
-    req.body.assets.map(async (asset) => {
-      if (asset.title && asset.languageId && asset.albumId) {
-        asset.slug = generateSlug(asset.title);
-        await dbMediaHelper.create(asset);
-        result.succeeded += 1;
-      } else {
-        result.failed += 1;
-      }
-    })
-  );
+
+  req.body.assets.map(async (asset) => {
+    if (asset.title && asset.languageId && asset.albumId) {
+      asset.slug = generateSlug(asset.title);
+      asset.title = ucFirst(asset.title);
+
+      const newMedia = await dbMediaHelper.create(asset);
+      console.log({ newMedia });
+
+      result.succeeded += 1;
+    } else {
+      result.failed += 1;
+    }
+  });
   return serverResponse(res, 200, "Success", result);
 };
