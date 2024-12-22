@@ -56,6 +56,7 @@ jobs:
             git pull origin develop
             yarn install --production=true
             echo "Restart the server"
+            export NODE_ENV=staging
             yarn migrate
             yarn build-stating
             pm2 restart 1
