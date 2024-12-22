@@ -7,7 +7,7 @@ const namespace = cls.createNamespace("Reformation");
 const Sequelize = require("sequelize");
 const basename = path.basename(__filename);
 const env = process.env.NODE_ENV || "develop";
-const config = require(__dirname + "/../config/config.js")[env];
+const config = require(__dirname + "/../config/db.js")[env];
 const db = {};
 
 Sequelize.useCLS(namespace);
