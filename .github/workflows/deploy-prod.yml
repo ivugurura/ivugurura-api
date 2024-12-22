@@ -5,7 +5,6 @@ on:
   # Triggers the workflow on push events but only for the develop branch
   push:
     branches:
-      - develop
       - main
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
@@ -53,20 +52,10 @@ jobs:
             ssh-add;
             ssh-add ${{ secrets.KEY_NAME }};
             git reset --hard
-            if [ "$GITHUB_REF" = "refs/heads/main" ]; then
-              git checkout main
-              git pull origin main
-            else
-              git checkout develop
-              git pull origin develop
-            fi
+            git checkout main
+            git pull origin main
             yarn install --production=true
             echo "Restart the server"
             yarn migrate
-            if [ "$GITHUB_REF" = "refs/heads/main" ]; then
-              yarn build
-              pm2 restart 0
-            else
-              yarn build-stating
-              pm2 restart 1
-            fi
+            yarn build
+            pm2 restart 0
