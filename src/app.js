@@ -64,7 +64,11 @@ app.use(handleErrors);
  * The frontend/cLient
  */
 app.get("/*", (req, res) => {
-  res.sendFile(path.resolve("build", "index.html"));
+  let buildDir = "build";
+  if (process.env.NODE_ENV === "staging") {
+    buildDir = "build-staging";
+  }
+  res.sendFile(path.resolve(buildDir, "index.html"));
 });
 /**
  * Configure socket
@@ -73,6 +77,8 @@ appSocket(app);
 /**
  * Backup database
  */
-dbBackup();
+if (process.env.NODE_ENV === "production") {
+  dbBackup();
+}
 
 export default app;
