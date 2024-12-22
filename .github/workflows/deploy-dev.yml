@@ -58,5 +58,5 @@ jobs:
             echo "Restart the server"
             export NODE_ENV=staging
             yarn migrate
-            yarn build-stating
+            yarn build-staging
             pm2 restart 1
