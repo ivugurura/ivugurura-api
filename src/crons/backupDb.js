@@ -3,18 +3,22 @@ import fs from "fs";
 import { Dropbox } from "dropbox";
 import path from "path";
 import { currentDate } from "../helpers";
+import cfg from "../config/db";
 
 export const backupDb = () => {
   // Dropbox configuration
   const DROPBOX_ACCESS_TOKEN = process.env.DROPBOX_TOKEN;
   const dropbox = new Dropbox({ accessToken: DROPBOX_ACCESS_TOKEN });
 
+  const env = process.env.NODE_ENV || "develop";
+  const dbConfig = cfg[env];
+
   // PostgreSQL configuration
-  const DB_NAME = process.env.DB_NAME;
-  const DB_USER = process.env.DB_USER;
-  const DB_PASSWORD = process.env.DB_PASSWORD;
-  const DB_HOST = process.env.DB_HOST;
-  const DB_PORT = process.env.DB_PORT;
+  const DB_NAME = dbConfig.database;
+  const DB_USER = dbConfig.username;
+  const DB_PASSWORD = dbConfig.password;
+  const DB_HOST = dbConfig.host;
+  const DB_PORT = dbConfig.port;
   const BACKUP_FOLDER = path.resolve(__dirname, process.env.BACKUP_ZONE);
 
   // Ensure backup folder exists
@@ -22,10 +26,8 @@ export const backupDb = () => {
     fs.mkdirSync(BACKUP_FOLDER, { recursive: true });
   }
 
-  const envType = process.env.NODE_ENV === "development" ? "dev" : "prod";
-
   // Generate the backup file name
-  const fileName = `${DB_NAME}_${envType}_${currentDate()}.sql`;
+  const fileName = `${DB_NAME}_${env}_${currentDate()}.sql`;
   const filePath = path.join(BACKUP_FOLDER, fileName);
 
   // Create the backup

@@ -6,7 +6,7 @@ const cls = require("cls-hooked");
 const namespace = cls.createNamespace("Reformation");
 const Sequelize = require("sequelize");
 const basename = path.basename(__filename);
-const env = process.env.NODE_ENV || "development";
+const env = process.env.NODE_ENV || "develop";
 const config = require(__dirname + "/../config/config.js")[env];
 const db = {};
 
