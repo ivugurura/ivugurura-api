@@ -10,15 +10,17 @@
   "scripts": {
     "_test": "NODE_ENV=test nyc mocha -r @babel/register --color --exit",
     "build": "yarn clean && babel ./src --out-dir dist",
+    "build-staging": "yarn clean && babel ./src --out-dir dist-staging",
     "clean": "rimraf dist",
     "compress": "tar zcvf build.tar.gz ./",
-    "dev": "NODE_ENV=development nodemon --exec babel-node src/app.js",
+    "dev": "NODE_ENV=develop nodemon --exec babel-node src/app.js",
     "test": "yarn _test \"tests/**/*.test.js\"",
     "migrate": "sequelize db:migrate",
     "migrate-down": "sequelize db:migrate:undo",
     "seed-up": "sequelize db:seed:all",
     "seed-down": "sequelize db:seed:undo:all",
     "start": "ulimit -c 0; NODE_ENV=production node dist/app.js",
+    "start-staging": "ulimit -c 0; NODE_ENV=staging node dist-staging/app.js",
     "un-compress": "tar zxvf build.tar.gz"
   },
   "repository": {

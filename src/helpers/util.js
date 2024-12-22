@@ -192,7 +192,7 @@ export const notifyMe = async (title = "", info = "") => {
  * @param {*} error SequelizeError
  */
 export const dbConnectFail = (error) => {
-  const isDev = process.env.NODE_ENV === "development";
+  const isDev = process.env.NODE_ENV === "develop";
   const isProduction = process.env.NODE_ENV === "production";
   if (isDev) {
     console.log("DB_Error", error);

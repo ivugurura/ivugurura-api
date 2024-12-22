@@ -2,8 +2,12 @@ import { Server } from "socket.io";
 // import http from 'http';
 import { ChatRoom, QueryHelper } from "../helpers";
 import { Message } from "../models";
+import cfg from "../config/envConfig";
 
-const port = process.env.PORT || 3000;
+const env = process.env.NODE_ENV || "develop";
+const envVars = cfg[env];
+
+const port = envVars.port;
 const chatRoom = new ChatRoom();
 const messageDb = new QueryHelper(Message);
 /**

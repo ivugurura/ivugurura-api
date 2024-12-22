@@ -4,7 +4,7 @@ import { Language } from "../models";
 import { translate } from "../locales";
 
 const dbHelper = new QueryHelper(Language);
-const isDev = process.env.NODE_ENV === "development";
+const isDev = process.env.NODE_ENV === "develop";
 export const handleErrors = (err, req, res, next) => {
   const lang = getLang(req);
   let message = translate[lang].error500;
@@ -14,11 +14,12 @@ export const handleErrors = (err, req, res, next) => {
   } else {
     const mesgContent = `
         <b>Device:</b> ${req.device.type}, <br />
-        <b>Route:</b> ${req.path}, method: ${req.method}, Language: ${lang} <br />
+        <b>Route:</b> ${req.path}, method: ${req.method}, 
+        Language: ${lang} <br />
         <b>body:</b> ${JSON.stringify(req.body)}, <br />
         <b>session:</b> ${JSON.stringify(req.session)}, <br />
         <b>IP:</b> ${req.ip}, host: ${req.headers.host} <hr />
-        <b>Stack:</b> ${err.stack}`
+        <b>Stack:</b> ${err.stack}`;
     notifyMe(err.message, mesgContent)
       .then(() => {
         console.log("NOTIFIER SENT");
