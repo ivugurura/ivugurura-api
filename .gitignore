@@ -111,3 +111,7 @@ public/
 # Remove production build directory client
 build/
 build-staging/
+
+# Zip files
+build-staging.tar.gz
+build.tar.gz
