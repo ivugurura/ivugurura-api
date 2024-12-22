@@ -68,6 +68,9 @@ app.get("/*", (req, res) => {
   if (process.env.NODE_ENV === "staging") {
     buildDir = "build-staging";
   }
+  console.log({ buildDir });
+  console.log("buildDir", process.env.NODE_ENV);
+
   res.sendFile(path.resolve(buildDir, "index.html"));
 });
 /**
