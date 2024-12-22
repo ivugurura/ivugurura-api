@@ -14,7 +14,7 @@ import { security } from "./config/security";
 import { appSocket } from "./config/socketIo";
 import { session } from "./config/session";
 import { dbBackup } from "./crons";
-import { dbConnectFail, notifyMe } from "./helpers";
+import { dbConnectFail } from "./helpers";
 
 dotenv.config();
 
