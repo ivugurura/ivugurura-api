@@ -54,8 +54,8 @@ jobs:
             git reset --hard
             git checkout main
             git pull origin main
-            yarn install --production=true
             echo "Restart the server"
+            yarn install --production=true
             export NODE_ENV=production
             yarn migrate
             yarn build
