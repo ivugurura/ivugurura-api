@@ -21,10 +21,10 @@ export const doesTopicExist = async (req, res, next) => {
     if (topic) {
       req.params.topicId = topic.id;
       req.body.originalTitle = topic.title || undefined;
+      console.log(req.body, req.params);
       return next();
     }
   }
-  console.log(req.body, req.params);
   return serverResponse(res, 404, "Topic does not exist");
 };
 export const isExistingTopicValid = (req, res, next) => {
