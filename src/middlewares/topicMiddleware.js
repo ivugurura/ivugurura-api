@@ -15,9 +15,10 @@ export const isNewTopicValidated = (req, res, next) => {
 
 export const doesTopicExist = async (req, res, next) => {
   const dbHelper = new QueryHelper(Topic);
-  if (req.params.topicIdOrSlug) {
-    const key = isNaN(req.params.topicIdOrSlug) ? "slug" : "id";
-    const topic = await dbHelper.findOne({ [key]: idOrSlug });
+  const { topicIdOrSlug } = req.params;
+  if (topicIdOrSlug) {
+    const key = isNaN(topicIdOrSlug) ? "slug" : "id";
+    const topic = await dbHelper.findOne({ [key]: topicIdOrSlug });
     if (topic) {
       req.params.topicId = topic.id;
       req.body.originalTitle = topic.title || undefined;
