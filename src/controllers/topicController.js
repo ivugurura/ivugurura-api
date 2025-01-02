@@ -273,6 +273,8 @@ export const replyToComment = async (req, res) => {
     { id },
     constHelper.commentAllIncludes()
   );
+  console.log(req.body, req.params, { newCommentBody });
+
   if (replyType === "public") {
     await Promise.all([
       dbCommentHelper.create(newCommentBody),
