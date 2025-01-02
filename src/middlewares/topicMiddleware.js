@@ -24,6 +24,7 @@ export const doesTopicExist = async (req, res, next) => {
       return next();
     }
   }
+  console.log(req.body, req.params);
   return serverResponse(res, 404, "Topic does not exist");
 };
 export const isExistingTopicValid = (req, res, next) => {
@@ -64,8 +65,6 @@ export const isEntityDisplayValid = (req, res, next) => {
   return next();
 };
 export const isCommentReplyValidated = (req, res, next) => {
-  console.log(req.body, req.params);
-
   let validator = new ValidatorHelper(req.body);
   const errorBody = validator.validateInput("commentReply");
   if (errorBody.error) return joiValidatorMsg(res, errorBody);
