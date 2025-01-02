@@ -274,7 +274,7 @@ export const replyToComment = async (req, res) => {
   );
 
   const newCommentBody = { content, topicId, parentId: id };
-  console.log(newCommentBody, req.body, req.params);
+  console.log(newCommentBody, req.body, req.params, comment.id);
 
   if (replyType === "public") {
     await Promise.all([
