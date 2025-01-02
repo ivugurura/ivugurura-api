@@ -33,6 +33,7 @@ sequelize
   .then(() => console.log("Database connected"))
   .catch(dbConnectFail);
 
+const buildDir = `build${process.env.NODE_ENV === "staging" ? "-staging" : ""}`;
 app.use(compression());
 app.use(
   express.urlencoded({
@@ -42,7 +43,7 @@ app.use(
   })
 );
 app.use(express.json({ limit: "100mb" }));
-app.use(express.static("build"));
+app.use(express.static(buildDir));
 app.use("/songs", express.static("public/songs"));
 app.use("/images", express.static("public/images"));
 /**
@@ -64,13 +65,6 @@ app.use(handleErrors);
  * The frontend/cLient
  */
 app.get("/*", (req, res) => {
-  let buildDir = "build";
-  if (process.env.NODE_ENV === "staging") {
-    buildDir = "build-staging";
-  }
-  console.log({ buildDir });
-  console.log("buildDir", process.env.NODE_ENV);
-
   res.sendFile(path.resolve(buildDir, "index.html"));
 });
 /**
