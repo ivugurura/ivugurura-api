@@ -277,18 +277,10 @@ export const replyToComment = async (req, res) => {
   console.log(newCommentBody, req.body, req.params);
 
   if (replyType === "public") {
-    dbCommentHelper
-      .create(newCommentBody)
-      .then((comm) => {
-        console.log({ comm });
-      })
-      .catch((err) => {
-        console.log({ err });
-        throw err;
-      }),
-      await Promise.all([
-        dbCommentHelper.update({ isPublished: true }, { id }),
-      ]);
+    await Promise.all([
+      dbCommentHelper.create(newCommentBody),
+      dbCommentHelper.update({ isPublished: true }, { id }),
+    ]);
   } else {
     const lang = getLang(req);
     const subject = translate[lang].replyTitle;

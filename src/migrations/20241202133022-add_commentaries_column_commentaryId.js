@@ -8,7 +8,7 @@ module.exports = {
         allowNull: true,
         onDelete: "CASCADE",
         references: {
-          model: "categories",
+          model: "commentaries",
           key: "id",
           as: "parent",
         },
