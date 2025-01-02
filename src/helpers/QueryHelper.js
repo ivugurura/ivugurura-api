@@ -72,7 +72,7 @@ export class QueryHelper {
     });
   }
   async create(data) {
-    return this.model.create(data, { logging: false });
+    return this.model.create(data, { logging: true });
   }
   async update(data, whereCondition = {}) {
     return this.model.update(data, { where: whereCondition, logging: false });
