@@ -268,12 +268,13 @@ export const replyToComment = async (req, res) => {
   const { content, replyType } = req.body;
   const { commentId: id, topicId } = req.params;
 
-  const newCommentBody = { content, topicId, parentId: id };
   const comment = await dbCommentHelper.findOne(
     { id },
     constHelper.commentAllIncludes()
   );
+
   if (replyType === "public") {
+    const newCommentBody = { content, topicId, parentId: id };
     await Promise.all([
       dbCommentHelper.create(newCommentBody),
       dbCommentHelper.update({ isPublished: true }, { id }),
