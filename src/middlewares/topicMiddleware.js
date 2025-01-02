@@ -22,7 +22,6 @@ export const doesTopicExist = async (req, res, next) => {
     if (topic) {
       req.params.topicId = topic.id;
       req.body.originalTitle = topic.title || undefined;
-      console.log(req.body, req.params);
       return next();
     }
   }
