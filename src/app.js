@@ -9,7 +9,7 @@ import { configurePassport } from "./config/passport";
 import { sequelize } from "./models";
 import routes from "./routes";
 import { handleErrors } from "./middlewares";
-import { corseOptions, security } from "./config/security";
+import { corseOptions, security, setHeaders } from "./config/security";
 import { appSocket } from "./config/socketIo";
 import { session } from "./config/session";
 import { dbBackup } from "./crons";
@@ -42,8 +42,18 @@ app.use(
 );
 app.use(express.json({ limit: "100mb" }));
 app.use(express.static(buildDir));
-app.use("/songs", express.static("public/songs"));
-app.use("/images", express.static("public/images"));
+app.use(
+  "/songs",
+  express.static("public/songs", {
+    setHeaders,
+  })
+);
+app.use(
+  "/images",
+  express.static("public/images", {
+    setHeaders,
+  })
+);
 /**
  * Initialize passport and session
  */

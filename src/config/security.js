@@ -1,5 +1,7 @@
 import helmet from "helmet";
-//Here you can spoof any back end
+import mime from "mime";
+
+// Here you can spoof any back end
 const SPOOFED_SERVER = "Phusion Passenger (mod_rails/mod_rack) 3.0.11";
 
 export const security = (app) => {
@@ -30,4 +32,11 @@ export const corseOptions = {
   methods: ["GET", "POST", "PUT", "PATCH", "DELETE"], // List allowed methods
   allowedHeaders: ["Content-Type", "Authorization"], // List allowed headers
   credentials: true, // If you want to allow cookies and credentials
+};
+
+export const setHeaders = (res, path) => {
+  const type = mime.getType(path); // Get MIME type based on file extension
+  if (type) {
+    res.set("Content-Type", type);
+  }
 };
