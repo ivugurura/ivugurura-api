@@ -1,5 +1,4 @@
 import express from "express";
-import dotenv from "dotenv";
 import path from "path";
 import cors from "cors";
 import passport from "passport";
@@ -15,8 +14,7 @@ import { appSocket } from "./config/socketIo";
 import { session } from "./config/session";
 import { dbBackup } from "./crons";
 import { dbConnectFail } from "./helpers";
-
-dotenv.config();
+import "dotenv/config";
 
 const app = express();
 
