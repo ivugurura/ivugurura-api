@@ -57,8 +57,6 @@ jobs:
             git checkout develop
             git pull origin develop
             echo "Restart the server"
-            node -v
-            nvm -v
             yarn install --production=true
             export NODE_ENV=staging
             yarn migrate
