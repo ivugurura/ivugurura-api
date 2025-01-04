@@ -1,5 +1,5 @@
 import helmet from "helmet";
-import mime from "mime";
+import { getMimeType } from "../helpers";
 
 // Here you can spoof any back end
 const SPOOFED_SERVER = "Phusion Passenger (mod_rails/mod_rack) 3.0.11";
@@ -35,7 +35,7 @@ export const corseOptions = {
 };
 
 export const setHeaders = (res, path) => {
-  const type = mime.getType(path); // Get MIME type based on file extension
+  const type = getMimeType(path); // Get MIME type based on file extension
   if (type) {
     res.set("Content-Type", type);
   }
