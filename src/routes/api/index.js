@@ -6,6 +6,7 @@ import albumRoutes from "./albumRoutes";
 import announceRoutes from "./announceRoutes";
 import manageRoutes from "./manageRoutes";
 import { getLang } from "../../helpers";
+import { translate } from "../../locales";
 
 const apiRoutes = Router();
 
