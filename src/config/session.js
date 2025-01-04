@@ -1,10 +1,9 @@
 import expressSession from "express-session";
-import connectRedis from "connect-redis";
+import { RedisStore } from "connect-redis";
 import { createClient } from "redis";
 import { ConstantHelper } from "../helpers/ConstantHelper";
 
 const constants = new ConstantHelper();
-const RedisStore = connectRedis(expressSession);
 const redisClient = createClient({ legacyMode: true });
 
 redisClient
