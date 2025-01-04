@@ -15,9 +15,7 @@ const routes = Router();
 routes.use(monitorDevActions);
 routes.get("/", (req, res) => {
   const lang = getLang(req);
-  res.status(200).json({
-    message: translate[lang].welcomeMesg,
-  });
+  res.status(200).json({ message: translate[lang].welcomeMesg });
 });
 routes.use("/v1", catchErrors(setLanguage), apiRoutes);
 routes.get("/v1/youtube", catchErrors(getYoutubeVideos));
