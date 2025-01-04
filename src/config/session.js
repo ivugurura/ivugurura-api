@@ -4,7 +4,7 @@ import { createClient } from "redis";
 import { ConstantHelper } from "../helpers/ConstantHelper";
 
 const constants = new ConstantHelper();
-const redisClient = createClient({ legacyMode: true });
+const redisClient = createClient();
 
 redisClient
   .connect()
