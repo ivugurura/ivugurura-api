@@ -7,7 +7,7 @@ chai.use(chaiAsPromise);
 export const expect = chai.expect;
 
 export const chatRoomUser = {
-  socketId: faker.datatype.uuid(),
-  userId: faker.datatype.uuid(),
+  socketId: faker.string.uuid(),
+  userId: faker.string.uuid(),
   name: "test-user",
 };
