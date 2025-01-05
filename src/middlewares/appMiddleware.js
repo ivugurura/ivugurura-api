@@ -39,7 +39,7 @@ export const monitorDevActions = (req, res, next) => {
   if (!existsSync("./public")) mkdirSync("./public");
   if (!existsSync(songsDir)) mkdirSync(songsDir);
   if (!existsSync(imagesDir)) mkdirSync(imagesDir);
-  if (isDev) {
+  if (process.env.NODE_ENV === "develop") {
     const user = req.isAuthenticated()
       ? `User: ${req.user.username}`
       : "UNKNOWN user";
