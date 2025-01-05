@@ -21,6 +21,8 @@ const allowedOrigins = [
 ];
 export const corseOptions = {
   origin: (origin, callback) => {
+    console.log({ origin });
+
     if (!origin || allowedOrigins.indexOf(origin) !== -1) {
       // Allow requests with no origin (like mobile apps or Postman)
       callback(null, true);
