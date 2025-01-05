@@ -36,7 +36,7 @@ export const corseOptions = {
 
 export const setHeaders = (res, path) => {
   const type = getMimeType(path); // Get MIME type based on file extension
-  if (type) {
-    res.set("Content-Type", type);
-  }
+  console.log({ type, path });
+
+  res.set("Content-Type", type);
 };
