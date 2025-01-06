@@ -22,24 +22,15 @@ const allowedOrigins = [
 ];
 export const corseOptions = {
   origin: (origin, callback) => {
-    // console.log({ origin });
-
     if (!origin || allowedOrigins.indexOf(origin) !== -1) {
       // Allow requests with no origin (like mobile apps or Postman)
-      callback(null, true);
+      return callback(null, true);
     } else {
       // Reject requests from other origins
-      callback(new Error("Not allowed by CORS"));
+      return callback(new Error("Not allowed by CORS"));
     }
   },
-  methods: ["GET", "POST", "PUT", "PATCH", "DELETE"], // List allowed methods
-  allowedHeaders: ["Content-Type", "Authorization"], // List allowed headers
-  credentials: true, // If you want to allow cookies and credentials
-};
-
-export const setHeaders = (res, path) => {
-  const type = getMimeType(path); // Get MIME type based on file extension
-  // console.log({ type, path });
-
-  res.set("Content-Type", type);
+  methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
+  allowedHeaders: ["Content-Type", "Authorization"],
+  credentials: true,
 };
