@@ -11,7 +11,8 @@ export const security = (app) => {
     .use(helmet.frameguard({ action: "deny" }))
     .use(helmet.xssFilter())
     .use(helmet.hidePoweredBy({ setTo: SPOOFED_SERVER }))
-    .use(helmet.dnsPrefetchControl({ allow: false }));
+    .use(helmet.dnsPrefetchControl({ allow: false }))
+    .use(helmet.crossOriginResourcePolicy({ policy: "cross-origin" }));
 };
 
 // Define allowed origins
