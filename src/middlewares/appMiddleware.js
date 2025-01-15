@@ -4,14 +4,11 @@ import { Language } from "../models";
 import { translate } from "../locales";
 
 const dbHelper = new QueryHelper(Language);
-const isDev = process.env.NODE_ENV === "develop";
+const isProd = process.env.NODE_ENV === "production";
 export const handleErrors = (err, req, res, next) => {
   const lang = getLang(req);
   let message = translate[lang].error500;
-  if (isDev) {
-    message = err.message;
-    console.log(err.stack || err.response?.data);
-  } else {
+  if (isProd) {
     const mesgContent = `
         <b>Device:</b> ${req.device.type}, <br />
         <b>Route:</b> ${req.path}, method: ${req.method}, 
@@ -27,6 +24,9 @@ export const handleErrors = (err, req, res, next) => {
       .catch((error) => {
         console.log("NOTIFIER NOT SENT", error);
       });
+  } else {
+    message = err.message;
+    console.log(err.stack || err.response?.data);
   }
 
   return serverResponse(res, 500, message);
@@ -39,7 +39,7 @@ export const monitorDevActions = (req, res, next) => {
   if (!existsSync("./public")) mkdirSync("./public");
   if (!existsSync(songsDir)) mkdirSync(songsDir);
   if (!existsSync(imagesDir)) mkdirSync(imagesDir);
-  if (isDev) {
+  if (process.env.NODE_ENV === "develop") {
     const user = req.isAuthenticated()
       ? `User: ${req.user.username}`
       : "UNKNOWN user";

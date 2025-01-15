@@ -228,3 +228,27 @@ export const truncateString = (str, num = 8) => {
   // Return str truncated with '...' concatenated to the end of str.
   return str.slice(0, num) + "...";
 };
+
+export const getMimeType = (filePath) => {
+  const mimeTypes = {
+    ".html": "text/html",
+    ".css": "text/css",
+    ".js": "application/javascript",
+    ".json": "application/json",
+    ".png": "image/png",
+    ".jpg": "image/jpeg",
+    ".jpeg": "image/jpeg",
+    ".gif": "image/gif",
+    ".svg": "image/svg+xml",
+    ".mp3": "audio/mpeg",
+    ".mp4": "video/mp4",
+    ".txt": "text/plain",
+    ".pdf": "application/pdf",
+    // Add more as needed
+  };
+  // Extract the file extension
+  const ext = filePath.slice(filePath.lastIndexOf(".")).toLowerCase();
+
+  // Return the MIME type or undefined if not found
+  return mimeTypes[ext] || "application/octet-stream"; // Default MIME type
+};

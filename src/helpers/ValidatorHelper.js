@@ -49,6 +49,6 @@ export class ValidatorHelper extends ConstantHelper {
       default:
         break;
     }
-    return Joi.validate(this.data, validateKeys);
+    return validateKeys.validate(this.data);
   }
 }

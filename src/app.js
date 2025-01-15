@@ -1,5 +1,4 @@
 import express from "express";
-import dotenv from "dotenv";
 import path from "path";
 import cors from "cors";
 import passport from "passport";
@@ -10,17 +9,16 @@ import { configurePassport } from "./config/passport";
 import { sequelize } from "./models";
 import routes from "./routes";
 import { handleErrors } from "./middlewares";
-import { security } from "./config/security";
+import { corseOptions, security } from "./config/security";
 import { appSocket } from "./config/socketIo";
 import { session } from "./config/session";
 import { dbBackup } from "./crons";
 import { dbConnectFail } from "./helpers";
-
-dotenv.config();
+import "dotenv/config";
 
 const app = express();
 
-app.use(cors({ origin: true, credentials: true }));
+app.use(cors(corseOptions));
 app.use(capture());
 app.use(userAgent.express());
 app.set("trust proxy", true);
