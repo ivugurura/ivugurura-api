@@ -44,7 +44,7 @@ export const monitorDevActions = (req, res, next) => {
       ? `User: ${req.user.username}`
       : "UNKNOWN user";
     console.log(
-      `${user} is using ${req.device.type},\n 
+      `${user} is using ${req.device?.type},\n 
         Route: ${req.path}, method: ${req.method}, Language: ${lang}\n
         body: ${JSON.stringify(req.body)},\n
         session: ${JSON.stringify(req.session)},\n
