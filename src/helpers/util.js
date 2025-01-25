@@ -252,3 +252,14 @@ export const getMimeType = (filePath) => {
   // Return the MIME type or undefined if not found
   return mimeTypes[ext] || "application/octet-stream"; // Default MIME type
 };
+
+export const getYtbChannelId = (lang) => {
+  const ids = {
+    kn: "UCCzVYqdLwgNMLMsP-NKNnIQ",
+    en: "UCCzVYqdLwgNMLMsP-NKNnIQ",
+    sw: "UCCzVYqdLwgNMLMsP-NKNnIQ",
+    fr: "UCCzVYqdLwgNMLMsP-NKNnIQ",
+  };
+
+  return ids[lang] || ids.kn;
+};
