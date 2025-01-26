@@ -256,9 +256,9 @@ export const getMimeType = (filePath) => {
 export const getYtbChannelId = (lang) => {
   const ids = {
     kn: "UCCzVYqdLwgNMLMsP-NKNnIQ",
-    en: "UCCzVYqdLwgNMLMsP-NKNnIQ",
-    sw: "UCCzVYqdLwgNMLMsP-NKNnIQ",
-    fr: "UCCzVYqdLwgNMLMsP-NKNnIQ",
+    en: "UCZe_Rjl4AGMtutq8UeQLuag",
+    sw: "UCZe_Rjl4AGMtutq8UeQLuag",
+    fr: "UCZe_Rjl4AGMtutq8UeQLuag",
   };
 
   return ids[lang] || ids.kn;
