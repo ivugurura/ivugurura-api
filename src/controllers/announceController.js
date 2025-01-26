@@ -25,12 +25,15 @@ export const getPublishedAnnouncemnt = async (req, res) => {
 export const publishAnnouncement = async (req, res) => {
   const { announcementId: id } = req.params;
   const { languageId, isPublished } = req.body;
-  /**
-   * First unpublish all then
-   * Publish according to the ID
-   */
-  await dbHelper.update({ isPublished: false }, { languageId });
-  await dbHelper.update({ isPublished: !isPublished }, { id });
+
+  if (isPublished) {
+    /**
+     * First unpublish all then
+     * Publish according to the ID
+     */
+    await dbHelper.update({ isPublished: false }, { languageId });
+  }
+  await dbHelper.update({ isPublished }, { id });
   return serverResponse(res, 200, "Success");
 };
 export const addNewAnnouncemt = async (req, res) => {
