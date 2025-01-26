@@ -16,9 +16,13 @@ export const security = (app) => {
 };
 
 // Define allowed origins
+/**
+ * TODO: Allow dev to dev server and production likewise
+ */
 const allowedOrigins = [
   "http://localhost:3000", // Allow localhost
-  "https://reformationvoice.com",
+  "https://reformationvoice.org",
+  "https://dev.reformationvoice.org",
 ];
 export const corseOptions = {
   origin: (origin, callback) => {

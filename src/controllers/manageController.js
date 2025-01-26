@@ -9,6 +9,8 @@ import {
   getPaginator,
   axiosYouTube,
   truncateString,
+  getLang,
+  getYtbChannelId,
 } from "../helpers";
 
 const categoryDb = new QueryHelper(Category);
@@ -118,12 +120,13 @@ export const getChatUsers = async (req, res) => {
 
 export const getYoutubeVideos = async (req, res) => {
   const { searchKey, pageSize, pageToken } = req.query;
+  const lang = getLang(req);
   axiosYouTube
     .get("/search", {
       params: {
         q: searchKey,
         type: "video",
-        channelId: "UCCzVYqdLwgNMLMsP-NKNnIQ",
+        channelId: getYtbChannelId(lang),
         maxResults: pageSize || 5,
         order: "date",
         pageToken,
