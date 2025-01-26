@@ -1,9 +1,10 @@
 import { serverResponse, QueryHelper } from "../helpers";
-import db, { Announcement } from "../models";
+import { Announcement, Sequelize } from "../models";
 import { ConstantHelper } from "../helpers/ConstantHelper";
 
 const dbHelper = new QueryHelper(Announcement);
 const constHelper = new ConstantHelper();
+const { Op } = Sequelize;
 export const getAnnouncements = async (req, res) => {
   const { languageId } = req.body;
   const announcements = await dbHelper.findAll(
@@ -16,7 +17,7 @@ export const getPublishedAnnouncemnt = async (req, res) => {
   const { languageId } = req.body;
   const attributes = ["id", "title", "content"];
   const announcement = await dbHelper.findOne(
-    { languageId, isPublished: true },
+    { languageId, isPublished: true, expiryDate: { [Op.gte]: new Date() } },
     null,
     attributes
   );
