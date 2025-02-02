@@ -18,26 +18,26 @@ announceRoutes.patch(
   "/:announcementId/publish",
   isAdmin,
   catchErrors(doesAnnouncementExist),
-  catchErrors(publishAnnouncement)
+  catchErrors(publishAnnouncement),
 );
 announceRoutes.post(
   "/",
   isAdmin,
   isAnnouncemtValid,
-  catchErrors(addNewAnnouncemt)
+  catchErrors(addNewAnnouncemt),
 );
 announceRoutes.patch(
   "/:announcementId",
   isAdmin,
   catchErrors(doesAnnouncementExist),
   isAnnouncemtValid,
-  catchErrors(editAnnouncemt)
+  catchErrors(editAnnouncemt),
 );
 announceRoutes.delete(
   "/:announcementId",
   isAdmin,
   catchErrors(doesAnnouncementExist),
-  catchErrors(deleteAnnouncemt)
+  catchErrors(deleteAnnouncemt),
 );
 
 export default announceRoutes;

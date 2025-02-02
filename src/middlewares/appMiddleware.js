@@ -21,7 +21,7 @@ export const handleErrors = (err, req, res, next) => {
       .then(() => {
         console.log("NOTIFIER SENT");
       })
-      .catch((error) => {
+      .catch(error => {
         console.log("NOTIFIER NOT SENT", error);
       });
   } else {
@@ -48,7 +48,7 @@ export const monitorDevActions = (req, res, next) => {
         Route: ${req.path}, method: ${req.method}, Language: ${lang}\n
         body: ${JSON.stringify(req.body)},\n
         session: ${JSON.stringify(req.session)},\n
-        IP: ${req.ip}, host: ${req.headers.host}`
+        IP: ${req.ip}, host: ${req.headers.host}`,
     );
     // User Agent: ${JSON.stringify(req.useragent)}
   }
@@ -61,7 +61,7 @@ export const route404 = (req, res) => {
 
   return serverResponse(res, 404, message);
 };
-export const catchErrors = (fn) => (req, res, next) => {
+export const catchErrors = fn => (req, res, next) => {
   Promise.resolve(fn(req, res, next)).catch(next);
 };
 export const setLanguage = async (req, res, next) => {

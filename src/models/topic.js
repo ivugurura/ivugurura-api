@@ -17,9 +17,9 @@ module.exports = (sequelize, DataTypes) => {
       tableName: "topics",
       charset: "utf8mb4",
       collate: "utf8mb4_unicode_ci",
-    }
+    },
   );
-  Topic.associate = (models) => {
+  Topic.associate = models => {
     Topic.belongsTo(models.Language, {
       as: "language",
       foreignKey: "languageId",

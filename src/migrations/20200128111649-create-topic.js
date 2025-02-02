@@ -1,74 +1,74 @@
-'use strict';
+"use strict";
 module.exports = {
   up: (queryInterface, Sequelize) => {
-    return queryInterface.createTable('topics', {
+    return queryInterface.createTable("topics", {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
       },
       title: {
         type: Sequelize.STRING,
-        allowNull: false
+        allowNull: false,
       },
       slug: {
         type: Sequelize.STRING,
-        allowNull: false
+        allowNull: false,
       },
       categoryId: {
         type: Sequelize.INTEGER,
         allowNull: false,
-        onDelete: 'CASCADE',
+        onDelete: "CASCADE",
         references: {
-          model: 'categories',
-          key: 'id',
-          as: 'categoryId'
-        }
+          model: "categories",
+          key: "id",
+          as: "categoryId",
+        },
       },
       coverImage: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
       },
       description: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
       },
       content: {
-        type: Sequelize.TEXT
+        type: Sequelize.TEXT,
       },
       languageId: {
         type: Sequelize.INTEGER,
         allowNull: false,
-        onDelete: 'CASCADE',
+        onDelete: "CASCADE",
         references: {
-          model: 'languages',
-          key: 'id',
-          as: 'languageId'
-        }
+          model: "languages",
+          key: "id",
+          as: "languageId",
+        },
       },
       userId: {
         type: Sequelize.INTEGER,
         allowNull: false,
         references: {
-          model: 'users',
-          key: 'id',
-          as: 'userId'
-        }
+          model: "users",
+          key: "id",
+          as: "userId",
+        },
       },
       isPublished: {
         type: Sequelize.BOOLEAN,
-        defaultValue: false
+        defaultValue: false,
       },
       createdAt: {
         allowNull: false,
-        type: Sequelize.DATE
+        type: Sequelize.DATE,
       },
       updatedAt: {
         allowNull: false,
-        type: Sequelize.DATE
-      }
+        type: Sequelize.DATE,
+      },
     });
   },
   down: (queryInterface, Sequelize) => {
-    return queryInterface.dropTable('topics');
-  }
+    return queryInterface.dropTable("topics");
+  },
 };

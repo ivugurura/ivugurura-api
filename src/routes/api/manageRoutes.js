@@ -18,29 +18,29 @@ manageRoutes.get("/home/contents", catchErrors(getHomeContents));
 manageRoutes.post(
   "/contact-us",
   isMessageInfoValid,
-  catchErrors(sendContactUs)
+  catchErrors(sendContactUs),
 );
 manageRoutes.get("/messages", catchErrors(getAllMessages));
 manageRoutes.get(
   "/messages/:listenerId",
   catchErrors(isAdmin),
-  catchErrors(getListenerMessages)
+  catchErrors(getListenerMessages),
 );
 manageRoutes.get(
   "/chat-users",
   catchErrors(isAdmin),
-  catchErrors(getChatUsers)
+  catchErrors(getChatUsers),
 );
 manageRoutes.patch(
   "/entity-display/:id",
   catchErrors(isAdmin),
   isEntityDisplayValid,
-  catchErrors(addToEntityDisplay)
+  catchErrors(addToEntityDisplay),
 );
 manageRoutes.delete(
   "/entity-display/:entityId",
   catchErrors(isAdmin),
-  catchErrors(deleteFromEntityDisplay)
+  catchErrors(deleteFromEntityDisplay),
 );
 
 export default manageRoutes;

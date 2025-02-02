@@ -4,7 +4,7 @@ import { getMimeType } from "../helpers";
 // Here you can spoof any back end
 const SPOOFED_SERVER = "Phusion Passenger (mod_rails/mod_rack) 3.0.11";
 
-export const security = (app) => {
+export const security = app => {
   app
     .use(helmet({ contentSecurityPolicy: false }))
     .use(helmet.noSniff())

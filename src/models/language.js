@@ -1,7 +1,7 @@
-'use strict';
+"use strict";
 module.exports = (sequelize, DataTypes) => {
   const Language = sequelize.define(
-    'Language',
+    "Language",
     {
       name: {
         type: DataTypes.STRING,
@@ -13,9 +13,9 @@ module.exports = (sequelize, DataTypes) => {
       },
     },
     {
-      tableName: 'languages',
-    }
+      tableName: "languages",
+    },
   );
-  Language.associate = (models) => {};
+  Language.associate = models => {};
   return Language;
 };

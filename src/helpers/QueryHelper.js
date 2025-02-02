@@ -13,7 +13,7 @@ export class QueryHelper {
     whereCondition = {},
     include = null,
     attributes,
-    otherOptions = {}
+    otherOptions = {},
   ) {
     return this.model.findOne({
       where: whereCondition,
@@ -30,7 +30,7 @@ export class QueryHelper {
     attributes,
     offset = 0,
     limit = 20,
-    group = null
+    group = null,
   ) {
     return this.model.findAll({
       order: orderBy,

@@ -43,18 +43,18 @@ export const searchInfo = async (req, res) => {
     topicConditions,
     null,
     [["title", "ASC"]],
-    ["id", "title", "slug", "description", "content", "updatedAt"]
+    ["id", "title", "slug", "description", "content", "updatedAt"],
   );
   const categories = await categoryDb.findAll(
     categoryConditions,
     null,
     [["name", "ASC"]],
-    ["id", "name", "slug"]
+    ["id", "name", "slug"],
   );
   const searched = {
     topics: topics
-      .map((x) => x.get({ plain: true }))
-      .map((topic) => ({
+      .map(x => x.get({ plain: true }))
+      .map(topic => ({
         ...topic,
         content: truncateString(convert(topic.content), 130),
       })),
@@ -112,7 +112,7 @@ export const getChatUsers = async (req, res) => {
     attributes,
     offset,
     limit,
-    group
+    group,
   );
 
   return serverResponse(res, 200, "Success", users);
@@ -135,7 +135,7 @@ export const getYoutubeVideos = async (req, res) => {
     .then(({ data }) => {
       return serverResponse(res, 200, "Success", data);
     })
-    .catch((error) => {
+    .catch(error => {
       // don't throw an error get
       console.log({ error: error.response.data });
 

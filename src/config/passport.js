@@ -15,8 +15,8 @@ const userSerializer = (user, done) => {
 
 const userDeserializer = (id, done) => {
   User.findOne({ where: { id }, logging: false })
-    .then((user) => done(null, user))
-    .catch((error) => done(error));
+    .then(user => done(null, user))
+    .catch(error => done(error));
 };
 
 const localLoginStrategy = new LocalStrategy(
@@ -25,7 +25,7 @@ const localLoginStrategy = new LocalStrategy(
     email = req.body.email.toLowerCase().trim();
     password = req.body.password;
     User.findOne({ where: { email }, logging: false })
-      .then((user) => {
+      .then(user => {
         if (!user) return done({ message: "Invalid email" });
         if (!unHashPassword(password, user.password))
           return done({ message: "Invalid password" });
@@ -37,8 +37,8 @@ const localLoginStrategy = new LocalStrategy(
         user = user.toJSON();
         return done(null, user);
       })
-      .catch((error) => done(error));
-  }
+      .catch(error => done(error));
+  },
 );
 
 const localSignupStrategy = new LocalStrategy(
@@ -53,20 +53,20 @@ const localSignupStrategy = new LocalStrategy(
       where: { [Op.or]: [{ email, username }] },
       logging: false,
     })
-      .then((user) => {
+      .then(user => {
         if (user) return done({ message: "Email or username has taken" });
         User.create(
           { email, username, password, names, access_lvl },
-          { logging: false }
+          { logging: false },
         )
-          .then((user) => done(null, user))
-          .catch((error) => done(error));
+          .then(user => done(null, user))
+          .catch(error => done(error));
       })
-      .catch((error) => done(error));
-  }
+      .catch(error => done(error));
+  },
 );
 
-export const configurePassport = (passport) => {
+export const configurePassport = passport => {
   passport.serializeUser(userSerializer);
   passport.deserializeUser(userDeserializer);
 

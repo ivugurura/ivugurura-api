@@ -12,7 +12,7 @@ import { QueryHelper } from "./QueryHelper";
 import { mailFormatter } from "./mailFormatter";
 
 const dbUser = new QueryHelper(User);
-export const hashPassword = (password) => {
+export const hashPassword = password => {
   const salt = bcrypt.genSaltSync(process.env.PASS_SALT);
   const hashPass = bcrypt.hashSync(password, salt);
   return hashPass;
@@ -20,7 +20,7 @@ export const hashPassword = (password) => {
 export const unHashPassword = (password, hashedPass) => {
   return bcrypt.compareSync(password, hashedPass);
 };
-export const generatJWT = (userInfo) => {
+export const generatJWT = userInfo => {
   const token = jwt.sign(userInfo, process.env.SECRET, { expiresIn: "1w" });
   return token;
 };
@@ -29,7 +29,7 @@ export const serverResponse = (
   statusCode,
   message,
   data,
-  totalItems = 0
+  totalItems = 0,
 ) => {
   const messageType = statusCode >= 400 ? "error" : "message";
   return res
@@ -46,7 +46,7 @@ export const joiValidatorMsg = (res, result) => {
   return serverResponse(res, 400, errors[0]);
 };
 
-export const generateSlug = (title) => {
+export const generateSlug = title => {
   const uniqueId = uniqid.process();
   const slug = `${slugify(title, { lower: true })}-${uniqueId}`;
   return slug;
@@ -62,7 +62,7 @@ export const getPaginator = ({ page, pageSize }) => {
   const offset = pageNumber > 1 ? (pageNumber - 1) * limit : 0;
   return { limit, offset };
 };
-export const authenticatedUser = async (req) => {
+export const authenticatedUser = async req => {
   const { user, useragent, headers } = req;
   if (
     useragent.isFirefox ||
@@ -103,7 +103,7 @@ export const sendEmail = async (subject, emailContent, sendTo) => {
   };
   return await sgMail.send(messageBody);
 };
-export const getLang = (req) => {
+export const getLang = req => {
   return req.acceptsLanguages("en", "kn", "fr", "sw") || "en";
 };
 /**
@@ -111,10 +111,10 @@ export const getLang = (req) => {
  * @param {Sting} word
  * @returns Word with first char capitalized
  */
-export const ucFirst = (word) => {
+export const ucFirst = word => {
   return word.replace(
     /(^\w|\s\w)(\S*)/g,
-    (_, m1, m2) => m1.toUpperCase() + m2.toLowerCase()
+    (_, m1, m2) => m1.toUpperCase() + m2.toLowerCase(),
   );
 };
 
@@ -159,7 +159,7 @@ export const isFileAllowed = (file, filePath, fileCallBack) => {
 const MB = 1024 * 1024;
 export const ACCEPTED_FILE_SIZE = 100 * MB; //100 mbs
 
-const setTwoDigit = (digit) => {
+const setTwoDigit = digit => {
   return digit <= 9 ? `0${digit}` : digit;
 };
 export const currentDate = () => {
@@ -191,7 +191,7 @@ export const notifyMe = async (title = "", info = "") => {
  *
  * @param {*} error SequelizeError
  */
-export const dbConnectFail = (error) => {
+export const dbConnectFail = error => {
   const isDev = process.env.NODE_ENV === "develop";
   const isProduction = process.env.NODE_ENV === "production";
   if (isDev) {
@@ -204,7 +204,7 @@ export const dbConnectFail = (error) => {
         console.log("Notified");
         process.exit(1);
       })
-      .catch((err) => {
+      .catch(err => {
         console.log("Not Notified", err.message);
         process.exit(1);
       });
@@ -229,7 +229,7 @@ export const truncateString = (str, num = 8) => {
   return str.slice(0, num) + "...";
 };
 
-export const getMimeType = (filePath) => {
+export const getMimeType = filePath => {
   const mimeTypes = {
     ".html": "text/html",
     ".css": "text/css",
@@ -253,7 +253,7 @@ export const getMimeType = (filePath) => {
   return mimeTypes[ext] || "application/octet-stream"; // Default MIME type
 };
 
-export const getYtbChannelId = (lang) => {
+export const getYtbChannelId = lang => {
   const ids = {
     kn: "UCCzVYqdLwgNMLMsP-NKNnIQ",
     en: "UCZe_Rjl4AGMtutq8UeQLuag",

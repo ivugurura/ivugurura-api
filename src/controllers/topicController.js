@@ -55,14 +55,14 @@ export const getAllTopics = async (req, res) => {
       order,
       undefined,
       offset,
-      limit
+      limit,
     ),
     dbHelper.count({ where: conditions }),
   ]);
 
   const topics = rows
-    .map((x) => x.get({ plain: true }))
-    .map((topic) => {
+    .map(x => x.get({ plain: true }))
+    .map(topic => {
       let content = topic.content;
       if (canTruncate === "yes") {
         content = truncateString(convert(topic.content), truncate);
@@ -90,7 +90,7 @@ export const getHomeContents = async (req, res) => {
       undefined,
       undefined,
       offset,
-      limit
+      limit,
     ),
     sequelize.query(categoriesTopicQuery(languageId), {
       type: sequelize.QueryTypes.SELECT,
@@ -102,8 +102,8 @@ export const getHomeContents = async (req, res) => {
     }),
   ]);
   recents = recents
-    .map((x) => x.get({ plain: true }))
-    .map((rec) => {
+    .map(x => x.get({ plain: true }))
+    .map(rec => {
       const trancated = truncateString(convert(rec.content), 70);
       return {
         ...rec,
@@ -112,7 +112,7 @@ export const getHomeContents = async (req, res) => {
         views: rec.views.length,
       };
     });
-  mostReads = mostReads.map((mr) => {
+  mostReads = mostReads.map(mr => {
     const trancated = truncateString(convert(mr.content), 70);
     return { ...mr, content: trancated, description: trancated };
   });
@@ -142,13 +142,13 @@ export const getOneTopic = async (req, res) => {
       [["title", "ASC"]],
       undefined,
       0,
-      10
+      10,
     ),
     viewDbHelper.count({ where: { topicId: id } }),
   ]);
   related = related
-    .map((x) => x.get({ plain: true }))
-    .map((rel) => {
+    .map(x => x.get({ plain: true }))
+    .map(rel => {
       const trancated = truncateString(convert(rel.content), 70);
       return { ...rel, content: trancated, description: trancated };
     });
@@ -174,7 +174,7 @@ export const deleteTopic = async (req, res) => {
   const { coverImage } = req.body;
   const { IMAGES_ZONE } = process.env;
   await dbHelper.delete({ id });
-  unlink(`${IMAGES_ZONE}/${coverImage}`, (error) => {
+  unlink(`${IMAGES_ZONE}/${coverImage}`, error => {
     if (error) console.log("File not delete");
     return serverResponse(res, 200, "The topic deleted");
   });
@@ -208,7 +208,7 @@ export const getTopicComments = async (req, res) => {
     { topicId, isPublished: true, parentId: null },
     constHelper.commentIncludes(),
     null,
-    attributes
+    attributes,
   );
   return serverResponse(res, 200, "Success", comments);
 };
@@ -249,7 +249,7 @@ export const publishComment = async (req, res) => {
   const { isPublished } = await dbCommentHelper.findOne(
     { id },
     null,
-    attributes
+    attributes,
   );
 
   await dbCommentHelper.update({ isPublished: !isPublished }, { id });
@@ -270,7 +270,7 @@ export const replyToComment = async (req, res) => {
 
   const comment = await dbCommentHelper.findOne(
     { id },
-    constHelper.commentAllIncludes()
+    constHelper.commentAllIncludes(),
   );
 
   if (replyType === "public") {

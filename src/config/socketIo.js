@@ -14,19 +14,19 @@ const messageDb = new QueryHelper(Message);
  *
  * @param {Express} app
  */
-export const appSocket = (app) => {
+export const appSocket = app => {
   // const server = http.createServer(app);
   /**
    * Start express server
    */
   const server = app.listen(port, () =>
-    console.log(`listening on port ${port}`)
+    console.log(`listening on port ${port}`),
   );
   const io = new Server(server, {
     allowEIO3: true,
   });
 
-  io.on("connect", (socket) => {
+  io.on("connect", socket => {
     socket.on("join", ({ userId, name }, socketJoinCb) => {
       const newUser = chatRoom.addUser(socket.id, userId, name);
 
@@ -83,7 +83,7 @@ export const appSocket = (app) => {
           });
           sendMessageCb();
         }
-      }
+      },
     );
     socket.on("disconnect", () => {
       const user = chatRoom.removeUser(socket.id);

@@ -16,7 +16,7 @@ export const getNavCategories = async (req, res) => {
   const { languageId } = req.body;
   const categories = await dbHelper.findAll(
     { languageId, categoryId: null },
-    constHelper.categoryIncludes()
+    constHelper.categoryIncludes(),
   );
   return serverResponse(res, 200, "Success", categories);
 };
@@ -36,7 +36,7 @@ export const getCategories = async (req, res) => {
     categories = await db.findAll(
       { languageId, categoryId: { [Op.not]: null } },
       null,
-      orderByName
+      orderByName,
     );
   }
   return serverResponse(res, 200, "Success", categories);
@@ -47,7 +47,7 @@ export const getACategory = async (req, res) => {
   const category = await dbHelper.findOne(
     { languageId, id },
     constHelper.oneCategoryIncludes(),
-    attributes
+    attributes,
   );
   return serverResponse(res, 200, "Success", category);
 };
