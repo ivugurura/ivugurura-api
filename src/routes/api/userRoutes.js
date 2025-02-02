@@ -26,19 +26,19 @@ userRoutes.post(
   "/",
   isSuperAdmin,
   catchErrors(isUserInfoValid),
-  catchErrors(createUser)
+  catchErrors(createUser),
 );
 userRoutes.patch(
   "/:userId",
   isAdmin,
   catchErrors(isUserInfoValid),
-  catchErrors(updateUser)
+  catchErrors(updateUser),
 );
 userRoutes.delete(
   "/:userId",
   isAdmin,
   catchErrors(canUserBeDeleted),
-  catchErrors(deleteUser)
+  catchErrors(deleteUser),
 );
 userRoutes.get("/", isAdmin, catchErrors(getSystemUsers));
 userRoutes.get("/my-profile", isAuthenticated, catchErrors(getMyProfile));

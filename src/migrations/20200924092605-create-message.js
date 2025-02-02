@@ -1,40 +1,40 @@
-'use strict';
+"use strict";
 module.exports = {
   up: (queryInterface, Sequelize) => {
-    return queryInterface.createTable('messages', {
+    return queryInterface.createTable("messages", {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
       },
       senderId: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
       },
       senderName: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
       },
       content: {
-        type: Sequelize.TEXT
+        type: Sequelize.TEXT,
       },
       receiverId: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
       },
       fromAdmin: {
         type: Sequelize.BOOLEAN,
-        defaultValue: false
+        defaultValue: false,
       },
       createdAt: {
         allowNull: false,
-        type: Sequelize.DATE
+        type: Sequelize.DATE,
       },
       updatedAt: {
         allowNull: false,
-        type: Sequelize.DATE
-      }
+        type: Sequelize.DATE,
+      },
     });
   },
   down: (queryInterface, Sequelize) => {
-    return queryInterface.dropTable('messages');
-  }
+    return queryInterface.dropTable("messages");
+  },
 };

@@ -35,33 +35,33 @@ albumRoutes.get("/", getAlbums);
 albumRoutes.get(
   "/:albumId",
   catchErrors(doesAlbumExist),
-  catchErrors(getOneAlbum)
+  catchErrors(getOneAlbum),
 );
 albumRoutes.patch(
   "/:albumId",
   isAdmin,
   catchErrors(doesAlbumExist),
   isAlbumValid,
-  catchErrors(editAlbumInfo)
+  catchErrors(editAlbumInfo),
 );
 
 albumRoutes.delete(
   "/:albumId",
   isAdmin,
   catchErrors(doesAlbumExist),
-  catchErrors(deleteAlbum)
+  catchErrors(deleteAlbum),
 );
 
 albumRoutes.post(
   "/upload/:fileType",
   isAdmin,
   isFileTypeValid,
-  catchErrors(uploadSingleFile)
+  catchErrors(uploadSingleFile),
 );
 albumRoutes.delete(
   "/:fileType/:fileName",
   isFileTypeValid,
-  catchErrors(deleteFile)
+  catchErrors(deleteFile),
 );
 albumRoutes.post("/add", isAdmin, isMediaValid, catchErrors(addNewMedia));
 albumRoutes.post("/sync", isSuperAdmin, catchErrors(bulkCreateMedia));
@@ -70,25 +70,25 @@ albumRoutes.patch(
   isAdmin,
   isMediaValid,
   catchErrors(doesMediaExist),
-  catchErrors(updateMedia)
+  catchErrors(updateMedia),
 );
 albumRoutes.delete(
   "/media/:mediaId/del",
   isAdmin,
   catchErrors(doesMediaExist),
-  catchErrors(deleteMedia)
+  catchErrors(deleteMedia),
 );
 albumRoutes.get("/medias/:mediaType", catchErrors(getMedia));
 albumRoutes.get("/medias/all/:mediaType", catchErrors(getAllMedia));
 albumRoutes.get(
   "/download/:mediaId",
   catchErrors(doesMediaExist),
-  catchErrors(downloadSong)
+  catchErrors(downloadSong),
 );
 albumRoutes.get(
   "/share/:mediaId",
   catchErrors(doesMediaExist),
-  catchErrors(shareMedia)
+  catchErrors(shareMedia),
 );
 albumRoutes.get("/counts/media", isAdmin, catchErrors(getMediaCounts));
 albumRoutes.get("/resources/:resourceType", catchErrors(getPublicResources));

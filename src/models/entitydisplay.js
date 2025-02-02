@@ -12,7 +12,7 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING,
       },
     },
-    { tableName: "display_entities" }
+    { tableName: "display_entities" },
   );
   EntityDisplay.associate = function (models) {
     EntityDisplay.belongsTo(models.Topic, {

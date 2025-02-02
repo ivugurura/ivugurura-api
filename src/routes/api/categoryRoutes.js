@@ -1,49 +1,49 @@
-import { Router } from 'express';
+import { Router } from "express";
 import {
   catchErrors,
   isAdminOrEditor,
   isCategoryValid,
   doesCategoryExist,
-  isSuperAdmin
-} from '../../middlewares';
+  isSuperAdmin,
+} from "../../middlewares";
 import {
   getCategories,
   createNewCategory,
   editCategory,
   deleteCategory,
   getNavCategories,
-  getACategory
-} from '../../controllers/categoryController';
+  getACategory,
+} from "../../controllers/categoryController";
 
 const categoryRoutes = Router();
 
-categoryRoutes.get('/', catchErrors(getCategories));
-categoryRoutes.get('/navs', catchErrors(getNavCategories));
+categoryRoutes.get("/", catchErrors(getCategories));
+categoryRoutes.get("/navs", catchErrors(getNavCategories));
 
 categoryRoutes.post(
-  '/',
+  "/",
   isSuperAdmin,
   catchErrors(doesCategoryExist),
   isCategoryValid,
-  catchErrors(createNewCategory)
+  catchErrors(createNewCategory),
 );
 categoryRoutes.get(
-  '/:categoryId',
+  "/:categoryId",
   catchErrors(doesCategoryExist),
-  catchErrors(getACategory)
+  catchErrors(getACategory),
 );
 categoryRoutes.patch(
-  '/:categoryId',
+  "/:categoryId",
   isAdminOrEditor,
   catchErrors(doesCategoryExist),
   isCategoryValid,
-  catchErrors(editCategory)
+  catchErrors(editCategory),
 );
 categoryRoutes.delete(
-  '/:categoryId',
+  "/:categoryId",
   isAdminOrEditor,
   catchErrors(doesCategoryExist),
-  catchErrors(deleteCategory)
+  catchErrors(deleteCategory),
 );
 
 export default categoryRoutes;

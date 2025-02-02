@@ -56,7 +56,7 @@ export const backupDb = () => {
           // Optionally, delete the local backup file
           fs.unlinkSync(filePath);
         })
-        .catch((uploadError) => {
+        .catch(uploadError => {
           console.error("Error uploading to Dropbox:", uploadError);
         });
     });

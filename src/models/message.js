@@ -1,15 +1,15 @@
-'use strict';
+"use strict";
 module.exports = (sequelize, DataTypes) => {
   const Message = sequelize.define(
-    'Message',
+    "Message",
     {
       senderId: DataTypes.STRING,
       senderName: DataTypes.STRING,
       content: DataTypes.TEXT,
       receiverId: DataTypes.STRING,
-      fromAdmin: DataTypes.BOOLEAN
+      fromAdmin: DataTypes.BOOLEAN,
     },
-    { tableName: 'messages' }
+    { tableName: "messages" },
   );
   Message.associate = function (models) {
     // associations can be defined here

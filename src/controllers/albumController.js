@@ -67,10 +67,10 @@ export const uploadFile = async (req, res) => {
    * Delete the previous file first then
    * Upload a new one
    */
-  unlink(`${filePath}/${prevFile}`, (error) => {
+  unlink(`${filePath}/${prevFile}`, error => {
     if (error) console.log("Error occurred, not deleted");
 
-    upload(req, res, async (uploadError) => {
+    upload(req, res, async uploadError => {
       if (uploadError instanceof multer.MulterError || uploadError)
         return serverResponse(res, 500, uploadError);
       if (!req.file) return serverResponse(res, 400, "No file selected");
@@ -81,7 +81,7 @@ export const uploadFile = async (req, res) => {
       if (fileType === "image" && update !== "null") {
         await dbTopicHelper.update(
           { coverImage: fileName },
-          { coverImage: prevFile }
+          { coverImage: prevFile },
         );
       }
       return serverResponse(res, 200, "File(s) uploaded", fileName);
@@ -93,7 +93,7 @@ export const deleteFile = (req, res) => {
   const { fileName, fileType } = req.params;
   const { IMAGES_ZONE, SONGS_ZONE } = process.env;
   const filePath = fileType === "image" ? IMAGES_ZONE : SONGS_ZONE;
-  unlink(`${filePath}/${fileName}`, (error) => {
+  unlink(`${filePath}/${fileName}`, error => {
     if (error) return serverResponse(res, 500, "File not delete");
     return serverResponse(res, 200, "File deleted");
   });
@@ -132,14 +132,14 @@ export const getMedia = async (req, res) => {
       [["actionDate", "DESC"]],
       undefined,
       offset,
-      limit
+      limit,
     ),
     dbMediaHelper.count({ where: conditions }),
   ]);
 
   const medias = rows
-    .map((x) => x.get({ plain: true }))
-    .map((m) => ({
+    .map(x => x.get({ plain: true }))
+    .map(m => ({
       ...m,
       downloads: m.downloads.length,
       shares: m.shares.length,
@@ -160,14 +160,14 @@ export const getAllMedia = async (req, res) => {
       [["actionDate", "DESC"]],
       undefined,
       offset,
-      limit
+      limit,
     ),
     dbMediaHelper.count({ where: conditions }),
   ]);
 
   const medias = rows
-    .map((x) => x.get({ plain: true }))
-    .map((m) => ({
+    .map(x => x.get({ plain: true }))
+    .map(m => ({
       ...m,
       downloads: m.downloads.length,
       shares: m.shares.length,
@@ -210,7 +210,7 @@ export const deleteMedia = async (req, res) => {
   const songLink = process.env.SONGS_ZONE + "/" + media.mediaLink;
   await dbMediaHelper.delete({ id: mediaId });
 
-  unlink(songLink, (error) => {
+  unlink(songLink, error => {
     if (error) return serverResponse(res, 200, "File not delete");
     return serverResponse(res, 200, "File deleted");
   });
@@ -241,7 +241,7 @@ export const getPublicResources = async (req, res) => {
   }
 
   const resources = readdirSync(dir)
-    .map((fileName) => ({
+    .map(fileName => ({
       fileName,
       createdAt: statSync(`${dir}/${fileName}`).mtime.getTime(),
     }))

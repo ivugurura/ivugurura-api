@@ -1,4 +1,4 @@
-export const categoriesTopicQuery = (languageId) => {
+export const categoriesTopicQuery = languageId => {
   return `
     select 
       c.id, c."name", c.slug

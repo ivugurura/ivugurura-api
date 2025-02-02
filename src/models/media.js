@@ -13,7 +13,7 @@ module.exports = (sequelize, DataTypes) => {
         values: ["audio", "video", "image"],
       },
     },
-    { tableName: "media" }
+    { tableName: "media" },
   );
   Media.associate = function (models) {
     Media.belongsTo(models.Language, {

@@ -9,7 +9,7 @@ export const getAnnouncements = async (req, res) => {
   const { languageId } = req.body;
   const announcements = await dbHelper.findAll(
     { languageId },
-    constHelper.identifierIncludes()
+    constHelper.identifierIncludes(),
   );
   return serverResponse(res, 200, "Success", announcements);
 };
@@ -19,7 +19,7 @@ export const getPublishedAnnouncemnt = async (req, res) => {
   const announcement = await dbHelper.findOne(
     { languageId, isPublished: true, expiryDate: { [Op.gte]: new Date() } },
     null,
-    attributes
+    attributes,
   );
   return serverResponse(res, 200, "Success", announcement);
 };

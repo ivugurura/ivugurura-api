@@ -22,7 +22,7 @@ const { Op } = Sequelize;
 export const userSignin = async (req, res, next) => {
   passport.authenticate("local.login", (error, user) => {
     if (error) return serverResponse(res, 401, error.message);
-    req.logIn(user, (err) => {
+    req.logIn(user, err => {
       if (err) return next(err);
 
       user.token = generatJWT({ id: user.id });
@@ -34,7 +34,7 @@ export const userSignin = async (req, res, next) => {
 };
 
 export const logoutUser = (req, res, next) => {
-  req.logout((error) => {
+  req.logout(error => {
     if (error) return next(error);
     req.session.destroy();
     return serverResponse(res, 200, "Successfully logged out");
@@ -92,13 +92,13 @@ export const getTopicsForAdmin = async (req, res) => {
       order,
       undefined,
       offset,
-      limit
+      limit,
     ),
     dbTopic.count({ where: whereConditions }),
   ]);
   const topics = rows
-    .map((x) => x.get({ plain: true }))
-    .map((topic) => {
+    .map(x => x.get({ plain: true }))
+    .map(topic => {
       let content = topic.content;
       if (canTruncate === "yes") {
         content = truncateString(convert(topic.content), truncate);

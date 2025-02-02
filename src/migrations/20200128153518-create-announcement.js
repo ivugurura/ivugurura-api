@@ -1,59 +1,59 @@
-'use strict';
+"use strict";
 module.exports = {
   up: (queryInterface, Sequelize) => {
-    return queryInterface.createTable('announcements', {
+    return queryInterface.createTable("announcements", {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
       },
       title: {
         type: Sequelize.STRING,
-        allowNull: false
+        allowNull: false,
       },
       content: {
         type: Sequelize.TEXT,
-        allowNull: false
+        allowNull: false,
       },
       isPublished: {
         type: Sequelize.BOOLEAN,
-        defaultValue: false
+        defaultValue: false,
       },
       expiryDate: {
         type: Sequelize.DATE,
-        allowNull: false
+        allowNull: false,
       },
       languageId: {
         type: Sequelize.INTEGER,
         allowNull: false,
-        onDelete: 'CASCADE',
+        onDelete: "CASCADE",
         references: {
-          model: 'languages',
-          key: 'id',
-          as: 'languageId'
-        }
+          model: "languages",
+          key: "id",
+          as: "languageId",
+        },
       },
       userId: {
         type: Sequelize.INTEGER,
         allowNull: false,
         references: {
-          model: 'users',
-          key: 'id',
-          as: 'userId'
-        }
+          model: "users",
+          key: "id",
+          as: "userId",
+        },
       },
       createdAt: {
         allowNull: false,
-        type: Sequelize.DATE
+        type: Sequelize.DATE,
       },
       updatedAt: {
         allowNull: false,
-        type: Sequelize.DATE
-      }
+        type: Sequelize.DATE,
+      },
     });
   },
   down: (queryInterface, Sequelize) => {
-    return queryInterface.dropTable('announcements');
-  }
+    return queryInterface.dropTable("announcements");
+  },
 };
