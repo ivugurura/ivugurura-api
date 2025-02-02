@@ -10,6 +10,10 @@
   "scripts": {
     "_test": "NODE_ENV=test nyc mocha -r @babel/register --color --exit",
     "test": "yarn _test \"tests/**/*.test.js\"",
+    "format:check": "prettier --check .",
+    "format:write": "prettier --write .",
+    "lint:check": "eslint .",
+    "lint:fix": "eslint --fix .",
     "migrate": "sequelize db:migrate",
     "migrate-down": "sequelize db:migrate:undo",
     "seed-up": "sequelize db:seed:all",
@@ -80,14 +84,19 @@
     "uniqid": "^5.2.0"
   },
   "devDependencies": {
+    "@eslint/js": "^9.19.0",
     "@faker-js/faker": "^9.3.0",
     "@types/node-fetch": "^2.6.12",
     "chai": "^4.3.6",
     "chai-as-promised": "^7.1.1",
-    "eslint": "^8.7.0",
+    "eslint": "^9.19.0",
+    "eslint-config-prettier": "^10.0.1",
+    "eslint-plugin-prettier": "^5.2.3",
     "faker": "^6.6.6",
+    "globals": "^15.14.0",
     "mocha": "^10.1.0",
     "nodemon": "^3.1.9",
-    "nyc": "^15.1.0"
+    "nyc": "^15.1.0",
+    "prettier": "^3.4.2"
   }
 }
