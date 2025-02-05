@@ -16,8 +16,10 @@ export const getAnnouncements = async (req, res) => {
 export const getPublishedAnnouncemnt = async (req, res) => {
   const { languageId } = req.body;
   const attributes = ["id", "title", "content"];
+  const tonight = new Date().setHours(0, 0, 0, 0);
+
   const announcement = await dbHelper.findOne(
-    { languageId, isPublished: true, expiryDate: { [Op.gte]: new Date() } },
+    { languageId, isPublished: true, expiryDate: { [Op.gte]: tonight } },
     null,
     attributes,
   );
