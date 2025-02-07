@@ -38,7 +38,7 @@ app.use(
     limit: "100mb",
     parameterLimit: 100000,
     extended: false,
-  })
+  }),
 );
 app.use(express.json({ limit: "100mb" }));
 app.use(express.static(buildDir));

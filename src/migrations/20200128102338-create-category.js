@@ -1,7 +1,7 @@
-'use strict';
+"use strict";
 module.exports = {
   up: (queryInterface, Sequelize) => {
-    return queryInterface.createTable('categories', {
+    return queryInterface.createTable("categories", {
       id: {
         allowNull: false,
         autoIncrement: true,
@@ -19,20 +19,20 @@ module.exports = {
       languageId: {
         type: Sequelize.INTEGER,
         allowNull: false,
-        onDelete: 'CASCADE',
+        onDelete: "CASCADE",
         references: {
-          model: 'languages',
-          key: 'id',
-          as: 'languageId',
+          model: "languages",
+          key: "id",
+          as: "languageId",
         },
       },
       categoryId: {
         type: Sequelize.INTEGER,
-        onDelete: 'CASCADE',
+        onDelete: "CASCADE",
         references: {
-          model: 'categories',
-          key: 'id',
-          as: 'parent',
+          model: "categories",
+          key: "id",
+          as: "parent",
         },
       },
       createdAt: {
@@ -46,6 +46,6 @@ module.exports = {
     });
   },
   down: (queryInterface, Sequelize) => {
-    return queryInterface.dropTable('categories');
+    return queryInterface.dropTable("categories");
   },
 };

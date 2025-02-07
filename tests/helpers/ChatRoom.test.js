@@ -11,7 +11,7 @@ describe("Chat room helper", () => {
     const user = chatRoom.addUser(
       chatRoomUser.socketId,
       chatRoomUser.userId,
-      chatRoomUser.name
+      chatRoomUser.name,
     );
     expect(user.id).equal(chatRoomUser.socketId);
   });

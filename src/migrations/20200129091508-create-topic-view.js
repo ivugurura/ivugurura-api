@@ -1,36 +1,36 @@
-'use strict';
+"use strict";
 module.exports = {
   up: (queryInterface, Sequelize) => {
-    return queryInterface.createTable('topic_views', {
+    return queryInterface.createTable("topic_views", {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
       },
       ipAddress: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
       },
       topicId: {
         type: Sequelize.INTEGER,
-        onDelete: 'CASCADE',
+        onDelete: "CASCADE",
         references: {
-          model: 'topics',
-          key: 'id',
-          as: 'topicId'
-        }
+          model: "topics",
+          key: "id",
+          as: "topicId",
+        },
       },
       createdAt: {
         allowNull: false,
-        type: Sequelize.DATE
+        type: Sequelize.DATE,
       },
       updatedAt: {
         allowNull: false,
-        type: Sequelize.DATE
-      }
+        type: Sequelize.DATE,
+      },
     });
   },
   down: (queryInterface, Sequelize) => {
-    return queryInterface.dropTable('topic_views');
-  }
+    return queryInterface.dropTable("topic_views");
+  },
 };

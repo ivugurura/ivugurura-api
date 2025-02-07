@@ -16,7 +16,7 @@ export const up = (queryInterface, Sequelize) => {
         updatedAt: new Date(),
       },
     ],
-    {}
+    {},
   );
 };
 export const down = (queryInterface, Sequelize) => {

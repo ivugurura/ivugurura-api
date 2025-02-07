@@ -32,7 +32,7 @@ topicRoutes.post(
   "/",
   isAdminOrEditor,
   isNewTopicValidated,
-  catchErrors(addNewTopic)
+  catchErrors(addNewTopic),
 );
 topicRoutes.get("/", catchErrors(getAllTopics));
 topicRoutes.patch(
@@ -41,12 +41,12 @@ topicRoutes.patch(
   catchErrors(doesTopicExist),
   catchErrors(isTheOwner),
   isExistingTopicValid,
-  catchErrors(editTopic)
+  catchErrors(editTopic),
 );
 topicRoutes.get(
   "/:topicIdOrSlug",
   catchErrors(doesTopicExist),
-  catchErrors(getOneTopic)
+  catchErrors(getOneTopic),
 );
 topicRoutes.delete("/comments", isAdmin, catchErrors(deleteComments));
 topicRoutes.delete(
@@ -54,36 +54,36 @@ topicRoutes.delete(
   isAdminOrEditor,
   catchErrors(doesTopicExist),
   catchErrors(isTheOwner),
-  catchErrors(deleteTopic)
+  catchErrors(deleteTopic),
 );
 topicRoutes.post(
   "/:topicIdOrSlug/comments",
   isCommentValid,
   catchErrors(doesTopicExist),
-  catchErrors(addTopicComment)
+  catchErrors(addTopicComment),
 );
 topicRoutes.get(
   "/:topicIdOrSlug/comments",
   catchErrors(doesTopicExist),
-  catchErrors(getTopicComments)
+  catchErrors(getTopicComments),
 );
 topicRoutes.post(
   "/:topicIdOrSlug/comments/:commentId",
   isCommentReplyValidated,
   catchErrors(doesTopicExist),
   catchErrors(doesCommentExist),
-  catchErrors(replyToComment)
+  catchErrors(replyToComment),
 );
 topicRoutes.get(
   "/comments/all",
   isAdminOrEditor,
-  catchErrors(getAllCommentaries)
+  catchErrors(getAllCommentaries),
 );
 topicRoutes.put(
   "/publish/comments/:commentId",
   isAdmin,
   catchErrors(doesCommentExist),
-  catchErrors(publishComment)
+  catchErrors(publishComment),
 );
 
 export default topicRoutes;

@@ -1,24 +1,27 @@
 import { serverResponse, QueryHelper } from "../helpers";
-import db, { Announcement } from "../models";
+import { Announcement, Sequelize } from "../models";
 import { ConstantHelper } from "../helpers/ConstantHelper";
 
 const dbHelper = new QueryHelper(Announcement);
 const constHelper = new ConstantHelper();
+const { Op } = Sequelize;
 export const getAnnouncements = async (req, res) => {
   const { languageId } = req.body;
   const announcements = await dbHelper.findAll(
     { languageId },
-    constHelper.identifierIncludes()
+    constHelper.identifierIncludes(),
   );
   return serverResponse(res, 200, "Success", announcements);
 };
 export const getPublishedAnnouncemnt = async (req, res) => {
   const { languageId } = req.body;
   const attributes = ["id", "title", "content"];
+  const tonight = new Date().setHours(0, 0, 0, 0);
+
   const announcement = await dbHelper.findOne(
-    { languageId, isPublished: true },
+    { languageId, isPublished: true, expiryDate: { [Op.gte]: tonight } },
     null,
-    attributes
+    attributes,
   );
   return serverResponse(res, 200, "Success", announcement);
 };

@@ -37,6 +37,7 @@ $ npm run start
 [Ijwi ry ubugorozi](http://www.reformationvoice.org)
 
 Prepare staging
+
 - npm scripts: build-staging, start-staging, DONE
 - Update the db config, DONE
 - Update app.js: Serve build dir depending on the env, DONE

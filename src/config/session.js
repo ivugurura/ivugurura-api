@@ -9,7 +9,7 @@ const redisClient = createClient();
 redisClient
   .connect()
   .then(() => console.log("Redis connected"))
-  .catch((error) => {
+  .catch(error => {
     process.stdout.write(`Redis error: ${error.message}\n`);
     process.exit(1);
   });

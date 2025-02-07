@@ -69,7 +69,7 @@ export const uploadSingleFile = async (req, res) => {
     },
   }).single("file");
 
-  upload(req, res, async (uploadError) => {
+  upload(req, res, async uploadError => {
     if (uploadError instanceof multer.MulterError || uploadError) {
       const errorMsg = uploadError.message || uploadError;
       return serverResponse(res, 500, errorMsg);
@@ -80,7 +80,7 @@ export const uploadSingleFile = async (req, res) => {
     if (fileType === "image" && update === "yes") {
       await dbTopicHelper.update(
         { coverImage: fileName },
-        { coverImage: prevFile }
+        { coverImage: prevFile },
       );
     }
     return serverResponse(res, 200, "File(s) uploaded", fileName);

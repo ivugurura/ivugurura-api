@@ -13,7 +13,7 @@ module.exports = (sequelize, DataTypes) => {
       website: DataTypes.STRING,
       privateReply: DataTypes.TEXT,
     },
-    { tableName: "commentaries" }
+    { tableName: "commentaries" },
   );
   Commentary.associate = function (models) {
     Commentary.belongsTo(models.Topic, {

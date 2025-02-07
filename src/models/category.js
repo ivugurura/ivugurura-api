@@ -16,9 +16,9 @@ module.exports = (sequelize, DataTypes) => {
         required: true,
       },
     },
-    { tableName: "categories" }
+    { tableName: "categories" },
   );
-  Category.associate = (models) => {
+  Category.associate = models => {
     Category.belongsTo(models.Language, { as: "language" });
     Category.belongsTo(models.Category, {
       as: "parent",

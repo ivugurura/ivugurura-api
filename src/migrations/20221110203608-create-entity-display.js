@@ -37,7 +37,7 @@ module.exports = {
           type: Sequelize.DATE,
         },
       })
-      .catch((error) => {
+      .catch(error => {
         console.log(error);
       });
   },

@@ -5,7 +5,7 @@ module.exports = (sequelize, DataTypes) => {
     {
       name: DataTypes.STRING,
     },
-    { tableName: "albums" }
+    { tableName: "albums" },
   );
   Album.associate = function (models) {
     Album.hasMany(models.Media, {

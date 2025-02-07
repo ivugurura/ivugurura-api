@@ -1,20 +1,20 @@
-'use strict';
+"use strict";
 module.exports = (sequelize, DataTypes) => {
   const TopicView = sequelize.define(
-    'TopicView',
+    "TopicView",
     {
       ipAddress: DataTypes.STRING,
       topicId: {
         type: DataTypes.INTEGER,
-        required: true
-      }
+        required: true,
+      },
     },
     {
-      tableName: 'topic_views'
-    }
+      tableName: "topic_views",
+    },
   );
-  TopicView.associate = (models) => {
-    TopicView.belongsTo(models.Topic, { foreignKey: 'topicId' });
+  TopicView.associate = models => {
+    TopicView.belongsTo(models.Topic, { foreignKey: "topicId" });
   };
   return TopicView;
 };

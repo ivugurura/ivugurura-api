@@ -1,7 +1,7 @@
-'use strict';
+"use strict";
 module.exports = {
   up: (queryInterface, Sequelize) => {
-    return queryInterface.createTable('media', {
+    return queryInterface.createTable("media", {
       id: {
         allowNull: false,
         autoIncrement: true,
@@ -19,26 +19,26 @@ module.exports = {
       type: {
         type: Sequelize.ENUM,
         allowNull: false,
-        values: ['audio', 'video', 'image'],
+        values: ["audio", "video", "image"],
       },
       languageId: {
         type: Sequelize.INTEGER,
         allowNull: false,
-        onDelete: 'CASCADE',
+        onDelete: "CASCADE",
         references: {
-          model: 'languages',
-          key: 'id',
-          as: 'languageId',
+          model: "languages",
+          key: "id",
+          as: "languageId",
         },
       },
       albumId: {
         type: Sequelize.INTEGER,
         allowNull: false,
-        onDelete: 'CASCADE',
+        onDelete: "CASCADE",
         references: {
-          model: 'albums',
-          key: 'id',
-          as: 'albumId',
+          model: "albums",
+          key: "id",
+          as: "albumId",
         },
       },
       createdAt: {
@@ -52,6 +52,6 @@ module.exports = {
     });
   },
   down: (queryInterface, Sequelize) => {
-    return queryInterface.dropTable('media');
+    return queryInterface.dropTable("media");
   },
 };
