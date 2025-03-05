@@ -1,6 +1,7 @@
 import { Router } from "express";
 import { catchErrors, doesEntityExist, isAdminOrEditor } from "../middlewares";
 import {
+  deleteBook,
   getBookCategories,
   getBooks,
   readBook,
@@ -17,6 +18,12 @@ bookRoutes.get(
   "/:bookId",
   doesEntityExist("Book", "bookId"),
   catchErrors(readBook),
+);
+bookRoutes.delete(
+  "/:bookId",
+  isAdminOrEditor,
+  doesEntityExist("Book", "bookId"),
+  catchErrors(deleteBook),
 );
 
 export default bookRoutes;

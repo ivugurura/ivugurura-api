@@ -1,5 +1,5 @@
 // import path from "path";
-import { createReadStream, existsSync } from "fs";
+import { createReadStream, existsSync, unlinkSync } from "fs";
 import { filePathsMap, QueryHelper, serverResponse } from "../helpers";
 import { Book, BookCategory } from "../models";
 
@@ -71,4 +71,14 @@ export const readBook = async (req, res) => {
 
   const fileStream = createReadStream(filePath);
   return fileStream.pipe(res);
+};
+
+export const deleteBook = async (req, res) => {
+  const book = req.body.entity;
+  const filePath = `${filePathsMap.bookFile}/${book?.url}`;
+  if (existsSync(filePath)) {
+    unlinkSync(filePath);
+  }
+  await bookTb.delete({ id: book.id });
+  return serverResponse(res, 200, "Book deleted successfully");
 };
