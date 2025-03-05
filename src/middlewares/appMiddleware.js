@@ -1,11 +1,17 @@
 import { existsSync, mkdirSync } from "fs";
-import { serverResponse, QueryHelper, getLang, notifyMe } from "../helpers";
+import {
+  serverResponse,
+  models,
+  QueryHelper,
+  getLang,
+  notifyMe,
+} from "../helpers";
 import { Language } from "../models";
 import { translate } from "../locales";
 
 const dbHelper = new QueryHelper(Language);
 const isProd = process.env.NODE_ENV === "production";
-export const handleErrors = (err, req, res, next) => {
+export const handleErrors = (err, req, res, _next) => {
   const lang = getLang(req);
   let message = translate[lang].error500;
   if (isProd) {
@@ -70,3 +76,19 @@ export const setLanguage = async (req, res, next) => {
   req.body.languageId = language ? language.id : 1;
   return next();
 };
+
+export const doesEntityExist =
+  (modalName = "", idKey = "") =>
+  async (req, res, next) => {
+    const Modal = models[modalName];
+
+    const dbQuerier = new QueryHelper(Modal);
+    if (req.params[idKey]) {
+      const entity = await dbQuerier.findOne({ id: req.params[idKey] });
+      if (entity) {
+        req.body.entity = entity;
+        return next();
+      }
+    }
+    return serverResponse(res, 404, `${modalName} does not exist`);
+  };
