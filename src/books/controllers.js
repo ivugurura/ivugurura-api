@@ -7,6 +7,7 @@ import {
   systemRoles,
 } from "../helpers";
 import { Book, BookCategory } from "../models";
+import slugify from "slugify";
 
 const bookTb = new QueryHelper(Book);
 const categoryTb = new QueryHelper(BookCategory);
@@ -21,6 +22,8 @@ export const registerBook = async (req, res) => {
   const book = await bookTb.create({
     url: bookFile,
     coverImage: bookCover,
+    slug: slugify(rest.name),
+    userId: req.user.id,
     ...rest,
   });
 
@@ -33,7 +36,8 @@ export const registerBook = async (req, res) => {
  * @param {import('express').Response} res
  */
 export const getBooks = async (req, res) => {
-  const books = await bookTb.findAll();
+  const { languageId } = req.body;
+  const books = await bookTb.findAll({ languageId });
   return serverResponse(res, 200, "Success", books);
 };
 
@@ -85,8 +89,10 @@ export const deleteBook = async (req, res) => {
   }
 
   const filePath = `${filePathsMap.bookFile}/${book?.url}`;
-  if (existsSync(filePath)) {
+  const coverPath = `${filePathsMap.bookCover}/${book?.coverImage}`;
+  if (existsSync(filePath) && existsSync(coverPath)) {
     unlinkSync(filePath);
+    unlinkSync(coverPath);
   }
   await bookTb.delete({ id: book.id });
   return serverResponse(res, 200, "Book deleted successfully");
