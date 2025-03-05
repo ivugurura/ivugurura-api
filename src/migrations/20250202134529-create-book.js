@@ -41,6 +41,21 @@ module.exports = {
           as: "categoryId",
         },
       },
+      userId: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        references: {
+          model: "users",
+          key: "id",
+          as: "userId",
+        },
+      },
+      slug: {
+        type: Sequelize.STRING,
+      },
+      author: {
+        type: Sequelize.STRING,
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE,
