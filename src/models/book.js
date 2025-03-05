@@ -16,6 +16,10 @@ module.exports = (sequelize, DataTypes) => {
         as: "category",
         foreignKey: "categoryId",
       });
+      this.belongsTo(models.User, {
+        as: "user",
+        foreignKey: "userId",
+      });
     }
   }
   Book.init(
@@ -24,6 +28,8 @@ module.exports = (sequelize, DataTypes) => {
       summary: DataTypes.STRING,
       url: DataTypes.STRING,
       coverImage: DataTypes.STRING,
+      slug: DataTypes.STRING,
+      author: DataTypes.STRING,
     },
     {
       sequelize,
