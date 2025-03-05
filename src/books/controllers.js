@@ -50,7 +50,7 @@ export const getBookCategories = async (req, res) => {
  * @param {import('express').Response} res
  */
 export const readBook = async (req, res) => {
-  const book = req.book.entity;
+  const book = req.body.entity;
 
   const filePath = `${filePathsMap.bookFile}/${book?.url}`;
 
