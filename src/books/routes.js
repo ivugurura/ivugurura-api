@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { catchErrors, isAdminOrEditor } from "../middlewares";
+import { catchErrors, doesEntityExist, isAdminOrEditor } from "../middlewares";
 import {
   getBookCategories,
   getBooks,
@@ -13,6 +13,10 @@ const bookRoutes = Router();
 bookRoutes.post("/", isAdminOrEditor, isBookValid, catchErrors(registerBook));
 bookRoutes.get("/", catchErrors(getBooks));
 bookRoutes.get("/categories", catchErrors(getBookCategories));
-bookRoutes.get("/:bookId", catchErrors(readBook));
+bookRoutes.get(
+  "/:bookId",
+  doesEntityExist("Book", "bookId"),
+  catchErrors(readBook),
+);
 
 export default bookRoutes;

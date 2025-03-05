@@ -50,8 +50,7 @@ export const getBookCategories = async (req, res) => {
  * @param {import('express').Response} res
  */
 export const readBook = async (req, res) => {
-  const { bookId } = req.params;
-  const book = await bookTb.findOne({ id: bookId });
+  const book = req.book.entity;
 
   const filePath = `${filePathsMap.bookFile}/${book?.url}`;
 
