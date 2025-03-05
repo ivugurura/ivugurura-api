@@ -1,4 +1,34 @@
+import {
+  User,
+  Topic,
+  Category,
+  Language,
+  Commentary,
+  Media,
+  TopicView,
+  Album,
+  MediaDownload,
+  MediaShare,
+  EntityDisplay,
+  Book,
+} from "../models";
+
 const queryOptions = {};
+
+export const models = {
+  User,
+  Topic,
+  Category,
+  Language,
+  Commentary,
+  Media,
+  TopicView,
+  Album,
+  MediaDownload,
+  MediaShare,
+  EntityDisplay,
+  Book,
+};
 export class QueryHelper {
   /**
    *
