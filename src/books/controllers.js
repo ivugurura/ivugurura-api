@@ -1,6 +1,11 @@
 // import path from "path";
 import { createReadStream, existsSync, unlinkSync } from "fs";
-import { filePathsMap, QueryHelper, serverResponse } from "../helpers";
+import {
+  filePathsMap,
+  QueryHelper,
+  serverResponse,
+  systemRoles,
+} from "../helpers";
 import { Book, BookCategory } from "../models";
 
 const bookTb = new QueryHelper(Book);
@@ -75,6 +80,10 @@ export const readBook = async (req, res) => {
 
 export const deleteBook = async (req, res) => {
   const book = req.body.entity;
+  if (req.user.role === systemRoles.editor && book.userId !== req.user.id) {
+    return serverResponse(res, 401, "You are not allowed to delete the book");
+  }
+
   const filePath = `${filePathsMap.bookFile}/${book?.url}`;
   if (existsSync(filePath)) {
     unlinkSync(filePath);
