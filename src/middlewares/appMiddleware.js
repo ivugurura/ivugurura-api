@@ -5,6 +5,8 @@ import {
   QueryHelper,
   getLang,
   notifyMe,
+  ValidatorHelper,
+  joiValidatorMsg,
 } from "../helpers";
 import { Language } from "../models";
 import { translate } from "../locales";
@@ -91,4 +93,13 @@ export const doesEntityExist =
       }
     }
     return serverResponse(res, 404, `${modalName} does not exist`);
+  };
+
+export const isBodyValid =
+  (type = "", action) =>
+  (req, res, next) => {
+    let validator = new ValidatorHelper(req.body);
+    const errorBody = validator.validateInput(type, action);
+    if (errorBody.error) return joiValidatorMsg(res, errorBody);
+    return next();
   };
