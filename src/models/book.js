@@ -30,6 +30,7 @@ module.exports = (sequelize, DataTypes) => {
       coverImage: DataTypes.STRING,
       slug: DataTypes.STRING,
       author: DataTypes.STRING,
+      isDownloadable: DataTypes.BOOLEAN,
     },
     {
       sequelize,
