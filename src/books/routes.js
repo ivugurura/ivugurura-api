@@ -1,5 +1,10 @@
 import { Router } from "express";
-import { catchErrors, doesEntityExist, isAdminOrEditor } from "../middlewares";
+import {
+  catchErrors,
+  doesEntityExist,
+  isAdminOrEditor,
+  isBodyValid,
+} from "../middlewares";
 import {
   deleteBook,
   getBookCategories,
@@ -7,11 +12,15 @@ import {
   readBook,
   registerBook,
 } from "./controllers";
-import { isBookValid } from "./middlewares";
 
 const bookRoutes = Router();
 
-bookRoutes.post("/", isAdminOrEditor, isBookValid, catchErrors(registerBook));
+bookRoutes.post(
+  "/",
+  isAdminOrEditor,
+  isBodyValid("book"),
+  catchErrors(registerBook),
+);
 bookRoutes.get("/", catchErrors(getBooks));
 bookRoutes.get("/categories", catchErrors(getBookCategories));
 bookRoutes.get(
