@@ -56,6 +56,10 @@ module.exports = {
       author: {
         type: Sequelize.STRING,
       },
+      isDownloadable: {
+        type: Sequelize.BOOLEAN,
+        defaultValue: true,
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE,

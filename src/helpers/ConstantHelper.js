@@ -140,6 +140,7 @@ export class ConstantHelper {
       summary: Joi.string().required(),
       bookCover: Joi.string().required(),
       bookFile: Joi.string().required(),
+      isDownloadable: Joi.boolean().required(),
     };
   }
   albumIncludes() {
