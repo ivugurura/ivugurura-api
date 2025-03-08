@@ -68,15 +68,17 @@ export const readBook = async (req, res) => {
   }
 
   res.setHeader("Content-Type", "application/pdf");
-  res.setHeader("Content-Disposition", "inline"); // Forces viewing, not downloading
-  res.setHeader("X-Content-Type-Options", "nosniff");
-  res.setHeader(
-    "Cache-Control",
-    "no-store, no-cache, must-revalidate, proxy-revalidate",
-  );
-  res.setHeader("Pragma", "no-cache");
-  res.setHeader("Expires", "0");
-  res.setHeader("Referrer-Policy", "no-referrer");
+  if (!book.isDownloadable) {
+    res.setHeader("Content-Disposition", "inline"); // Forces viewing, not downloading
+    res.setHeader("X-Content-Type-Options", "nosniff");
+    res.setHeader(
+      "Cache-Control",
+      "no-store, no-cache, must-revalidate, proxy-revalidate",
+    );
+    res.setHeader("Pragma", "no-cache");
+    res.setHeader("Expires", "0");
+    res.setHeader("Referrer-Policy", "no-referrer");
+  }
 
   const fileStream = createReadStream(filePath);
   return fileStream.pipe(res);
