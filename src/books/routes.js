@@ -7,6 +7,7 @@ import {
 } from "../middlewares";
 import {
   deleteBook,
+  downloadBook,
   getBookCategories,
   getBooks,
   readBook,
@@ -33,6 +34,11 @@ bookRoutes.delete(
   isAdminOrEditor,
   doesEntityExist("Book", "bookId"),
   catchErrors(deleteBook),
+);
+bookRoutes.get(
+  "/download/:bookId",
+  doesEntityExist("Book", "bookId"),
+  catchErrors(downloadBook),
 );
 
 export default bookRoutes;

@@ -99,3 +99,19 @@ export const deleteBook = async (req, res) => {
   await bookTb.delete({ id: book.id });
   return serverResponse(res, 200, "Book deleted successfully");
 };
+
+export const downloadBook = async (req, res) => {
+  const book = req.body.entity;
+
+  if (!book.isDownloadable) {
+    return serverResponse(res, 401, "Book is not downloadable");
+  }
+  const filePath = `${filePathsMap.bookFile}/${book?.url}`;
+  if (!existsSync(filePath)) {
+    return serverResponse(res, 404, "Book not found");
+  }
+  res.setHeader("Content-Type", "application/pdf");
+  res.setHeader("Content-Disposition", `attachment; filename="${book?.name}"`);
+  const fileStream = createReadStream(filePath);
+  return fileStream.pipe(res);
+};
