@@ -13,6 +13,7 @@ import {
   readBook,
   registerBook,
 } from "./controllers";
+import { validateBookAccess } from "./middlewares";
 
 const bookRoutes = Router();
 
@@ -26,6 +27,7 @@ bookRoutes.get("/", catchErrors(getBooks));
 bookRoutes.get("/categories", catchErrors(getBookCategories));
 bookRoutes.get(
   "/:bookId",
+  validateBookAccess,
   doesEntityExist("Book", "bookId"),
   catchErrors(readBook),
 );
@@ -37,6 +39,7 @@ bookRoutes.delete(
 );
 bookRoutes.get(
   "/:bookId/download",
+  validateBookAccess,
   doesEntityExist("Book", "bookId"),
   catchErrors(downloadBook),
 );
