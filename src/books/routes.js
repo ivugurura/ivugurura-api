@@ -36,7 +36,7 @@ bookRoutes.delete(
   catchErrors(deleteBook),
 );
 bookRoutes.get(
-  "/download/:bookId",
+  "/:bookId/download",
   doesEntityExist("Book", "bookId"),
   catchErrors(downloadBook),
 );
