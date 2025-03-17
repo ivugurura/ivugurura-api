@@ -34,6 +34,11 @@ export const corseOptions = {
     }
   },
   methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
-  allowedHeaders: ["Content-Type", "Authorization"],
+  allowedHeaders: [
+    "Content-Type",
+    "Authorization",
+    "X-Timestamp",
+    "X-Signature",
+  ],
   credentials: true,
 };
