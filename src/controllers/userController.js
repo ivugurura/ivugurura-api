@@ -22,7 +22,7 @@ const { Op } = Sequelize;
 export const userSignin = async (req, res, next) => {
   passport.authenticate("local.login", (error, user) => {
     if (error) return serverResponse(res, 401, error.message);
-    req.logIn(user, err => {
+    return req.logIn(user, err => {
       if (err) return next(err);
 
       user.token = generatJWT({ id: user.id });
