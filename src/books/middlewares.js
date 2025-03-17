@@ -9,7 +9,7 @@ import { authenticatedUser, serverResponse, systemRoles } from "../helpers";
  * @returns
  */
 export const validateBookAccess = async (req, res, next) => {
-  const book = req.body.book;
+  const book = req.body.entity;
   if (book.isDownloadable) {
     return next();
   }
