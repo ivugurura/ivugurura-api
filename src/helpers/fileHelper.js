@@ -4,14 +4,46 @@ import path from "path";
 import { Topic } from "../models";
 import { ConstantHelper } from "./ConstantHelper";
 import { QueryHelper } from "./QueryHelper";
-import {
-  ACCEPTED_FILE_SIZE,
-  filePathsMap,
-  isFileAllowed,
-  serverResponse,
-} from "./util";
+import { ACCEPTED_FILE_SIZE, isFileAllowed, serverResponse } from "./util";
 
 const dbTopicHelper = new QueryHelper(Topic);
+
+export const getFilePath = key => {
+  const vals = {
+    develop: {
+      image: process.env.IMAGES_ZONE_DEV,
+      song: process.env.SONGS_ZONE_DEV,
+      bookCover: process.env.BOOK_COVERS_ZONE_DEV,
+      bookFile: process.env.BOOK_FILES_ZONE_DEV,
+    },
+    staging: {
+      image: process.env.IMAGES_ZONE_STAGING,
+      song: process.env.SONGS_ZONE_STAGING,
+      bookCover: process.env.BOOK_COVERS_ZONE_STAGING,
+      bookFile: process.env.BOOK_FILES_ZONE_STAGING,
+    },
+    production: {
+      image: process.env.IMAGES_ZONE,
+      song: process.env.SONGS_ZONE,
+      bookCover: process.env.BOOK_COVERS_ZONE,
+      bookFile: process.env.BOOK_FILES_ZONE,
+    },
+  };
+  const env = process.env.NODE_ENV || "develop";
+
+  if (!vals[env] || !vals[env][key]) {
+    throw new Error(`No file path found for ${env}`);
+  }
+  return vals[env][key];
+};
+
+export const filePathsMap = {
+  image: getFilePath("image"),
+  song: getFilePath("song"),
+  bookCover: getFilePath("bookCover"),
+  bookFile: getFilePath("bookFile"),
+};
+
 const storage = multer.diskStorage({
   destination: (req, file, callBack) => {
     let fileStorage = null;

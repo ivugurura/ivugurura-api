@@ -178,12 +178,7 @@ export const isFileAllowed = (file, fileType, fileCallBack) => {
 
   return fileCallBack(errorMsg);
 };
-export const filePathsMap = {
-  image: process.env.IMAGES_ZONE,
-  song: process.env.SONGS_ZONE,
-  bookCover: process.env.BOOK_COVERS_ZONE,
-  bookFile: process.env.BOOK_FILES_ZONE,
-};
+
 const MB = 1024 * 1024;
 export const ACCEPTED_FILE_SIZE = 100 * MB; //100 mbs
 
