@@ -13,7 +13,7 @@ import { allowedOrigins, corseOptions, security } from "./config/security";
 import { appSocket } from "./config/socketIo";
 import { session } from "./config/session";
 import { dbBackup } from "./crons";
-import { dbConnectFail } from "./helpers";
+import { dbConnectFail, filePathsMap } from "./helpers";
 import "dotenv/config";
 
 const app = express();
@@ -54,9 +54,9 @@ app.use(
 );
 app.use(express.json({ limit: "100mb" }));
 app.use(express.static(buildDir));
-app.use("/songs", express.static("public/songs"));
-app.use("/images", express.static("public/images"));
-app.use("/covers", express.static("public/books/bookCovers"));
+app.use("/songs", express.static(filePathsMap.song));
+app.use("/images", express.static(filePathsMap.image));
+app.use("/covers", express.static(filePathsMap.bookCover));
 /**
  * Initialize passport and session
  */
