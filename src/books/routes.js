@@ -27,19 +27,20 @@ bookRoutes.get("/", catchErrors(getBooks));
 bookRoutes.get("/categories", catchErrors(getBookCategories));
 bookRoutes.get(
   "/:bookId",
-  doesEntityExist("Book", "bookId"),
+  catchErrors(doesEntityExist("Book", "bookId")),
+  catchErrors(validateBookAccess),
   catchErrors(readBook),
 );
 bookRoutes.delete(
   "/:bookId",
   isAdminOrEditor,
-  doesEntityExist("Book", "bookId"),
+  catchErrors(doesEntityExist("Book", "bookId")),
   catchErrors(deleteBook),
 );
 bookRoutes.get(
   "/:bookId/download",
-  doesEntityExist("Book", "bookId"),
-  validateBookAccess,
+  catchErrors(doesEntityExist("Book", "bookId")),
+  catchErrors(validateBookAccess),
   catchErrors(downloadBook),
 );
 

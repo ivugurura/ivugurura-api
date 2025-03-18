@@ -104,9 +104,11 @@ export const downloadBook = async (req, res) => {
   const book = req.body.entity;
 
   if (!book.isDownloadable) {
-    return serverResponse(res, 401, "Book is not downloadable");
+    return serverResponse(res, 401, "You are not allowed to download the book");
   }
+
   const filePath = `${filePathsMap.bookFile}/${book?.url}`;
+
   if (!existsSync(filePath)) {
     return serverResponse(res, 404, "Book not found");
   }
