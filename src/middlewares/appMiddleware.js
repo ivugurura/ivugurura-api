@@ -1,4 +1,3 @@
-import { existsSync, mkdirSync } from "fs";
 import {
   serverResponse,
   models,
@@ -42,11 +41,6 @@ export const handleErrors = (err, req, res, _next) => {
 
 export const monitorDevActions = (req, res, next) => {
   const lang = getLang(req);
-  const songsDir = process.env.SONGS_ZONE;
-  const imagesDir = process.env.IMAGES_ZONE;
-  if (!existsSync("./public")) mkdirSync("./public");
-  if (!existsSync(songsDir)) mkdirSync(songsDir);
-  if (!existsSync(imagesDir)) mkdirSync(imagesDir);
   if (process.env.NODE_ENV === "develop") {
     const user = req.isAuthenticated()
       ? `User: ${req.user.username}`
