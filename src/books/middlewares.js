@@ -1,4 +1,4 @@
-// import crypto from "crypto";
+import crypto from "crypto";
 import { authenticatedUser, serverResponse, systemRoles } from "../helpers";
 
 /**
@@ -15,27 +15,26 @@ export const validateBookAccess = async (req, res, next) => {
   }
 
   const user = await authenticatedUser(req);
-  if (book.userId === user?.id || user.role <= systemRoles.editor) {
+  if (book.userId === user?.id || user?.role <= systemRoles.editor) {
     return next();
   }
 
-  return serverResponse(res, 403, "You are not allowed to download this book");
-  // const apiKey = "your-secret-key";
-  // const requestTimestamp = req.headers["x-timestamp"];
-  // const requestHash = req.headers["x-signature"];
+  const apiKey = "your-secret-key";
+  const requestTimestamp = req.headers["x-timestamp"];
+  const requestHash = req.headers["x-signature"];
 
-  // if (!requestTimestamp || !requestHash) {
-  //   return res.status(403).json({ error: "Missing authentication headers" });
-  // }
+  const errMsg = sy => "You are not allowed to download this book: " + sy;
+  if (!requestTimestamp || !requestHash) {
+    return serverResponse(res, 403, errMsg("MA Headers"));
+  }
 
-  // const expectedHash = crypto
-  //   .createHmac("sha256", apiKey)
-  //   .update(requestTimestamp)
-  //   .digest("hex");
+  const expectedHash = crypto
+    .createHmac("sha256", apiKey)
+    .update(requestTimestamp)
+    .digest("hex");
 
-  // if (requestHash !== expectedHash) {
-  //   return res.status(403).json({ error: "Invalid signature" });
-  // }
-
-  // return next();
+  if (requestHash === expectedHash) {
+    return next();
+  }
+  return serverResponse(res, 403, errMsg("INV signature"));
 };
