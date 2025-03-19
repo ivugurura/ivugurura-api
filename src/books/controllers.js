@@ -37,7 +37,13 @@ export const registerBook = async (req, res) => {
  */
 export const getBooks = async (req, res) => {
   const { languageId } = req.body;
-  const books = await bookTb.findAll({ languageId });
+  const books = await bookTb.findAll({ languageId }, [
+    {
+      model: BookCategory,
+      as: "category",
+      attributes: ["name"],
+    },
+  ]);
   return serverResponse(res, 200, "Success", books);
 };
 
