@@ -22,6 +22,7 @@ export const security = app => {
 const allowedOrigins = [
   "http://localhost:3000", // Allow localhost
   "https://reformationvoice.org",
+  "https://www.reformationvoice.org",
   "https://dev.reformationvoice.org",
 ];
 export const corseOptions = {
