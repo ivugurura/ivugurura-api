@@ -1,10 +1,38 @@
-import { Model } from "sequelize";
+import {
+  User,
+  Topic,
+  Category,
+  Language,
+  Commentary,
+  Media,
+  TopicView,
+  Album,
+  MediaDownload,
+  MediaShare,
+  EntityDisplay,
+  Book,
+} from "../models";
 
 const queryOptions = {};
+
+export const models = {
+  User,
+  Topic,
+  Category,
+  Language,
+  Commentary,
+  Media,
+  TopicView,
+  Album,
+  MediaDownload,
+  MediaShare,
+  EntityDisplay,
+  Book,
+};
 export class QueryHelper {
   /**
    *
-   * @param {Model} model
+   * @param {import('sequelize').Model} model
    */
   constructor(model) {
     this.model = model;
