@@ -17,10 +17,10 @@ export const getFilePath = key => {
       bookFile: process.env.BOOK_FILES_ZONE_DEV,
     },
     staging: {
-      image: process.env.IMAGES_ZONE_STAGING,
-      song: process.env.SONGS_ZONE_STAGING,
-      bookCover: process.env.BOOK_COVERS_ZONE_STAGING,
-      bookFile: process.env.BOOK_FILES_ZONE_STAGING,
+      image: process.env.IMAGES_ZONE_STG,
+      song: process.env.SONGS_ZONE_STG,
+      bookCover: process.env.BOOK_COVERS_ZONE_STG,
+      bookFile: process.env.BOOK_FILES_ZONE_STG,
     },
     production: {
       image: process.env.IMAGES_ZONE,
