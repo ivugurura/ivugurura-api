@@ -19,6 +19,7 @@
     "seed-up": "sequelize db:seed:all",
     "seed-down": "sequelize db:seed:undo:all",
     "dev": "NODE_ENV=develop nodemon --exec babel-node src/app.js",
+    "stg": "NODE_ENV=staging nodemon --exec babel-node src/app.js",
     "clean": "rimraf dist",
     "build": "NODE_ENV=production yarn clean && babel ./src --out-dir dist",
     "start": "ulimit -c 0; NODE_ENV=production node dist/app.js",
