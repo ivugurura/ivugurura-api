@@ -7,13 +7,51 @@ import { QueryHelper } from "./QueryHelper";
 import { ACCEPTED_FILE_SIZE, isFileAllowed, serverResponse } from "./util";
 
 const dbTopicHelper = new QueryHelper(Topic);
+
+export const getFilePath = key => {
+  const vals = {
+    develop: {
+      image: process.env.IMAGES_ZONE_DEV,
+      song: process.env.SONGS_ZONE_DEV,
+      bookCover: process.env.BOOK_COVERS_ZONE_DEV,
+      bookFile: process.env.BOOK_FILES_ZONE_DEV,
+    },
+    staging: {
+      image: process.env.IMAGES_ZONE_STAGING,
+      song: process.env.SONGS_ZONE_STAGING,
+      bookCover: process.env.BOOK_COVERS_ZONE_STAGING,
+      bookFile: process.env.BOOK_FILES_ZONE_STAGING,
+    },
+    production: {
+      image: process.env.IMAGES_ZONE,
+      song: process.env.SONGS_ZONE,
+      bookCover: process.env.BOOK_COVERS_ZONE,
+      bookFile: process.env.BOOK_FILES_ZONE,
+    },
+  };
+  const env = process.env.NODE_ENV || "develop";
+
+  if (!vals[env] || !vals[env][key]) {
+    throw new Error(`No file path found for ${env}`);
+  }
+  return vals[env][key];
+};
+
+export const filePathsMap = {
+  image: getFilePath("image"),
+  song: getFilePath("song"),
+  bookCover: getFilePath("bookCover"),
+  bookFile: getFilePath("bookFile"),
+};
+
 const storage = multer.diskStorage({
   destination: (req, file, callBack) => {
     let fileStorage = null;
-    const { path } = req;
-    if (path.includes("upload/image")) fileStorage = process.env.IMAGES_ZONE;
-    else if (path.includes("upload/song")) fileStorage = process.env.SONGS_ZONE;
-    else callBack(ConstantHelper.serverError);
+    if (req.path.includes("upload/image")) {
+      fileStorage = process.env.IMAGES_ZONE;
+    } else if (req.path.includes("upload/song")) {
+      fileStorage = process.env.SONGS_ZONE;
+    } else callBack(ConstantHelper.serverError);
     callBack(null, fileStorage);
   },
   filename: (req, file, callBack) => {
@@ -30,26 +68,24 @@ export const uploadSingle = multer({
 export const uploadMany = multer({ storage }).array("file");
 
 export const uploadSingleFile = async (req, res) => {
-  let fileStorage = null;
   const { fileType } = req.params;
   const { prevFile, update } = req.query;
-  if (fileType === "image") {
-    fileStorage = process.env.IMAGES_ZONE;
-  } else if (fileType === "song") {
-    fileStorage = process.env.SONGS_ZONE;
-  } else return serverResponse(res, 400, "Unknown file upload");
+
+  const filesDir = filePathsMap[fileType];
+  if (!filesDir) return serverResponse(res, 400, "Unknown file upload");
+
   /**
    * Delete the previous file if exist
    */
-  if (!existsSync(fileStorage)) {
-    mkdirSync(fileStorage, { recursive: true });
+  if (!existsSync(filesDir)) {
+    mkdirSync(filesDir, { recursive: true });
   }
   if (prevFile) {
-    unlink(`${fileStorage}/${prevFile}`, () => {});
+    unlink(`${filesDir}/${prevFile}`, () => {});
   }
-  const storage = multer.diskStorage({
+  const diskStorage = multer.diskStorage({
     destination: (req, file, callBack) => {
-      callBack(null, fileStorage);
+      callBack(null, filesDir);
     },
     filename: (req, file, callBack) => {
       let ext = path.extname(file.originalname).split(".")[1];
@@ -59,17 +95,20 @@ export const uploadSingleFile = async (req, res) => {
     },
   });
   const upload = multer({
-    storage,
+    storage: diskStorage,
     limits: { fileSize: ACCEPTED_FILE_SIZE },
     fileFilter: (req, file, filterCallBack) => {
-      isFileAllowed(file, fileStorage, (error, allowed) => {
+      let type = "images";
+      if (fileType === "song") type = "audios";
+      if (fileType === "bookFile") type = "files";
+      isFileAllowed(file, type, (error, allowed) => {
         if (error) return filterCallBack(error);
         return filterCallBack(null, allowed);
       });
     },
   }).single("file");
 
-  upload(req, res, async uploadError => {
+  return upload(req, res, async uploadError => {
     if (uploadError instanceof multer.MulterError || uploadError) {
       const errorMsg = uploadError.message || uploadError;
       return serverResponse(res, 500, errorMsg);
