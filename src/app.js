@@ -20,7 +20,7 @@ const app = express();
 
 app.use(cors(corseOptions));
 app.use((req, res, next) => {
-  const origin = req.headers.origin || req.headers.referer.replace(/\/$/, "");
+  const origin = req.headers.origin || req.headers.referer?.replace(/\/$/, "");
 
   if (allowedOrigins.includes(origin)) {
     res.setHeader("X-Frame-Options", `ALLOW-FROM ${origin}`); // Change accordingly
