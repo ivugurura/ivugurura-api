@@ -138,7 +138,7 @@ export class ConstantHelper {
       categoryId: Joi.number().required(),
       author: Joi.string().required(),
       summary: Joi.string().required(),
-      bookCover: Joi.string().required(),
+      bookCover: Joi.string(),
       bookFile: Joi.string().required(),
       isDownloadable: Joi.boolean().required(),
     };
