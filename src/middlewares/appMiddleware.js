@@ -79,8 +79,10 @@ export const doesEntityExist =
     const Modal = models[modalName];
 
     const dbQuerier = new QueryHelper(Modal);
-    if (req.params[idKey]) {
-      const entity = await dbQuerier.findOne({ id: req.params[idKey] });
+    const idOrSlug = req.params[idKey];
+    if (idOrSlug) {
+      const key = isNaN(idOrSlug) ? "slug" : "id";
+      const entity = await dbQuerier.findOne({ [key]: idOrSlug });
       if (entity) {
         req.body.entity = entity;
         return next();
