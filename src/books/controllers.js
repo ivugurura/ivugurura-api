@@ -123,3 +123,9 @@ export const downloadBook = async (req, res) => {
   const fileStream = createReadStream(filePath);
   return fileStream.pipe(res);
 };
+
+export const getBook = (req, res) => {
+  const book = req.body.entity;
+
+  return serverResponse(res, 200, "Successfully", book);
+};
