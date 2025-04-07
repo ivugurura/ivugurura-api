@@ -17,7 +17,7 @@ import {
   getAllMedia,
   bulkCreateMedia,
 } from "../../controllers/albumController";
-import { uploadSingleFile } from "../../helpers";
+import { upload } from "../../helpers";
 import {
   isAdmin,
   catchErrors,
@@ -28,6 +28,7 @@ import {
   doesMediaExist,
   isSuperAdmin,
 } from "../../middlewares";
+import { finalizeUpload } from "../../controllers/fileController";
 
 const albumRoutes = Router();
 albumRoutes.post("/", isAdmin, isAlbumValid, catchErrors(createAlbum));
@@ -55,8 +56,8 @@ albumRoutes.delete(
 albumRoutes.post(
   "/upload/:fileType",
   isAdmin,
-  // isFileTypeValid,
-  catchErrors(uploadSingleFile),
+  upload.single(""),
+  finalizeUpload,
 );
 albumRoutes.delete(
   "/:fileType/:fileName",
