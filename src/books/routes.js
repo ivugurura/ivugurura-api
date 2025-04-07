@@ -8,6 +8,7 @@ import {
 import {
   deleteBook,
   downloadBook,
+  getBook,
   getBookCategories,
   getBooks,
   readBook,
@@ -25,6 +26,11 @@ bookRoutes.post(
 );
 bookRoutes.get("/", catchErrors(getBooks));
 bookRoutes.get("/categories", catchErrors(getBookCategories));
+bookRoutes.get(
+  "/:bookId/view",
+  catchErrors(doesEntityExist("Book", "bookId")),
+  getBook,
+);
 bookRoutes.get(
   "/:bookId",
   catchErrors(doesEntityExist("Book", "bookId")),
