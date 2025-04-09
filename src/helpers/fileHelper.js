@@ -1,8 +1,7 @@
-// import { unlink } from "fs";
 import multer from "multer";
 import path from "path";
-// import { ConstantHelper } from "./ConstantHelper";
-import { isFileAllowed } from "./util";
+import { ACCEPTED_FILE_SIZE, isFileAllowed } from "./util";
+import { unlinkSync } from "fs";
 
 export const getFilePath = key => {
   const vals = {
@@ -40,36 +39,14 @@ export const filePathsMap = {
   bookFile: getFilePath("bookFile"),
 };
 
-// const storage = multer.diskStorage({
-//   destination: (req, file, callBack) => {
-//     let fileStorage = null;
-//     if (req.path.includes("upload/image")) {
-//       fileStorage = process.env.IMAGES_ZONE;
-//     } else if (req.path.includes("upload/song")) {
-//       fileStorage = process.env.SONGS_ZONE;
-//     } else callBack(ConstantHelper.serverError);
-//     callBack(null, fileStorage);
-//   },
-//   filename: (req, file, callBack) => {
-//     let ext = path.extname(file.originalname).split(".")[1];
-//     let fileName = file.originalname.split(".")[0];
-//     let mediaLink = `${fileName}-${Date.now()}.${ext}`;
-//     callBack(null, mediaLink);
-//   },
-// });
-
-// export const uploadSingle = multer({
-//   storage,
-// }).single("file");
-// export const uploadMany = multer({ storage }).array("file");
 const getDestination = (req, file, callBack) => {
   const { fileType } = req.params;
-  // const { prevFile } = req.query;
+  const { prevFile } = req.query;
   const filesDir = filePathsMap[fileType];
 
-  // if (prevFile) {
-  //   unlink(`${filesDir}/${prevFile}`, () => {});
-  // }
+  if (prevFile) {
+    unlinkSync(`${filesDir}/${prevFile}`);
+  }
 
   callBack(null, filesDir);
 };
@@ -77,29 +54,28 @@ const getFileName = (req, file, callBack) => {
   let ext = path.extname(file.originalname).split(".")[1];
   let fileName = file.originalname.split(".")[0].replace(/\W/g, " ").trim();
   let mediaLink = `${fileName}-${Date.now()}.${ext}`;
-  // console.log(req.body, req.params, req.file, mediaLink);
   callBack(null, mediaLink);
 };
 
-const diskStorage = multer.diskStorage({
+export const diskStorage = multer.diskStorage({
   destination: getDestination,
   filename: getFileName,
 });
 
-const filterFile = (req, file, filterCallBack) => {
+export const filterFile = (req, file, filterCallBack) => {
   let type = "images";
   const { fileType } = req.params;
   if (fileType === "song") type = "audios";
   if (fileType === "bookFile") type = "files";
-  console.log(req.body, req.params, req.file, type);
+
   isFileAllowed(file, type, (error, allowed) => {
     if (error) return filterCallBack(error);
     return filterCallBack(null, allowed);
   });
 };
 
-export const upload = multer({
+export const uploadSingle = multer({
   storage: diskStorage,
-  limits: { fileSize: 10 * 1024 * 1024 },
+  limits: { fileSize: ACCEPTED_FILE_SIZE },
   fileFilter: filterFile,
-});
+}).single("file");

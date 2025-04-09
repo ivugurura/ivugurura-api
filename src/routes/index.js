@@ -7,8 +7,10 @@ import {
   route404,
   setLanguage,
   catchErrors,
+  isAdmin,
 } from "../middlewares";
 import apiRoutes from "./api";
+import { finalizeSingleUpload } from "../controllers/fileController";
 
 const routes = Router();
 
@@ -19,6 +21,7 @@ routes.get("/", (req, res) => {
 });
 routes.use("/v1", catchErrors(setLanguage), apiRoutes);
 routes.get("/v1/youtube", catchErrors(getYoutubeVideos));
+routes.post("/v1/upload-file/:fileType", isAdmin, finalizeSingleUpload);
 routes.all("/*", route404);
 
 export default routes;
