@@ -115,3 +115,6 @@ build-staging/
 # Zip files
 build-staging.tar.gz
 build.tar.gz
+
+# Mac generated files
+.DS_Store

@@ -17,7 +17,6 @@ import {
   getAllMedia,
   bulkCreateMedia,
 } from "../../controllers/albumController";
-import { uploadSingleFile } from "../../helpers";
 import {
   isAdmin,
   catchErrors,
@@ -52,12 +51,6 @@ albumRoutes.delete(
   catchErrors(deleteAlbum),
 );
 
-albumRoutes.post(
-  "/upload/:fileType",
-  isAdmin,
-  isFileTypeValid,
-  catchErrors(uploadSingleFile),
-);
 albumRoutes.delete(
   "/:fileType/:fileName",
   isFileTypeValid,

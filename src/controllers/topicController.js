@@ -149,8 +149,8 @@ export const getOneTopic = async (req, res) => {
   related = related
     .map(x => x.get({ plain: true }))
     .map(rel => {
-      const trancated = truncateString(convert(rel.content), 70);
-      return { ...rel, content: trancated, description: trancated };
+      const trString = truncateString(convert(rel.content), 70);
+      return { ...rel, content: trString, description: trString };
     });
   const category = { ...topic.category, relatedTopics: related };
   topic = { ...topic, category, views };
