@@ -31,9 +31,9 @@ export const getPublishedAnnouncemnt = async (req, res) => {
     null,
     attributes,
   );
-  if (announcement && truncate) {
+  if (announcement && truncate && !isNaN(truncate)) {
     announcement = announcement.get({ plain: true });
-    const trString = truncateString(convert(announcement.content), 70);
+    const trString = truncateString(convert(announcement.content), truncate);
     announcement = { ...announcement, content: trString };
   }
   return serverResponse(res, 200, "Success", announcement);
