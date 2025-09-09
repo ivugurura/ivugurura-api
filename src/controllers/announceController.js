@@ -1,6 +1,7 @@
-import { serverResponse, QueryHelper } from "../helpers";
+import { serverResponse, QueryHelper, truncateString } from "../helpers";
 import { Announcement, Sequelize } from "../models";
 import { ConstantHelper } from "../helpers/ConstantHelper";
+import { convert } from "html-to-text";
 
 const dbHelper = new QueryHelper(Announcement);
 const constHelper = new ConstantHelper();
@@ -11,18 +12,30 @@ export const getAnnouncements = async (req, res) => {
     { languageId },
     constHelper.identifierIncludes(),
   );
-  return serverResponse(res, 200, "Success", announcements);
+  const plainAnnouncements = announcements
+    .map(x => x.get({ plain: true }))
+    .map(rel => {
+      const trString = truncateString(convert(rel.content), 70);
+      return { ...rel, content: trString };
+    });
+  return serverResponse(res, 200, "Success", plainAnnouncements);
 };
 export const getPublishedAnnouncemnt = async (req, res) => {
   const { languageId } = req.body;
+  const { truncate } = req.query;
   const attributes = ["id", "title", "content"];
   const tonight = new Date().setHours(0, 0, 0, 0);
 
-  const announcement = await dbHelper.findOne(
+  let announcement = await dbHelper.findOne(
     { languageId, isPublished: true, expiryDate: { [Op.gte]: tonight } },
     null,
     attributes,
   );
+  if (announcement && truncate && !isNaN(truncate)) {
+    announcement = announcement.get({ plain: true });
+    const trString = truncateString(convert(announcement.content), truncate);
+    announcement = { ...announcement, content: trString };
+  }
   return serverResponse(res, 200, "Success", announcement);
 };
 export const publishAnnouncement = async (req, res) => {
