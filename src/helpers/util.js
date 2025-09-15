@@ -109,7 +109,7 @@ export const authenticatedUser = async req => {
  * @param {String} emailContent The formated message to be sent
  * @param {String} sendTo an email to send the message to
  */
-export const sendEmail = async (subject, emailContent, sendTo) => {
+export const sendEmail = (subject, emailContent, sendTo) => {
   sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
   const messageBody = {
@@ -119,7 +119,7 @@ export const sendEmail = async (subject, emailContent, sendTo) => {
     html: emailContent,
     text: `${emailContent}`,
   };
-  return await sgMail.send(messageBody);
+  return sgMail.send(messageBody);
 };
 export const getLang = req => {
   return req.acceptsLanguages("en", "kn", "fr", "sw") || "en";
@@ -206,7 +206,7 @@ export const notifyMe = async (title = "", info = "") => {
     const content = mailFormatter("System", "Reformation System", info);
     await sendEmail(title, content, process.env.ADMIN_EMAIL);
   } catch (error) {
-    throw new Error(error.message);
+    console.log("Notify_Error", error.message);
   }
 };
 

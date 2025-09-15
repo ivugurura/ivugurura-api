@@ -68,7 +68,7 @@ export const sendContactUs = async (req, res) => {
   const subject = `${names} contacted us from ${process.env.APP_NAME}`;
   const emailContent = mailFormatter(names, email, message);
 
-  await sendEmail(subject, emailContent, process.env.CONTACT_EMAIL);
+  sendEmail(subject, emailContent, process.env.CONTACT_EMAIL);
 
   return serverResponse(res, 200, "Message sent");
 };
