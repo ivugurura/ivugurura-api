@@ -196,7 +196,7 @@ export const addTopicComment = async (req, res) => {
 
   const newComment = await dbCommentHelper.create(req.body);
   // Send message to Admin
-  await sendEmail(subject, emailContent, process.env.CONTACT_EMAIL);
+  sendEmail(subject, emailContent, process.env.CONTACT_EMAIL);
 
   return serverResponse(res, 201, "Success", newComment);
 };
@@ -298,7 +298,7 @@ export const replyToComment = async (req, res) => {
       .filter(Boolean)
       .join("~");
     await dbCommentHelper.update({ privateReply: newContent }, { id });
-    await sendEmail(subject, emailContent, comment.email);
+    sendEmail(subject, emailContent, comment.email);
   }
 
   return serverResponse(res, 200, "Success");
