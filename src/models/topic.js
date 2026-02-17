@@ -12,6 +12,10 @@ module.exports = (sequelize, DataTypes) => {
       description: DataTypes.STRING,
       content: DataTypes.TEXT,
       isPublished: DataTypes.BOOLEAN,
+      hasIndexed: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: false,
+      },
     },
     {
       tableName: "topics",
