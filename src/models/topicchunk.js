@@ -1,5 +1,4 @@
 "use strict";
-const { Vector } = require("pgvector/sequelize");
 const { Model } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
   class TopicChunk extends Model {
@@ -35,11 +34,7 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
       },
       embedding: {
-        type: Vector(384),
-        allowNull: false,
-      },
-      topicUpdatedAt: {
-        type: DataTypes.DATE,
+        type: DataTypes.VECTOR(384),
         allowNull: false,
       },
     },

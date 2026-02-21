@@ -25,11 +25,7 @@ module.exports = {
         allowNull: false,
       },
       embedding: {
-        type: Sequelize.DataTypes.VECTOR(384),
-        allowNull: false,
-      },
-      topicUpdatedAt: {
-        type: Sequelize.DATE,
+        type: Sequelize.VECTOR(384),
         allowNull: false,
       },
       slug: {
