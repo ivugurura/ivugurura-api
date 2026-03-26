@@ -12,6 +12,7 @@ import {
   getLang,
   getYtbChannelId,
 } from "../helpers";
+import langService from "../services/db/langService";
 
 const categoryDb = new QueryHelper(Category);
 const topicDb = new QueryHelper(Topic);
@@ -166,4 +167,8 @@ export const deleteFromEntityDisplay = async (req, res) => {
   const { type } = req.body;
   await tbEntityDisplay.delete({ entityId, type });
   return serverResponse(res, 200, "Removed");
+};
+export const getLanguages = async (req, res) => {
+  const languages = await langService.fetchLanguages();
+  return serverResponse(res, 200, "Success", languages);
 };
