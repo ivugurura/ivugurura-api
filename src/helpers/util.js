@@ -119,7 +119,14 @@ export const sendEmail = (subject, emailContent, sendTo) => {
     html: emailContent,
     text: `${emailContent}`,
   };
-  return sgMail.send(messageBody);
+  sgMail
+    .send(messageBody)
+    .then(() => {
+      console.log("Email sent to:", sendTo);
+    })
+    .catch(err => {
+      console.log("Email was not sent, Error: ", err);
+    });
 };
 export const getLang = req => {
   return req.acceptsLanguages("en", "kn", "fr", "sw") || "en";
