@@ -85,8 +85,8 @@ appSocket(app);
 /**
  * Backup database
  */
-if (process.env.NODE_ENV === "production") {
-  dbBackup();
-}
+// if (process.env.NODE_ENV === "production") {
+dbBackup();
+// }
 
 export default app;
