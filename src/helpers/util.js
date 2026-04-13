@@ -224,7 +224,7 @@ export const notifyMe = async (title = "", info = "") => {
 export const dbConnectFail = error => {
   const isDev = process.env.NODE_ENV === "develop";
   const isProduction = process.env.NODE_ENV === "production";
-  if (isDev) {
+  if (isDev || !isProduction) {
     console.log("DB_Error", error);
     process.exit(1);
   }
