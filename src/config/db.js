@@ -1,6 +1,5 @@
 require("dotenv/config");
 
-// query: { raw: true, nest: true }
 const queryOptions = {
   username: process.env.DB_USER,
   password: process.env.DB_PASSWORD,

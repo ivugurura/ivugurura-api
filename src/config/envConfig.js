@@ -1,6 +1,5 @@
 require("dotenv/config");
 
-// query: { raw: true, nest: true }
 const config = {
   port: process.env.PORT,
 };
