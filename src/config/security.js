@@ -19,11 +19,10 @@ export const security = app => {
  * TODO: Allow dev to dev server and production likewise
  */
 export const allowedOrigins = [
-  "http://localhost:3000", // Allow localhost
   "https://reformationvoice.org",
   "https://www.reformationvoice.org",
   "https://dev.reformationvoice.org",
-];
+].concat(process.env.NODE_ENV === "develop" ? ["http://localhost:3000"] : []);
 export const corseOptions = {
   origin: (origin, callback) => {
     if (!origin || allowedOrigins.indexOf(origin) !== -1) {

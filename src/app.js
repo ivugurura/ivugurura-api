@@ -73,7 +73,7 @@ app.use("/api", routes);
  */
 app.use(handleErrors);
 /**
- * The frontend/cLient
+ * The frontend/client
  */
 app.get("/*", (req, res) => {
   res.sendFile(path.resolve(buildDir, "index.html"));
@@ -85,8 +85,8 @@ appSocket(app);
 /**
  * Backup database
  */
-// if (process.env.NODE_ENV === "production") {
-dbBackup();
-// }
+if (process.env.NODE_ENV === "production") {
+  dbBackup();
+}
 
 export default app;
