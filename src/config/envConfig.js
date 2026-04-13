@@ -1,4 +1,4 @@
-import "dotenv/config";
+require("dotenv/config");
 
 // query: { raw: true, nest: true }
 const config = {
