@@ -98,8 +98,10 @@ export const deleteBook = async (req, res) => {
 
   const filePath = `${filePathsMap.bookFile}/${book?.url}`;
   const coverPath = `${filePathsMap.bookCover}/${book?.coverImage}`;
-  if (existsSync(filePath) && existsSync(coverPath)) {
+  if (existsSync(filePath)) {
     unlinkSync(filePath);
+  }
+  if (existsSync(coverPath)) {
     unlinkSync(coverPath);
   }
   await bookTb.delete({ id: book.id });
