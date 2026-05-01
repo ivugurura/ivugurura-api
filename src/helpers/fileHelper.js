@@ -52,7 +52,11 @@ const getDestination = (req, file, callBack) => {
 };
 const getFileName = (req, file, callBack) => {
   let ext = path.extname(file.originalname).split(".")[1];
-  let fileName = file.originalname.split(".")[0].replace(/\W/g, " ").trim();
+  let fileName = file.originalname
+    .split(".")[0]
+    .toLowerCase()
+    .replace(/\W/g, "-")
+    .trim();
   let mediaLink = `${fileName}-${Date.now()}.${ext}`;
   callBack(null, mediaLink);
 };
