@@ -22,7 +22,9 @@ export const allowedOrigins = [
   "https://reformationvoice.org",
   "https://www.reformationvoice.org",
   "https://dev.reformationvoice.org",
-].concat(process.env.NODE_ENV === "develop" ? ["http://localhost:3000"] : []);
+].concat(
+  process.env.NODE_ENV !== "production" ? ["http://localhost:3000"] : [],
+);
 export const corseOptions = {
   origin: (origin, callback) => {
     if (!origin || allowedOrigins.indexOf(origin) !== -1) {
