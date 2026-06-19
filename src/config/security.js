@@ -27,13 +27,14 @@ export const allowedOrigins = [
 );
 export const corseOptions = {
   origin: (origin, callback) => {
-    if (!origin || allowedOrigins.indexOf(origin) !== -1) {
-      // Allow requests with no origin (like mobile apps or Postman)
-      return callback(null, true);
-    } else {
-      // Reject requests from other origins
-      return callback(new Error("Not allowed by CORS"));
-    }
+    return callback(null, true);
+    // if (!origin || allowedOrigins.indexOf(origin) !== -1) {
+    //   // Allow requests with no origin (like mobile apps or Postman)
+    //   return callback(null, true);
+    // } else {
+    //   // Reject requests from other origins
+    //   return callback(new Error("Not allowed by CORS"));
+    // }
   },
   methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
   allowedHeaders: [
