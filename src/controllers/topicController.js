@@ -16,6 +16,7 @@ import { Topic, TopicView, Commentary, sequelize, Sequelize } from "../models";
 import { ConstantHelper } from "../helpers/ConstantHelper";
 import { categoriesTopicQuery, topicViewsQuery } from "../helpers/rawQueries";
 import { translate } from "../locales";
+import { ingestTopics } from "../services/chatbotProxies";
 
 const dbHelper = new QueryHelper(Topic);
 const dbCommentHelper = new QueryHelper(Commentary);
@@ -27,6 +28,7 @@ export const addNewTopic = async (req, res) => {
   req.body.slug = generateSlug(req.body.title);
   req.body.title = ucFirst(req.body.title);
   const newTopic = await dbHelper.create(req.body);
+
   return serverResponse(res, 201, "Created", newTopic);
 };
 
@@ -166,6 +168,10 @@ export const editTopic = async (req, res) => {
   }
 
   await dbHelper.update(req.body, { id });
+  if (req.body.isPublished) {
+    const { data, message } = await ingestTopics();
+    console.log(message, "=======>", data);
+  }
   return serverResponse(res, 200, "The topic updated");
 };
 

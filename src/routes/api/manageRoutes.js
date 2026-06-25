@@ -5,6 +5,7 @@ import {
   deleteFromEntityDisplay,
   getAllMessages,
   getChatUsers,
+  getLanguages,
   getListenerMessages,
   searchInfo,
   sendContactUs,
@@ -14,6 +15,7 @@ import { isEntityDisplayValid } from "../../middlewares/topicMiddleware";
 
 const manageRoutes = Router();
 manageRoutes.get("/search", catchErrors(searchInfo));
+manageRoutes.get("/languages", catchErrors(getLanguages));
 manageRoutes.get("/home/contents", catchErrors(getHomeContents));
 manageRoutes.post(
   "/contact-us",

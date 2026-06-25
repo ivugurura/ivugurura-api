@@ -3,6 +3,7 @@
 const fs = require("fs");
 const path = require("path");
 const cls = require("cls-hooked");
+const { registerType } = require("pgvector/sequelize");
 const namespace = cls.createNamespace("Reformation");
 const Sequelize = require("sequelize");
 const basename = path.basename(__filename);
@@ -11,6 +12,7 @@ const config = require(__dirname + "/../config/db.js")[env];
 const db = {};
 
 Sequelize.useCLS(namespace);
+registerType(Sequelize);
 
 let sequelize;
 if (config.use_env_variable) {

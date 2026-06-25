@@ -3,7 +3,7 @@ import bcrypt from "bcrypt";
 import slugify from "slugify";
 import uniqid from "uniqid";
 import path from "path";
-import jwt, { verify } from "jsonwebtoken";
+import JWT from "jsonwebtoken";
 import sgMail from "@sendgrid/mail";
 // import nodemailer from 'nodemailer';
 // import sgTransport from 'nodemailer-sendgrid-transport';
@@ -21,7 +21,7 @@ export const unHashPassword = (password, hashedPass) => {
   return bcrypt.compareSync(password, hashedPass);
 };
 export const generatJWT = userInfo => {
-  const token = jwt.sign(userInfo, process.env.SECRET, { expiresIn: "1w" });
+  const token = JWT.sign(userInfo, process.env.SECRET, { expiresIn: "1w" });
   return token;
 };
 
@@ -89,7 +89,7 @@ export const authenticatedUser = async req => {
   ) {
     const token = headers.authorization;
     try {
-      const { id } = verify(token, process.env.SECRET);
+      const { id } = JWT.verify(token, process.env.SECRET);
       const existingUser = await dbUser.findOne({ id });
       if (existingUser.id) {
         return existingUser;
