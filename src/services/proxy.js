@@ -4,7 +4,7 @@ import { get } from "lodash";
 
 const servers = {
   chatbot: {
-    baseUrl: `${process.env.CHATBOT_SERVER_URL}/ai/v1`,
+    baseUrl: `${process.env.CHATBOT_SERVER_URL}/v1`,
     headers: {
       "Content-Type": "application/json",
     },
