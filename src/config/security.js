@@ -18,16 +18,17 @@ export const security = app => {
 /**
  * TODO: Allow dev to dev server and production likewise
  */
-export const allowedOrigins = [
-  "https://reformationvoice.org",
-  "https://www.reformationvoice.org",
-  "https://dev.reformationvoice.org",
-].concat(
-  process.env.NODE_ENV !== "production" ? ["http://localhost:3000"] : [],
-);
+// reformationvoice.org and any of its subdomains (www, dev, ...), HTTPS only
+const SITE_ORIGIN = /^https:\/\/([a-z0-9-]+\.)*reformationvoice\.org$/;
+const allowLocalhost = ["develop", "staging"].includes(process.env.NODE_ENV);
+
+export const isAllowedOrigin = origin =>
+  SITE_ORIGIN.test(origin) ||
+  (allowLocalhost && origin === "http://localhost:3000");
+
 export const corseOptions = {
   origin: (origin, callback) => {
-    if (!origin || allowedOrigins.indexOf(origin) !== -1) {
+    if (!origin || isAllowedOrigin(origin)) {
       // Allow requests with no origin (like mobile apps or Postman)
       return callback(null, true);
     } else {
