@@ -153,7 +153,8 @@ export const getAllMedia = async (req, res) => {
   const { mediaType } = req.params;
   let conditions = { type: mediaType };
 
-  const { offset, limit } = getPaginator(req.query);
+  // Admin SyncAudio loads up to 300 rows at once to diff against storage.
+  const { offset, limit } = getPaginator(req.query, { maxPageSize: 500 });
   let [rows, count] = await Promise.all([
     dbMediaHelper.findAll(
       conditions,

@@ -68,15 +68,24 @@ export const generateSlug = title => {
   const slug = `${slugify(title, { lower: true })}-${uniqueId}`;
   return slug;
 };
-export const getPaginator = ({ page, pageSize }) => {
-  let pageNumber = 0;
-  let rowsPerPage = 20;
-  if (page && pageSize) {
-    pageNumber = Number(page);
-    rowsPerPage = Number(pageSize);
-  }
-  const limit = rowsPerPage;
-  const offset = pageNumber > 1 ? (pageNumber - 1) * limit : 0;
+const DEFAULT_PAGE_SIZE = 20;
+const MAX_PAGE_SIZE = 100;
+
+const toPositiveInt = (value, fallback) => {
+  const n = Number.parseInt(value, 10);
+  return Number.isInteger(n) && n > 0 ? n : fallback;
+};
+
+export const getPaginator = (
+  { page, pageSize } = {},
+  { maxPageSize = MAX_PAGE_SIZE } = {},
+) => {
+  const pageNumber = toPositiveInt(page, 1);
+  const limit = Math.min(
+    toPositiveInt(pageSize, DEFAULT_PAGE_SIZE),
+    maxPageSize,
+  );
+  const offset = (pageNumber - 1) * limit;
   return { limit, offset };
 };
 export const authenticatedUser = async req => {
