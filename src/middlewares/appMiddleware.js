@@ -9,6 +9,7 @@ import {
 } from "../helpers";
 import { Language } from "../models";
 import { translate } from "../locales";
+import { isAllowedOrigin } from "../config/security";
 
 const dbHelper = new QueryHelper(Language);
 const isProd = process.env.NODE_ENV === "production";
@@ -99,3 +100,16 @@ export const isBodyValid =
     if (errorBody.error) return joiValidatorMsg(res, errorBody);
     return next();
   };
+
+export const allowOrigin = (req, res, next) => {
+  const origin = req.headers.origin || req.headers.referer?.replace(/\/$/, "");
+
+  if (origin && isAllowedOrigin(origin)) {
+    res.setHeader("X-Frame-Options", `ALLOW-FROM ${origin}`); // Change accordingly
+    res.setHeader(
+      "Content-Security-Policy",
+      `frame-ancestors 'self' ${origin}`,
+    );
+  }
+  return next();
+};
